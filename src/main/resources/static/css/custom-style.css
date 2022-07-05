@@ -1,0 +1,46 @@
+/* 재사용 가능한 컴포넌트 스타일*/
+
+@media (max-width: 600px) {
+	.stress {
+		display: none !important;
+	}
+}
+/* index.html */
+
+#pokemonImg {
+	position: absolute;
+	top: -20px;
+	left:250px;
+	width: 100px;
+	height: 100px;
+	background-image : none;
+	background-size: contain;
+	background-repeat : no-repeat;
+	display: none;
+}
+
+/* login.html */
+
+/* my-page.html */
+
+.user-info {
+  width: 20vw;
+  min-width: 150px;
+}
+.user-info > * {
+  padding: 10px;
+}
+
+/* register.html */
+
+.err-msg {
+  color: #f00;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.err-display {
+	border: 2px dashed #f00;
+}
+
+/* signup.html */

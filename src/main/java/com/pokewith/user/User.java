@@ -60,10 +60,10 @@ public class User {
     private String friendCode5;
 
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Raid> raids = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<RaidComment> raidComments = new ArrayList<>();
 
 }

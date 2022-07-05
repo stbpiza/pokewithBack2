@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>채팅 서비스</title>
+<link rel="stylesheet" href="/static/css/room.css" type="text/css" />
+<link rel="stylesheet" href="/static/css/webfont.css" />
+</head>
+<body>
+	<div class="container">
+		<div id="chatroom" class="chatroom-div"><div id="divButtonCreateRoom" class="exit-div">
+			<button id="Exit" class="exit-btn common-btn" type="button"
+					onclick="disconnect()">
+				<i class="fas fa-2x fa-times"></i>
+			</button>
+		</div>
+	</div>
+	
+	<div class="select-area">
+			<div class="option-div">
+				<div class="chat-select">
+					<select id="message" class="message-box" required autofocus>
+                     <option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/go.jpeg class=img-mid>">
+							Go.</option>
+						<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/hello.jpeg class=img-mid>">
+							Hello.</option>
+						<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/no.jpeg class=img-mid>">
+							No.</option>
+					</select>
+				</div>
+				
+				
+	<div class="chat-send">
+					<button class="send-btn chat-btn common-btn" id="send">
+						<i class="fas fa-comments"></i> <span>Chat</span>
+					</button>
+				</div>
+			</div>
+			<div th:if="${session.userId == room.name}" class="option-div">
+				<div class="code-select">
+					<select id="code1" class="message-box" required
+						placeholder="Please select" autofocus onload="getTime()">
+						<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/1.png class=img-sm>">
+							이상해씨</option>
+						<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/2.png class=img-sm>">
+							꼬부기</option>
+						<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/3.png class=img-sm>">
+							파이리</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/4.png class=img-sm>">
+							피카츄</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/5.png class=img-sm>">
+							버터풀</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/6.png class=img-sm>">
+							잠만보</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/7.png class=img-sm>">
+							꼬렛</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/8.png class=img-sm>">
+							구구</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/9.png class=img-sm>">
+							나옹</option>
+					</select> <select id="code2" class="message-box" required
+						placeholder="Please select" autofocus onload="getTime()">
+						<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/1.png class=img-sm>">
+							이상해씨</option>
+						<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/2.png class=img-sm>">
+							꼬부기</option>
+						<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/3.png class=img-sm>">
+							파이리</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/4.png class=img-sm>">
+							피카츄</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/5.png class=img-sm>">
+							버터풀</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/6.png class=img-sm>">
+							잠만보</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/7.png class=img-sm>">
+							꼬렛</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/8.png class=img-sm>">
+							구구</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/9.png class=img-sm>">
+							나옹</option>
+					</select> <select id="code3" class="message-box" required
+						placeholder="Please select" autofocus onload="getTime()">
+						<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/1.png class=img-sm>">
+							이상해씨</option>
+						<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/2.png class=img-sm>">
+							꼬부기</option>
+						<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/3.png class=img-sm>">
+							파이리</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/4.png class=img-sm>">
+							피카츄</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/5.png class=img-sm>">
+							버터풀</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/6.png class=img-sm>">
+							잠만보</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/7.png class=img-sm>">
+							꼬렛</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/8.png class=img-sm>">
+							구구</option>
+							<option
+							value="<img src = https://192.168.1.136:8443/static/img/chat/9.png class=img-sm>">
+							나옹</option>
+					</select>
+				</div>
+				<div class="code-send">
+					<button class="send-btn code-btn common-btn" id="codesend">
+						<i class="fas fa-unlock-alt"></i> <span class="btn-label">Code</span>
+					</button>
+				</div>
+			</div>
+			<!-- End of option-div -->
+		</div>
+		<!-- End of select-area -->
+	</div>
+	<!-- End of container -->
+
+	<script src="https://kit.fontawesome.com/04da709f7e.js"
+		crossorigin="anonymous"></script>
+</body>
+<script th:inline="javascript">
+
+
+   
+    window.onbeforeunload = function(e){
+    	var dialogText = 'Dialog text here';
+   	 e.returnValue = dialogText;
+    }
+    
+    
+
+   //새로고침방지
+   
+   window.onbeforeunload = function(){
+	   webSocket.send(JSON.stringify({chatRoomId : roomId,type:'LEAVE',writer:nickname}));
+       webSocket.close();
+       window.location.href="https://192.168.1.136:8443/post";
+   }
+        	
+     
+    var webSocket;
+    var nickname;
+    /* <![CDATA[ */
+    var nickname1 = /*[[${session.nickname1}]]*/;
+    /* ]]> */ 
+    
+	/* <![CDATA[ */
+    var roomId = /*[[${room.roomId}]]*/;
+	/* ]]> */    
+	
+    window.onload = function (){
+    	nickname = nickname1;
+        connect(); 
+    }
+
+    document.getElementById("send").addEventListener("click",function(){
+       send();
+    });
+    
+    document.getElementById("codesend").addEventListener("click",function(){
+       codesend();
+    });
+    
+    function connect(){
+        webSocket = new WebSocket("wss://192.168.1.136:8443/chat");
+        webSocket.onopen = onOpen;
+        webSocket.onclose = onClose;
+        webSocket.onmessage = onMessage;
+    }
+    
+    function disconnect(){
+        webSocket.send(JSON.stringify({chatRoomId : roomId,type:'LEAVE',writer:nickname}));
+        webSocket.close();
+        window.location.href="https://192.168.1.136:8443/post";
+
+	 }
+    
+ 
+    
+    
+    function send(){
+    	 let today = new Date();
+        let now2 = today.toLocaleTimeString();
+        let now = "<span class=timestamp>" + now2 + "</span>";
+    	 msg = document.getElementById("message").value; 
+    	 if(msg != "") {
+    		 msg += now;
+             console.log(msg);
+            webSocket.send(JSON.stringify({chatRoomId : roomId,type:'CHAT',writer:nickname,message : msg}));
+             document.getElementById("message").value = "";
+    	}else{
+    		alert("choose option :(");
+    	}
+        setTimeout(
+        scroll, 100
+       );
+        }
+    
+    function codesend(){
+        
+        code1 = document.getElementById("code1").value;
+        code2 = document.getElementById("code2").value;
+        code3 = document.getElementById("code3").value;
+        
+        if(code1 && code2 && code3 != "") {
+        let result = code1 + code2 + code3;
+     	   
+     	
+        console.log(result);
+       webSocket.send(JSON.stringify({chatRoomId : roomId,type:'CHAT',writer:nickname,message : result}));
+        document.getElementById("code1").value = "";
+        document.getElementById("code2").value = "";
+        document.getElementById("code3").value = "";
+        } else {
+      	  alert("choose option :(");
+        }
+
+
+        setTimeout(
+        scroll, 100
+       );
+ }
+    
+    
+    function scroll(){
+    var objDiv = document.getElementById("chatroom");
+	objDiv.scrollTop = objDiv.scrollHeight;
+    }
+     
+    function onOpen(){
+        webSocket.send(JSON.stringify({chatRoomId : roomId,type:'ENTER',writer:nickname}));
+    }
+    function onMessage(e){
+        data = e.data;
+        chatroom = document.getElementById("chatroom");
+        chatroom.innerHTML = chatroom.innerHTML + "<br>" + data;
+        
+        setTimeout(
+                scroll, 100
+               );
+    }
+    function onClose(){
+        disconnect();
+    }
+
+</script>
+</html>

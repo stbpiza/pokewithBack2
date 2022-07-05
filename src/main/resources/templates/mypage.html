@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="Pokewith" />
+
+    <title>PokeWith :: My Page</title>
+
+    <!-- favicon -->
+    <link rel="shortcut icon" href="/static/img/poke-favi.png" type="image/x-icon" />
+    <!-- Custom fonts for this template-->
+    <link href="/staticv/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+
+    <!-- Custom styles for this template-->
+    <link href="/static/css/sb-admin-2.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/custom-style.css" />
+  </head>
+
+  <body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      <aside th:insert="/partials/sidebar :: sidebar" class="stress navbar-nav bg-gradient-info sidebar-dark sidebar accordion" id="accordionSidebar"></aside>
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+          <header th:insert="/partials/header :: header"></header>
+
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+            <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+              <h1 class="h3 mb-0 text-gray-800">My Page</h1>
+            </div>
+
+            <!-- Content Row -->
+
+            <div class="row">
+              <div class="container-fluid">
+                <!-- post -->
+                <div class="card shadow mb-4 add-user-area">
+                  <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-black">My Account</h6>
+                  </div>
+                  <div class="card-body">
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                      <img class="profile-img" src="/static/img/default-user-profile.png" alt="profile" />
+                      <div class="profile-name"></div>
+                    </div>
+                  </div>
+
+                  <div class="card-body">
+                    <div class="card">
+                      <!-- Default panel contents -->
+                      <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>User Information</div>
+                        <span class="err-msg"></span>
+                      </div>
+                      <div class="card-body d-flex justify-content-center align-items-center">
+                        <ul class="user-info"></ul>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="sidebar-divider" />
+                  <div class="input-container card-body d-flex flex-column justify-content-center">
+                    <div class="msg-div"></div>
+                    <div class="d-flex align-items-center" style="margin: 0 auto">
+                      <button class="send-btn d-sm-block btn btn-lg btn-primary shadow-sm rounded-pill">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+        <footer th:insert="/partials/footer :: footer" class="sticky-footer bg-white"></footer>
+      </div>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/static/js/sb-admin-2.min.js"></script>
+    <script src="/static/js/mypage.js"></script>
+  </body>
+</html>

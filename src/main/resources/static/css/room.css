@@ -1,0 +1,170 @@
+
+html {
+  max-width: 650px;
+  min-width: 300px;
+  background-color: #f5f5f5;
+  margin: 20px auto;
+}
+
+.container {
+  width: 85%;
+  height: 90vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatroom-div {
+  overflow: auto;
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: #f2d06b;
+  font-family: NanumSquare, Dotum, "돋움", Helvetica, AppleSDGothicNeo, sans-serif;
+  font-size: 15px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02), 0 6.7px 5.3px rgba(0, 0, 0, 0.028), 0 12.5px 10px rgba(0, 0, 0, 0.035),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.042), 0 41.8px 33.4px rgba(0, 0, 0, 0.05), 0 100px 80px rgba(0, 0, 0, 0.07);
+}
+
+.select-area {
+  width: 100%;
+}
+
+.option-div {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.chat-select,
+.code-select {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-select > .message-box,
+.code-select > .message-box {
+  width: 100%;
+  margin-right: 10px;
+}
+
+.message-box {
+  height: 5vh;
+  border: none;
+  text-indent: 13px;
+  border-radius: 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.message-box:active,
+.message-box:focus {
+  outline: none;
+}
+
+.timestamp {
+  color: #414040;
+  font-size: 10px;
+  font-family: NanumSquare, Dotum, "돋움", Helvetica, AppleSDGothicNeo, sans-serif;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.common-btn {
+  height: 5vh;
+  width: 15vw;
+  border: none;
+  border-radius: 18px;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.chat-btn {
+  background-color: #6aaed9;
+}
+
+.code-btn {
+  background-color: #65bf73;
+}
+.message-box:hover,
+.common-btn:hover {
+  cursor: pointer;
+}
+
+.common-btn:focus {
+  outline: none;
+}
+.common-btn:active {
+  transition: 0.1s ease-in-out;
+  transform: scale(0.96);
+}
+
+.exit-div {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.exit-btn {
+  width: 35px;
+  height: 35px;
+  background-color: #fff;
+  color: #f28f79;
+  border: 2px solid #f28f79;
+  border-radius: 50%;
+  margin: 10px -10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+}
+
+.img-sm {
+	width: 20%;
+}
+
+.img-mid {
+	width: 50%;
+}
+
+@media screen and (max-width: 480px) {
+  .option-div {
+    flex-direction: column;
+  }
+
+  .chat-send,
+  .code-send {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .chat-select > .message-box {
+    width: 100%;
+    margin: 0;
+  }
+
+  .code-select > .message-box {
+    width: 30%;
+    margin: 0;
+  }
+
+  .chat-btn,
+  .code-btn {
+    width: 100%;
+    margin-top: 15px;
+  }
+}
+
+#code1 option[value="<img src = http://192.168.1.97:8080/img/pika.png class=img-sm >"] {
+	background-image: url("/img/200.gif");
+}

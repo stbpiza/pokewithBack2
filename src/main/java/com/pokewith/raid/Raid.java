@@ -48,6 +48,6 @@ public class Raid {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "raid", fetch = FetchType.LAZY)
     private List<RaidComment> raidComments = new ArrayList<>();
 }

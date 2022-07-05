@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+	<!-- Sidebar -->
+	<ul th:fragment="sidebar" class="navbar-nav">
+	  <!-- Sidebar - Brand -->
+	  <div class="mt-5 mb-5">
+	    <a class="sidebar-brand d-flex mt-5 align-items-center justify-content-center" href="/">
+	      <img src="/static/img/poke-logo2.png" />
+	    </a>
+	  </div>
+	
+	  <!-- Nav Item - Dashboard -->
+	  <li class="nav-item active">
+	    <a class="nav-link" href="/">
+	      <i class="fas fa-fw fa-tachometer-alt"></i>
+	      <span>Poke With</span></a
+	    >
+	  </li>
+	
+	  <!-- Divider -->
+	  <hr class="sidebar-divider" />
+	
+	  <!-- Heading -->
+	  <div class="sidebar-heading">My Info</div>
+	
+	  <!-- Nav Item - Pages Collapse Menu -->
+	  <li class="nav-item">
+	    <a class="nav-link collapsed" href="/" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+	      <i class="fas fa-fw fa-wrench"></i>
+	      <span>My Account</span>
+	    </a>
+	    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+	      <div class="bg-white py-2 collapse-inner rounded">
+	        <a class="collapse-item sidebar-list" href="#">Nickname1</a>
+	        <a class="collapse-item sidebar-list" href="#">Nickname2</a>
+	        <a class="collapse-item sidebar-list" href="#">Nickname3</a>
+	        <a class="collapse-item sidebar-list" href="#">Nickname4</a>
+	        <a class="collapse-item sidebar-list" href="#">Nickname5</a>
+	      </div>
+	    </div>
+	  </li>
+	
+	  <!-- Divider -->
+	  <hr class="sidebar-divider" />
+	</ul>
+	<!-- End of Sidebar -->
+</html>

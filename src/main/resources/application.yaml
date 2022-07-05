@@ -6,7 +6,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/pagedemo?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/pokewith?serverTimezone=Asia/Seoul
     username: root
     password: root1234
     hikari:
@@ -24,3 +24,10 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 1000
+
+  thymeleaf:
+    suffix: .html
+    cache: false
+
+  mvc:
+    static-path-pattern: "/static/**"
