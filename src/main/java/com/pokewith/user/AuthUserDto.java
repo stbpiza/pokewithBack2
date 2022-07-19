@@ -31,25 +31,9 @@ public class AuthUserDto implements UserDetails {
 
     private String email;
 
+    private UserType userType;
+
     private String nickname1;
-
-    private String friendCode1;
-
-    private String nickname2;
-
-    private String friendCode2;
-
-    private String nickname3;
-
-    private String friendCode3;
-
-    private String nickname4;
-
-    private String friendCode4;
-
-    private String nickname5;
-
-    private String friendCode5;
 
 
     @Builder
@@ -57,13 +41,14 @@ public class AuthUserDto implements UserDetails {
         this.userId = user.getUserId();
         this.oauth2Id = user.getOauth2Id();
         this.email = user.getEmail();
+        this.userType = user.getUserType();
         this.nickname1 = user.getNickname1();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<String> roles = new ArrayList<>();
-//        roles.add(this.userType.toString());
+        roles.add(this.userType.toString());
         return roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
