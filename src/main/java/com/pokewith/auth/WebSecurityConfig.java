@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+//import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -47,10 +47,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomAuthenticationEntryPoint();
     }
 
-    @Bean
-    public OAuth2AuthorizedClientService authorizedClientService() {
-        return new CustomOAuth2AuthorizedClientService(redisService);
-    }
+//    @Bean
+//    public OAuth2AuthorizedClientService authorizedClientService() {
+//        return new CustomOAuth2AuthorizedClientService(redisService);
+//    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -84,8 +84,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .baseUri("/login/oauth2/**")
 //                .and()
 //                .clientRegistrationRepository(clientRegistrationRepository)
-                .authorizedClientService(authorizedClientService())
-                .successHandler(new CustomOAuth2SuccessHandler(redisService, authService))
+                // oauth2
+//                .authorizedClientService(authorizedClientService())
+//                .successHandler(new CustomOAuth2SuccessHandler(redisService, authService))
                 .and()
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 앞에 넣음
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),

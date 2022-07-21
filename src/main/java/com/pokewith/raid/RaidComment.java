@@ -1,5 +1,6 @@
 package com.pokewith.raid;
 
+import com.pokewith.superclass.TimeEntity;
 import com.pokewith.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class RaidComment {
+public class RaidComment extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

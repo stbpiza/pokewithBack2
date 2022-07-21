@@ -38,3 +38,7 @@ spring:
 
   mvc:
     static-path-pattern: "/static/**"
+
+text:
+  secretKey: pokewith123456
+  myurl: http://localhost
