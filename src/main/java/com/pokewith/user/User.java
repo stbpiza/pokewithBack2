@@ -2,6 +2,7 @@ package com.pokewith.user;
 
 import com.pokewith.raid.Raid;
 import com.pokewith.raid.RaidComment;
+import com.pokewith.superclass.TimeEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.List;
 uniqueConstraints = {
     @UniqueConstraint(name = "oauth2Id", columnNames = {"oauth2Id"})
 })
-public class User {
+public class User extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -14,7 +14,7 @@ public class EmailSendService implements EmailService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
-    private final JavaMailSender javaMailSender;
+//    private final JavaMailSender javaMailSender;
 
     @Value("${text.myurl}")
     private String myurl;
@@ -70,7 +70,7 @@ public class EmailSendService implements EmailService {
 
     @Async
     public void sendEmail(SimpleMailMessage email) {
-        javaMailSender.send(email);
+//        javaMailSender.send(email);
     }
 
 
