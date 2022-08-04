@@ -69,8 +69,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
                 .accessDeniedHandler(accessDeniedHandler)
-                .and()
-                .oauth2Login()
+//                .and()
+//                .oauth2Login()
 
 //                .authorizationEndpoint()
 //                .baseUri("/oauth2/**")
