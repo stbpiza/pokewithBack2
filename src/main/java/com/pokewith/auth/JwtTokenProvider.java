@@ -1,5 +1,6 @@
 package com.pokewith.auth;
 
+import com.pokewith.exception.auth.TokenInvalidException;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
@@ -23,6 +25,7 @@ public class JwtTokenProvider {
     private String secretKey;
 
     private final UserDetailsService userDetailsService;
+    private final AuthService authService;
 
     private final TokenValue tokenValue = new TokenValue();
 
@@ -46,6 +49,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    // 리프레시 토큰 현재는 사용안함
     public String createRefreshToken(String userPk, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(userPk);
         claims.put("roles", roles);
@@ -70,9 +74,13 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값"
+    // Request의 쿠키에서 token 값을 가져옵니다.
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH-TOKEN");
+        Cookie cookie = authService.getCookie(request, tokenValue.getAccessToken());
+        if (cookie == null || cookie.getValue() == null) {
+            throw new TokenInvalidException();
+        }
+        return cookie.getValue();
     }
 
     // 토큰의 유효성 + 만료일자 확인

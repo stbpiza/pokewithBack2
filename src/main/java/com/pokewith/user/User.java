@@ -30,6 +30,8 @@ public class User extends TimeEntity {
     @Column(length = 100)
     private String email;
 
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
     private UserType userType;
