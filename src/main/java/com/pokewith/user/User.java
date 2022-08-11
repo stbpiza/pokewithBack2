@@ -4,6 +4,7 @@ import com.pokewith.raid.Raid;
 import com.pokewith.raid.RaidComment;
 import com.pokewith.superclass.TimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -73,4 +74,14 @@ public class User extends TimeEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<RaidComment> raidComments = new ArrayList<>();
 
+    @Builder(builderClassName = "NormalSignUpBuilder", builderMethodName = "NormalSignUpBuilder")
+    public User(String email, String password, String nickname1, String friendCode1) {
+        this.email = email;
+        this.password = password;
+        this.nickname1 = nickname1;
+        this.friendCode1 = friendCode1;
+    }
+
+
+    public String getUserIdToString() { return Long.toString(userId); }
 }
