@@ -78,7 +78,8 @@ public class JwtTokenProvider {
     public String resolveToken(HttpServletRequest request) {
         Cookie cookie = authService.getCookie(request, tokenValue.getAccessToken());
         if (cookie == null || cookie.getValue() == null) {
-            throw new TokenInvalidException();
+//            throw new TokenInvalidException();
+            return "";
         }
         return cookie.getValue();
     }

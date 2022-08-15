@@ -17,7 +17,8 @@ import java.util.List;
 @Entity
 @Table(name = "user",
 uniqueConstraints = {
-    @UniqueConstraint(name = "oauth2Id", columnNames = {"oauth2Id"})
+    @UniqueConstraint(name = "oauth2Id", columnNames = {"oauth2Id"}),
+    @UniqueConstraint(name = "email", columnNames = {"email"})
 })
 public class User extends TimeEntity {
 
@@ -80,6 +81,7 @@ public class User extends TimeEntity {
         this.password = password;
         this.nickname1 = nickname1;
         this.friendCode1 = friendCode1;
+        this.userType = UserType.USER;
     }
 
 
