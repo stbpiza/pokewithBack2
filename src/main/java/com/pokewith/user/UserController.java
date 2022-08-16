@@ -1,5 +1,6 @@
 package com.pokewith.user;
 
+import com.pokewith.user.dto.RqLogInDto;
 import com.pokewith.user.dto.RqSignUpDto;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Slf4j
@@ -33,5 +35,16 @@ public class UserController {
     public ResponseEntity<String> signup (@Valid @RequestBody RqSignUpDto dto) {
         log.info("/signup");
         return userService.normalSignUp(dto);
+    }
+
+    @PostMapping("/login")
+    @ApiOperation(value = "로그인", notes = "email password 로 로그인")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "로그인성공"),
+            @ApiResponse(code = 400, message = "email password 불일치, 유효성검사, 소셜로그인 유저가 일반로그인 시도")
+    })
+    public ResponseEntity<String> login (@Valid @RequestBody RqLogInDto dto, HttpServletResponse response) {
+        log.info("/login");
+        return userService.normalLogIn(dto, response);
     }
 }
