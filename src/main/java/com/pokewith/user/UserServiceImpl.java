@@ -4,6 +4,7 @@ import com.pokewith.auth.AuthService;
 import com.pokewith.auth.JwtTokenProvider;
 import com.pokewith.auth.TokenValue;
 import com.pokewith.exception.auth.LoginFailedException;
+import com.pokewith.user.dto.RqEmailCheckDto;
 import com.pokewith.user.dto.RqLogInDto;
 import com.pokewith.user.dto.RqSignUpDto;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Transactional(readOnly = true)
@@ -46,7 +48,6 @@ public class UserServiceImpl implements UserService{
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
-    @Transactional
     @Override
     public ResponseEntity<String> normalLogIn(RqLogInDto rqLogInDto, HttpServletResponse response) {
 
@@ -55,6 +56,18 @@ public class UserServiceImpl implements UserService{
         String token = createAccessToken(member, response);
 
         return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> emailCheck(RqEmailCheckDto rqEmailCheckDto) {
+
+        Optional<User> member = findByEmailCheck(rqEmailCheckDto);
+
+        if(member.isEmpty()) {
+            return new ResponseEntity<>("사용 가능한 이메일입니다.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("이미 사용중인 이메일입니다.", HttpStatus.CONFLICT);
+        }
     }
 
     /**
@@ -87,4 +100,9 @@ public class UserServiceImpl implements UserService{
         response.addCookie(authService.createCookie(tokenValue.getAccessToken(), token));
         return token;
     }
+
+    private Optional<User> findByEmailCheck(RqEmailCheckDto rqEmailCheckDto) {
+        return userRepository.findByEmail(rqEmailCheckDto.getEmail());
+    }
+
 }

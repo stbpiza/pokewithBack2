@@ -81,7 +81,7 @@ public class User extends TimeEntity {
         this.password = password;
         this.nickname1 = nickname1;
         this.friendCode1 = friendCode1;
-        this.userType = UserType.USER;
+        this.userType = UserType.ROLE_NOTUSER;
     }
 
 
