@@ -1,5 +1,7 @@
-package com.pokewith.user;
+package com.pokewith.user.dto;
 
+import com.pokewith.user.User;
+import com.pokewith.user.UserType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

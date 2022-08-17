@@ -1,6 +1,6 @@
 package com.pokewith.auth;
 
-import com.pokewith.user.AuthUserDto;
+import com.pokewith.user.dto.AuthUserDto;
 import com.pokewith.user.User;
 import com.pokewith.user.UserRepository;
 import lombok.RequiredArgsConstructor;

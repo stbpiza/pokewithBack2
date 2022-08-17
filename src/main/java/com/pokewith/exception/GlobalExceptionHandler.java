@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
 ////            message = ((PathImpl) item.getPropertyPath()).getLeafNode().getName() + item.getMessage();
 //            message = item.getMessage();
 //        }
-        return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("유효하지 않은 입력값 입니다.", HttpStatus.BAD_REQUEST);
     }
 
     // 커스텀 유효성검사
