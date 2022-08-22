@@ -40,30 +40,31 @@
                 <form class="user" method="post">
                   <div class="form-group">
                     <p class="h6">My email</p>
-                    <input type="text" class="form-control form-control-user nickname1" id="email" placeholder="ex) abc@gmail.com" />
+                    <input type="text" class="form-control form-control-user email" id="email" placeholder="ex) abc@gmail.com" />
                   </div>
                   <div class="form-group">
                     <span class="h6">Password </span>
-                    <span class="err-msg"> alphabet + number + Special character 8~20 </span>
-                    <input type="password" class="form-control form-control-user nickname1" id="password" />
+                    <span class="sm-msg ml-1"> alphabet + number + Special character 8~20 </span>
+                    <input type="password" class="form-control form-control-user password" id="password" placeholder="password"/>
                   </div>
                   <div class="form-group">
                     <p class="h6">Password Again</p>
-                    <input type="password" class="form-control form-control-user nickname1" id="password2" placeholder="ex) same password" />
+                    <input type="password" class="form-control form-control-user password2" id="password2" placeholder="same password" />
                   </div>
                   <div class="form-group">
                   	 <p class="h6">My PokemonGO Nickname</p>
                     <input type="text" class="form-control form-control-user nickname1" id="nickname1" placeholder="ex) red" />
                   </div>
                   <div class="form-group">
-                  	<p class="h6">My PokemonGO Friend Code</p>
-                    <input type="text" class="form-control form-control-user friendCode1" id="friendCode1" placeholder="ex) 0000-1111-2222-3333" maxlength="15" />
+                  	<span class="h6">My PokemonGO Friend Code</span>
+                    <span class="sm-msg ml-1"> must type 0000-0000-0000-0000 </span>
+                    <input type="text" class="form-control form-control-user friendCode1" id="friendCode1" placeholder="ex) 0000-1111-2222-3333" maxlength="19" />
                   </div>
                   <a href="#" id="register-btn" class="btn btn-info btn-user btn-block register-btn"> Register Account </a>
                   <a href="#" id="clear-btn" class="btn btn-warning btn-user btn-block clear-btn"> Clear </a>
                 </form>
                 <hr />
-                <div class="text-center err-msg"></div>
+                <div class="text-center err-msg"> </div>
               </div>
               <footer th:insert="/partials/footer :: footer" class="sticky-footer bg-white"></footer>
             </div>
