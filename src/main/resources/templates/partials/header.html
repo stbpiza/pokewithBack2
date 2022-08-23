@@ -55,8 +55,11 @@
 	        <a th:if="${session.userId != null}" class="nav-link" href="/logout">Logout</a>
 	      </li>
 	      <li class="nav-item">
-	        <a th:if="${session.userId == null}" class="nav-link" href="/login">Start with Facebook</a>
+	        <a th:if="${session.userId == null}" class="nav-link" href="/login">Login</a>
 	      </li>
+		  <li class="nav-item">
+			<a th:if="${session.userId == null}" class="nav-link" href="/register">SignUp</a>
+		  </li>
 	    </ul>
 	  </div>
 	</nav>
