@@ -15,7 +15,7 @@ function sendAjax(url, method, data, callback){
       console.log('들어옴1');
       if (httpReq.readyState === 4 && httpReq.status === 200) {
         console.log('들어옴2');
-        console.log(httpReq.responseText);
+        // console.log(httpReq.responseText);
         callback(httpReq);
       }
   };

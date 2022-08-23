@@ -107,30 +107,8 @@ function handleRegister() {
   userInfoInput.friendCode1 = sendCode;
   postUserInfo();
 }
+
 // ADDITIONAL USER INFORMATION FOR POST REQUEST
-
-//AJAX REQUEST
-function sendAjax(url, method, data, callback) {
-  const httpReq = new XMLHttpRequest();
-  httpReq.open(method, url, true);
-
-  httpReq.setRequestHeader("Access-Control-Allow-Headers", "*");
-  httpReq.setRequestHeader("Content-type", "application/json");
-  httpReq.setRequestHeader("Access-Control-Allow-Origin", "*");
-
-  httpReq.onreadystatechange = function () {
-    if (httpReq.readyState === 4 && httpReq.status === 200) {
-      callback(httpReq);
-    }
-  };
-
-  if (data != null) {
-    httpReq.send(data);
-  } else {
-    httpReq.send();
-  }
-}
-
 //POST USER INFORMATION
 
 function postUserInfo() {
@@ -138,16 +116,21 @@ function postUserInfo() {
   let jsonData = JSON.stringify(inputData);
   const url = "/api/signup";
 
-  sendAjax(url, "POST", jsonData, function (res) {
-    console.log("POST DATA: ", jsonData);
-    console.log(res.response);
-    if (res == 1) {
-      alert("Your information has been registered. 😉");
-      window.location.href = "/";
-    } else {
-      alert("Faild to register. 😣");
-    }
-  });
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: jsonData,
+  })
+      .then((response) => {
+        if (response.status == 200) {
+             alert("signup success")
+          window.location.href = "/";
+        } else if (response.status == 400) {
+           alert("signup fail")
+        }
+      })
 }
 
 //BINDING SINGLE EVENT LISTENER FOR EACH BUTTONS
