@@ -49,32 +49,38 @@
                           <div class="d-flex justify-content-center align-items-center mt-5">
                             <img src="/static/img/poke-logo4.png" style="width: 50%" />
                           </div>
-                          <a href="#" class="login-btn btn btn-facebook btn-user btn-block">
+                          <div class="form-group">
+                            <p class="h6">My email</p>
+                            <input type="text" class="form-control form-control-user email" id="email" />
+                          </div>
+                          <div class="form-group">
+                            <span class="h6">Password </span>
+                            <input type="password" class="form-control form-control-user password" id="password"/>
+                          </div>
+                          <a href="#" class="login-btn btn btn-google btn-user btn-block">
+                            Login
+                          </a>
+                          <a href="#" class="f-login-btn btn btn-facebook btn-user btn-block">
                             <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
                           </a>
-                          <div class="d-flex flex-column justify-content-center align-items-center mt-5">
-                                <span>...Not available at this time...</span>
-                            <img src="/static/img/poke-logo3.png" style="width: 50%">
-                          </div>
-                          <a href="#" class="btn btn-google btn-user btn-block disabled">
-                            <i class="fab fa-google fa-fw"></i> Login with Google 
-                          </a>
                         </form>
+                        <div class="text-center err-msg"> </div>
                       </div>
                     </div>
                   </div>
                   <!-- End of Nested Row within Card Body -->
                 </div>
 				<footer th:insert="/partials/footer :: footer" class="sticky-footer bg-white"></footer>
+              </div>
             <!-- End of Card body -->
+            </div>
           </div>
         </div>
-      </div>
       <!-- End of Outer Row -->
+      </div>
+      <!-- facebook 로그인 링크 -->
+      <!-- https://www.facebook.com/v2.5/dialog/oauth?client_id=630118604601342&response_type=code&scope=email&redirect_uri=https%3A%2F%2F192.168.1.136%3A8443%2FfacebookSignInCallback -->
     </div>
-    <!-- facebook 로그인 링크 -->
-    <!-- https://www.facebook.com/v2.5/dialog/oauth?client_id=630118604601342&response_type=code&scope=email&redirect_uri=https%3A%2F%2F192.168.1.136%3A8443%2FfacebookSignInCallback -->
-
     <!-- Bootstrap core JavaScript-->
     <script src="/static/vendor/jquery/jquery.min.js"></script>
     <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

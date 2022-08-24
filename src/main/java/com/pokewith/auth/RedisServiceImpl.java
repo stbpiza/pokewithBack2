@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class RedisUtil implements RedisService{
+public class RedisServiceImpl implements RedisService{
 
     private final NormalRedisRepository normalRedisRepository;
     private final GitRedisRepository gitRedisRepository;

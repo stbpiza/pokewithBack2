@@ -8,7 +8,7 @@ const inputPassword = document.querySelector(".password");
 const inputPassword2 = document.querySelector(".password2");
 const inputName = document.querySelector(".nickname1");
 const inputCode = document.querySelector(".friendCode1");
-console.log(inputEmail, inputPassword, inputPassword2, inputName, inputCode);
+// console.log(inputEmail, inputPassword, inputPassword2, inputName, inputCode);
 
 //DUMMY DATA FROM GET REQUEST
 const userInfoData = {
@@ -122,7 +122,7 @@ function postUserInfo() {
       "Content-type": "application/json",
     },
     body: jsonData,
-  })
+    })
       .then((response) => {
         if (response.status == 200) {
              alert("signup success")
@@ -130,7 +130,7 @@ function postUserInfo() {
         } else if (response.status == 400) {
            alert("signup fail")
         }
-      })
+  })
 }
 
 //BINDING SINGLE EVENT LISTENER FOR EACH BUTTONS
