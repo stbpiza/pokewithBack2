@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -52,18 +53,37 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        return new CustomOAuth2AuthorizedClientService(redisService);
 //    }
 
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers(
+                        "/favicon.ico"
+                        ,"/error"
+                        ,"/static/**"
+                        ,"/"
+                        ,"/index"
+                        ,"/mypage"
+                        ,"/mypost"
+                        ,"/join"
+                        ,"/login"
+                        ,"/register"
+                        ,"/room"
+                );
+    }
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.httpBasic().disable()
                 .csrf().disable()
 //                .cors().configurationSource(corsConfigurationSource())
 //                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .antMatchers("/api/user/**").hasRole("USER")
-                .antMatchers("/api/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/v2/api-docs", "/swagger-ui.html", "/webjars/**",
                         "/swagger/**", "/configuration/**", "/swagger-resources/**").permitAll()
                 .and()

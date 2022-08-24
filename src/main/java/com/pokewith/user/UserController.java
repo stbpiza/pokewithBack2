@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -42,9 +43,9 @@ public class UserController {
             @ApiResponse(code = 200, message = "로그인성공"),
             @ApiResponse(code = 400, message = "email password 불일치, 유효성검사, 소셜로그인 유저가 일반로그인 시도")
     })
-    public ResponseEntity<String> login (@Valid @RequestBody RqLogInDto dto, HttpServletResponse response) {
+    public ResponseEntity<String> login (@Valid @RequestBody RqLogInDto dto, HttpServletResponse response, HttpServletRequest request) {
         log.info("/login");
-        return userService.normalLogIn(dto, response);
+        return userService.normalLogIn(dto, response, request);
     }
 
     @PostMapping("/email")

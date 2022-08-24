@@ -42,14 +42,14 @@
 	      <li class="nav-item">
 	        <a class="nav-link" href="/">
 	          <img src="/static/img/poke-circle2.png" style="width: 50px" />
-	          <span th:if="${session.nickname1 != null}" th:text="${session.nickname1}"></span>
+	          <span class="pl-3" th:if="${session.nickname1 != null}" th:text="${session.nickname1}"></span>
 	        </a>
 	      </li>
 	      <li class="nav-item">
-	        <a th:if="${session.userId != null}" class="nav-link" href="/post">My post</a>
+	        <a th:if="${session.userId != null}" class="nav-link" href="/mypost">My post</a>
 	      </li>
 	      <li class="nav-item">
-	        <a th:if="${session.userId != null}" class="nav-link" href="/page">My page</a>
+	        <a th:if="${session.userId != null}" class="nav-link" href="/mypage">My page</a>
 	      </li>
 	      <li class="nav-item">
 	        <a th:if="${session.userId != null}" class="nav-link" href="/logout">Logout</a>

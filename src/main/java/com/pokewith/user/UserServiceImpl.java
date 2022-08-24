@@ -1,8 +1,6 @@
 package com.pokewith.user;
 
-import com.pokewith.auth.AuthService;
-import com.pokewith.auth.JwtTokenProvider;
-import com.pokewith.auth.TokenValue;
+import com.pokewith.auth.*;
 import com.pokewith.exception.auth.LoginFailedException;
 import com.pokewith.user.dto.RqEmailCheckDto;
 import com.pokewith.user.dto.RqLogInDto;
@@ -16,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthService authService;
+    private final RedisService redisService;
     private final EntityManager em;
 
     private final TokenValue tokenValue = new TokenValue();
@@ -49,11 +50,22 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public ResponseEntity<String> normalLogIn(RqLogInDto rqLogInDto, HttpServletResponse response) {
+    public ResponseEntity<String> normalLogIn(RqLogInDto rqLogInDto, HttpServletResponse response, HttpServletRequest request) {
 
         User member = checkLoginUser(rqLogInDto);
 
         String token = createAccessToken(member, response);
+
+        redisService.setNormalData(NormalToken.builder()
+                        .username(member.getUserIdToString())
+                        .refreshToken(token)
+                        .timeToLive(tokenValue.getTokenValidTime())
+                .build());
+
+        HttpSession session = request.getSession();
+        session.setAttribute("userId", member.getUserId());
+        session.setAttribute("nickname1", member.getNickname1());
+        session.setMaxInactiveInterval(24*60*60); //24시간
 
         return new ResponseEntity<>("", HttpStatus.OK);
     }
