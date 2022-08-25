@@ -122,7 +122,7 @@ function allPostAjax(selectOption, switchOption) {
   if(selectOption == 'three'){
 	if(switchOption == true){
 		removeAllPost();
-		var url = '/index/three/0';
+		var url = '/api/index/three/0';
 		
 		sendAjax(url, 'GET', null, function (res) {
 	      console.log(res.response);
@@ -133,7 +133,7 @@ function allPostAjax(selectOption, switchOption) {
    		});
 	} else {		
 		removeAllPost();
-	    var url = '/index/three';
+	    var url = '/api/index/three';
 	    sendAjax(url, 'GET', null, function (res) {
 	      console.log(res.response);
 	      var result = JSON.parse(res.response);
@@ -145,7 +145,7 @@ function allPostAjax(selectOption, switchOption) {
   }else if(selectOption == 'five'){
 	if(switchOption == true){
 		removeAllPost();
-		var url = '/index/five/0';
+		var url = '/api/index/five/0';
 		
 		sendAjax(url, 'GET', null, function (res) {
 	      console.log(res.response);
@@ -156,7 +156,7 @@ function allPostAjax(selectOption, switchOption) {
    		});
 	} else {
 		removeAllPost();
-	    var url = '/index/five';
+	    var url = '/api/index/five';
 	    sendAjax(url, 'GET', null, function (res) {
 	      console.log(res.response);
 	      var result = JSON.parse(res.response);
@@ -169,7 +169,7 @@ function allPostAjax(selectOption, switchOption) {
   }else if(selectOption == 'mega'){
 	if(switchOption == true){
 		removeAllPost();
-		var url = '/index/mega/0';
+		var url = '/api/index/mega/0';
 		sendAjax(url, 'GET', null, function (res) {
 	      console.log(res.response);
 	      var result = JSON.parse(res.response);
@@ -179,7 +179,7 @@ function allPostAjax(selectOption, switchOption) {
     	});
 	} else {
 		removeAllPost();
-	    var url = '/index/mega';		
+	    var url = '/api/index/mega';
 	    sendAjax(url, 'GET', null, function (res) {
 	      console.log(res.response);
 	      var result = JSON.parse(res.response);
@@ -191,7 +191,7 @@ function allPostAjax(selectOption, switchOption) {
   }else{
 	if(switchOption == true){
 		removeAllPost();
-		var url = '/index/0';
+		var url = '/api/index/0';
 		sendAjax(url, 'GET', null, function (res) {
 	      console.log(res.response);
 	      var result = JSON.parse(res.response);
@@ -201,7 +201,7 @@ function allPostAjax(selectOption, switchOption) {
     	});
 	} else {	
 		removeAllPost();
-	    var url = '/index';
+	    var url = '/api/index';
 	    sendAjax(url, 'GET', null, function (res) {
 	      console.log(res.response);
 	      var result = JSON.parse(res.response);
@@ -590,7 +590,7 @@ function filterOptionCheck(){
 
 // Init paint sidebar
 function myPageAjax() {
-  const url = "/mypage";
+  const url = "/api/mypage";
 
   sendAjax(url, "GET", null, function (res) {
     let result = JSON.parse(res.response);

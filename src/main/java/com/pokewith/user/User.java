@@ -1,5 +1,6 @@
 package com.pokewith.user;
 
+import com.pokewith.mypage.dto.RqUpdateMyPageDto;
 import com.pokewith.raid.Raid;
 import com.pokewith.raid.RaidComment;
 import com.pokewith.superclass.TimeEntity;
@@ -84,6 +85,18 @@ public class User extends TimeEntity {
         this.userType = UserType.ROLE_NOTUSER;
     }
 
+    public void updateUser(RqUpdateMyPageDto dto) {
+        this.nickname1 = dto.getNickname1();
+        this.friendCode1 = dto.getFriendCode1();
+        this.nickname2 = dto.getNickname2();
+        this.friendCode2 = dto.getFriendCode2();
+        this.nickname3 = dto.getNickname3();
+        this.friendCode3 = dto.getFriendCode3();
+        this.nickname4 = dto.getNickname4();
+        this.friendCode4 = dto.getFriendCode4();
+        this.nickname5 = dto.getNickname5();
+        this.friendCode5 = dto.getFriendCode5();
+    }
 
     public String getUserIdToString() { return Long.toString(userId); }
 }
