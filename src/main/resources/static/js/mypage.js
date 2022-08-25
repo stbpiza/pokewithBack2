@@ -22,8 +22,8 @@ function saveUserInfo() {
   const name = document.querySelectorAll(".nickName");
   const code = document.querySelectorAll(".friendCode");
 
-  const nameRgx = RegExp(/^[A-Za-z0-9_\-]{5,20}$/);
-  const codeRgx = RegExp(/^[0-9_\-]{12}$/);
+  const nameRgx = RegExp(/^[A-Za-z\d]{2,20}$/);
+  const codeRgx = RegExp(/^[\d]{4}[-][\d]{4}[-][\d]{4}[-][\d]{4}$/);
 
   for (let i = 0; i < pointer.childNodes.length; i++) {
     if (i % 2 == 1) {
@@ -105,6 +105,7 @@ function paintUserInfo(data) {
     const saveBtn = document.createElement("button");
 
     numberSpan.setAttribute(`id`, `idNumber${i}`);
+    numberSpan.setAttribute(`class`, `pr-3`);
     numberSpan.innerText = `#${i}`;
 
     nameSpan.setAttribute(`id`, `nickname${i}`);
@@ -115,7 +116,7 @@ function paintUserInfo(data) {
     codeSpan.setAttribute(`id`, `friendCode${i}`);
     codeSpan.setAttribute(`class`, `friendCode form-control rounded-pill border-0 user-info`);
     codeInput.setAttribute(`class`, `input-friendCode d-none form-control rounded-pill user-info`);
-    codeInput.setAttribute(`maxlength`, `12`);
+    codeInput.setAttribute(`maxlength`, `19`);
     codeInput.setAttribute(`id`, `FRIENDCODE${i}`);
 
     infoDiv.appendChild(nameSpan);
@@ -206,6 +207,11 @@ function loadUserInfo(data) {
   profile.innerText = userInfoGet.nickname1;
   profile.setAttribute("style", "margin-top: 10px");
   paintUserInfo(data);
+  setUserInfo(data);
+}
+
+function setUserInfo(data) {
+  userInfoInput = data;
 }
 
 //BINDING SAVE BUTTON EVENT
@@ -235,20 +241,22 @@ function sendAjax(url, method, data, callback) {
 
 //GET USER INFORMATION
 function getUserInfo() {
-  const url = "/mypage";
+  const url = "/api/mypage";
 
-  sendAjax(url, "GET", null, function (res) {
-    let result = JSON.parse(res.response);
-	console.log("mypage data : " + result);
-    loadUserInfo(result);
-  });
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("mypage data : " + JSON.stringify(data));
+      loadUserInfo(data);
+    });
+
 }
 
 //POST USER INFORMATION
 function postUserInfo() {
   let inputData = userInfoInput;
   let jsonData = JSON.stringify(inputData);
-  const url = "/mypage";
+  const url = "/api/mypage";
 
   sendAjax(url, "POST", jsonData, function (res) {
     console.log("POST DATA: ", jsonData);

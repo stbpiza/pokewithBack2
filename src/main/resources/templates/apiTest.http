@@ -2,7 +2,7 @@ POST http://localhost:8888/api/signup
 Content-Type: application/json
 
 {
-  "email" : "abc@abc.com",
+  "email" : "abc1@abc.com",
   "password" : "qwe123qwe123!",
   "nickname1" : "pokepoke",
   "friendCode1" : "1234-1234-1234-1234"
