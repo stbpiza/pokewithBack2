@@ -56,17 +56,17 @@ function saveUserInfo() {
     }
   }
 
-  userInfoInput.nickname1 = name[0].innerText;
-  userInfoInput.nickname2 = name[1].innerText;
-  userInfoInput.nickname3 = name[2].innerText;
-  userInfoInput.nickname4 = name[3].innerText;
-  userInfoInput.nickname5 = name[4].innerText;
+  userInfoInput.nickname1 = name[0].innerText === "" ? null : name[0].innerText ;
+  userInfoInput.nickname2 = name[1].innerText === "" ? null : name[1].innerText ;
+  userInfoInput.nickname3 = name[2].innerText === "" ? null : name[2].innerText ;
+  userInfoInput.nickname4 = name[3].innerText === "" ? null : name[3].innerText ;
+  userInfoInput.nickname5 = name[4].innerText === "" ? null : name[4].innerText ;
 
-  userInfoInput.friendCode1 = code[0].innerText;
-  userInfoInput.friendCode2 = code[1].innerText;
-  userInfoInput.friendCode3 = code[2].innerText;
-  userInfoInput.friendCode4 = code[3].innerText;
-  userInfoInput.friendCode5 = code[4].innerText;
+  userInfoInput.friendCode1 = code[0].innerText === "" ? null : code[0].innerText ;
+  userInfoInput.friendCode2 = code[1].innerText === "" ? null : code[1].innerText ;
+  userInfoInput.friendCode3 = code[2].innerText === "" ? null : code[2].innerText ;
+  userInfoInput.friendCode4 = code[3].innerText === "" ? null : code[3].innerText ;
+  userInfoInput.friendCode5 = code[4].innerText === "" ? null : code[4].innerText ;
 }
 //BINDING EDIT BUTTON CLICK EVENT
 function editUserInfo() {
@@ -258,15 +258,20 @@ function postUserInfo() {
   let jsonData = JSON.stringify(inputData);
   const url = "/api/mypage";
 
-  sendAjax(url, "POST", jsonData, function (res) {
-    console.log("POST DATA: ", jsonData);
- 	 console.log(res.response);
-    if (res.response == 1) {
-      alert("Your information has been updated. 😉");
-    } else {
-      alert("Faild to update. 😣");
-    }
-  });
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: jsonData,
+    })
+      .then((response) => {
+        if (response.status == 200) {
+          alert("save success")
+        } else if (response.status == 400) {
+          alert("save fail")
+        }
+  })
 }
 
 // USING AJAX CALL
