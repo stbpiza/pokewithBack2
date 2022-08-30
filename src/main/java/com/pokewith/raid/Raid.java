@@ -23,23 +23,25 @@ public class Raid extends TimeEntity {
     @Column(nullable = false)
     private int pokemon;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String raidLevel;
+    private RaidType raidType;
 
-
+    @Column(nullable = false)
     private LocalDateTime startTime;
 
-
+    @Column(nullable = false)
     private LocalDateTime endTime;
 
-
+    @Column(nullable = false)
     private int normalPass;
 
-
+    @Column(nullable = false)
     private int remotePass;
 
-
-    private boolean end;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RaidState raidState;
 
 
     private int requiredLevel;

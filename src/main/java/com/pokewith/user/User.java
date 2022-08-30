@@ -69,6 +69,10 @@ public class User extends TimeEntity {
     @Column(length = 20)
     private String friendCode5;
 
+    private int likeCount;
+
+    private int hateCount;
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Raid> raids = new ArrayList<>();
