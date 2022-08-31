@@ -34,16 +34,16 @@ function sendAjax(url, method, data, callback){
 //allPostHtml() : 전체/필터 게시글 출력 함수
 function allPostHtml(requiredData, n){
 
-  let num = requiredData[n].p_id;
+  let num = requiredData.raidDtoList[n].p_id;
   console.log(num);
     
   let startDiv = document.createElement("div");
   startDiv.setAttribute("id", "result-box");
   startDiv.setAttribute("class", "card shadow mb-4");
   
-  if(requiredData[n].p_end == "2"){
+  if(requiredData.raidDtoList[n].raidState === "DONE"){
     startDiv.setAttribute("class", "ending card shadow mb-4");
-  } else if (requiredData[n].p_end == "1") {
+  } else if (requiredData.raidDtoList[n].raidState === "DOING") {
     startDiv.setAttribute("class", "raiding card shadow mb-4");
   }
 
@@ -51,9 +51,9 @@ function allPostHtml(requiredData, n){
   nickDiv.setAttribute("class", "card-header py-3 d-flex flex-row align-items-center justify-content-between");
 
   let nickName = '';
-  nickName += '<p class="m-0 text-gray"><b>'+requiredData[n].nickname1
-              + '</b><i class="fa fa-thumbs-up updown" aria-hidden="true" style="font-size:10px"></i>' + requiredData[n].u_like
-              + ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + requiredData[n].u_hate + '</p>'
+  nickName += '<p class="m-0 text-gray"><b>'+requiredData.raidDtoList[n].nickname1
+              + '</b><i class="fa fa-thumbs-up updown" aria-hidden="true" style="font-size:10px"></i>' + requiredData.raidDtoList[n].likeCount
+              + ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + requiredData.raidDtoList[n].hateCount + '</p>'
   nickDiv.innerHTML = nickName;
 
   startDiv.appendChild(nickDiv);
@@ -62,28 +62,28 @@ function allPostHtml(requiredData, n){
   cardDiv.setAttribute("class", "card-body cardBody"+num);
   startDiv.appendChild(cardDiv);
 
-  if(requiredData[n].raidLevel == '1') {
+  if(requiredData.raidDtoList[n].raidType === 'ONE') {
       str = "<img src = '/static/img/1.png' style='width:50px'>"
-  } else if(requiredData[n].raidLevel == '3') {
+  } else if(requiredData.raidDtoList[n].raidType === 'THREE') {
       str = "<img src = '/static/img/3.png' style='width:50px'>"
-  } else if(requiredData[n].raidLevel == '5') {
+  } else if(requiredData.raidDtoList[n].raidType === 'FIVE') {
       str = "<img src = '/static/img/5.png' style='width:50px'>"
   } else {
       str = "<img src = '/static/img/mega.png' style='width:50px'>"
   }
   
-  cardDiv.innerHTML += '<input type="hidden" id="postId" name="postId" value="'+ requiredData[n].p_id +'">';
+  cardDiv.innerHTML += '<input type="hidden" id="postId" name="postId" value="'+ requiredData.raidDtoList[n].raidId +'">';
   cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/150.png" width="150px" /></p>';
   //cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/'+resultData[n].pokemon+'.png" width="150px" /></p>';
   cardDiv.innerHTML += '<p> Level of Raid : ' + str + '</p>';
-  cardDiv.innerHTML += '<p> Start Time of Raid : ' + requiredData[n].startTime+'</p>';
-  cardDiv.innerHTML += '<p> End Time of Raid : ' + requiredData[n].endTime+'</p>';
-  cardDiv.innerHTML += '<p> Required Player Level : ' + requiredData[n].minLevel+'</p>';
-  cardDiv.innerHTML += '<p> Premium Pass : <img src="/static/img/3_premium.png" style="width:60px"> / <img src="/static/img/2_premium.png" style="width:50px">' + requiredData[n].nPass+'</p>';
-  cardDiv.innerHTML += '<p> Remote Pass : <img src="/static/img/1_remote.png" style="width:60px"> ' + requiredData[n].rPass + '</p>';
+  cardDiv.innerHTML += '<p> Start Time of Raid : ' + requiredData.raidDtoList[n].startTime+'</p>';
+  cardDiv.innerHTML += '<p> End Time of Raid : ' + requiredData.raidDtoList[n].endTime+'</p>';
+  cardDiv.innerHTML += '<p> Required Player Level : ' + requiredData.raidDtoList[n].requiredLevel+'</p>';
+  cardDiv.innerHTML += '<p> Premium Pass : <img src="/static/img/3_premium.png" style="width:60px"> / <img src="/static/img/2_premium.png" style="width:50px">' + requiredData.raidDtoList[n].normalPass+'</p>';
+  cardDiv.innerHTML += '<p> Remote Pass : <img src="/static/img/1_remote.png" style="width:60px"> ' + requiredData.raidDtoList[n].remotePass + '</p>';
 
 
-  if(requiredData[n].p_end =="0"){
+  if(requiredData.raidDtoList[n].raidState ==="invite"){
   let commentDiv3 = document.createElement('div');
   commentDiv3.setAttribute('class', 'commentBox');
   commentDiv3.setAttribute('id', 'commentBox');
@@ -119,98 +119,24 @@ function allPostHtml(requiredData, n){
 
 //allPost() : 모든 포스트/필터된 포스트를 출력하기 전 거치는 ajax
 function allPostAjax(selectOption, switchOption) {
-  if(selectOption == 'three'){
-	if(switchOption == true){
-		removeAllPost();
-		var url = '/api/index/three/0';
-		
-		sendAjax(url, 'GET', null, function (res) {
-	      console.log(res.response);
-	      var result = JSON.parse(res.response);
-	      for (let i = 0; i < result.length; i++) {
-	        allPostHtml(result, i);
-	      }
-   		});
-	} else {		
-		removeAllPost();
-	    var url = '/api/index/three';
-	    sendAjax(url, 'GET', null, function (res) {
-	      console.log(res.response);
-	      var result = JSON.parse(res.response);
-	      for (let i = 0; i < result.length; i++) {
-	        allPostHtml(result, i);
-	      }
-	    });
-	}
-  }else if(selectOption == 'five'){
-	if(switchOption == true){
-		removeAllPost();
-		var url = '/api/index/five/0';
-		
-		sendAjax(url, 'GET', null, function (res) {
-	      console.log(res.response);
-	      var result = JSON.parse(res.response);
-	      for (let i = 0; i < result.length; i++) {
-	        allPostHtml(result, i);
-	      }
-   		});
-	} else {
-		removeAllPost();
-	    var url = '/api/index/five';
-	    sendAjax(url, 'GET', null, function (res) {
-	      console.log(res.response);
-	      var result = JSON.parse(res.response);
-	      for (let i = 0; i < result.length; i++) {
-	        allPostHtml(result, i);
-	      }
-	    });
-	}
-    
-  }else if(selectOption == 'mega'){
-	if(switchOption == true){
-		removeAllPost();
-		var url = '/api/index/mega/0';
-		sendAjax(url, 'GET', null, function (res) {
-	      console.log(res.response);
-	      var result = JSON.parse(res.response);
-	      for (let i = 0; i < result.length; i++) {
-	        allPostHtml(result, i);
-	      }
-    	});
-	} else {
-		removeAllPost();
-	    var url = '/api/index/mega';
-	    sendAjax(url, 'GET', null, function (res) {
-	      console.log(res.response);
-	      var result = JSON.parse(res.response);
-	      for (let i = 0; i < result.length; i++) {
-	        allPostHtml(result, i);
-	      }
-	    });
-	}
-  }else{
-	if(switchOption == true){
-		removeAllPost();
-		var url = '/api/index/0';
-		sendAjax(url, 'GET', null, function (res) {
-	      console.log(res.response);
-	      var result = JSON.parse(res.response);
-	      for (let i = 0; i < result.length; i++) {
-	        allPostHtml(result, i);
-	      }
-    	});
-	} else {	
-		removeAllPost();
-	    var url = '/api/index';
-	    sendAjax(url, 'GET', null, function (res) {
-	      console.log(res.response);
-	      var result = JSON.parse(res.response);
-	      for (let i = 0; i < result.length; i++) {
-	        allPostHtml(result, i);
-	      }
-	    });
-	}
-  }
+
+    let state = "";
+    let type = "";
+    if (switchOption) {
+        state = "INVITE"
+    }
+    if (typeof selectOption === 'string') {
+        type = selectOption;
+    }
+    removeAllPost();
+    var url = `/api/raid?size=50&state=${state}&type=${type}`;
+    sendAjax(url, 'GET', null, function (res) {
+      console.log(res.response);
+      var result = JSON.parse(res.response);
+      for (let i = 0; i < result.raidDtoList.length; i++) {
+        allPostHtml(result, i);
+      }
+    });
 };
 
 
@@ -514,22 +440,22 @@ function makeFilteringButton(){
   filterBox.appendChild(select);
 
   let selectTotal = document.createElement("option");
-  selectTotal.setAttribute("value", "total");
+  selectTotal.setAttribute("value", "");
   let selectTotalText = document.createTextNode("total");
   selectTotal.appendChild(selectTotalText);
 
   let selectOne = document.createElement("option");
-  selectOne.setAttribute("value", "three");
-  let selectOneText = document.createTextNode("1~3");
+  selectOne.setAttribute("value", "ONE");
+  let selectOneText = document.createTextNode("1~2");
   selectOne.appendChild(selectOneText);
 
   let selectTwo = document.createElement("option");
-  selectTwo.setAttribute("value", "five");
+  selectTwo.setAttribute("value", "FIVE");
   let selectTwoText = document.createTextNode("5");
   selectTwo.appendChild(selectTwoText);
 
   let selectThree = document.createElement("option");
-  selectThree.setAttribute("value", "mega");
+  selectThree.setAttribute("value", "MEGA");
   let selectThreeText = document.createTextNode("mega");
   selectThree.appendChild(selectThreeText);
 
@@ -559,31 +485,8 @@ function makeFilterSwich(){
 function filterOptionCheck(){
   var selectOption = document.getElementById("filterSelect").value;
   var switchOption = document.getElementById("customSwitch1").checked;
-  if(selectOption === 'total'){
-    if(switchOption == true){
-      return allPostAjax(selectOption, switchOption);
-    } else {
-    	return allPostAjax(selectOption, switchOption);
-	}
-  }else if(selectOption === 'three'){
-    if(switchOption == true){
-      return allPostAjax(selectOption, switchOption);
-    } else {
-    	return allPostAjax(selectOption, switchOption);
-	}
-  }else if(selectOption === 'five'){
-    if(switchOption == true){
-      return allPostAjax(selectOption, switchOption);
-    } else {
-    	return allPostAjax(selectOption, switchOption);
-	}
-  }else{
-    if(switchOption == true){
-      return allPostAjax(selectOption, switchOption);
-    } else {
-    	return allPostAjax(selectOption, switchOption);
-	}
-  }
+  return allPostAjax(selectOption, switchOption);
+
 }
 
 
