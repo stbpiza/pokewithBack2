@@ -129,14 +129,17 @@ function allPostAjax(selectOption, switchOption) {
         type = selectOption;
     }
     removeAllPost();
-    var url = `/api/raid?size=50&state=${state}&type=${type}`;
-    sendAjax(url, 'GET', null, function (res) {
-      console.log(res.response);
-      var result = JSON.parse(res.response);
-      for (let i = 0; i < result.raidDtoList.length; i++) {
-        allPostHtml(result, i);
-      }
-    });
+    const url = `/api/raid?size=50&state=${state}&type=${type}`;
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        for (let i = 0; i < data.raidDtoList.length; i++) {
+          allPostHtml(data, i);
+        }
+      })
+
+
 };
 
 
@@ -234,7 +237,7 @@ function pokemon(){
 	let pokeNum = document.getElementById("pokemon").value;
 	let pokeDiv = document.getElementById("pokemonImg");
 	pokeDiv.style.display = 'block';
-	if(pokeNum == ""){
+	if(pokeNum === ""){
 		pokeDiv.style.backgroundImage = "none";
 	}else {	
 		pokeDiv.style.backgroundImage = "url('/static/img/pokemon/"+pokeNum+".png')";
@@ -495,10 +498,10 @@ function filterOptionCheck(){
 function myPageAjax() {
   const url = "/api/mypage";
 
-  sendAjax(url, "GET", null, function (res) {
-    let result = JSON.parse(res.response);
-	console.log(result);
-	loadSidebar(result);	
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      loadSidebar(data);
   });
 }
 

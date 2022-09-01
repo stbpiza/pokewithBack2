@@ -1,8 +1,10 @@
 package com.pokewith.raid;
 
+import com.pokewith.raid.dto.RqPostRaidDto;
 import com.pokewith.superclass.TimeEntity;
 import com.pokewith.user.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -53,4 +55,19 @@ public class Raid extends TimeEntity {
 
     @OneToMany(mappedBy = "raid", fetch = FetchType.LAZY)
     private List<RaidComment> raidComments = new ArrayList<>();
+
+
+    @Builder
+    public Raid(RqPostRaidDto dto, User user) {
+        this.pokemon = dto.getPokemon();
+        this.raidType = dto.getRaidType();
+        this.startTime = dto.getStartTime();
+        this.endTime = dto.getEndTime();
+        this.normalPass = dto.getNormalPass();
+        this.remotePass = dto.getRemotePass();
+        this.raidState = RaidState.INVITE;
+        this.requiredLevel = dto.getRequiredLevel();
+
+        this.user = user;
+    }
 }

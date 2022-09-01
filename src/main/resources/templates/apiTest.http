@@ -13,8 +13,8 @@ POST http://localhost:8888/api/login
 Content-Type: application/json
 
 {
-  "email" : "abc@abc.com",
-  "password" : "qwe123qwe123!"
+  "email" : "ab0147@naver.com",
+  "password" : "qweqwe123!"
 }
 
 ###
@@ -30,3 +30,17 @@ GET http://localhost:8888/api/user/test
 
 ###
 GET http://localhost:8888/api/raid?page=0
+
+###
+POST http://localhost:8888/api/raid
+Content-Type: application/json
+
+{
+  "pokemon" : 150,
+  "raidType" : "FIVE",
+  "startTime" : "2022-08-30T23:05:21",
+  "endTime" : "2022-08-30T23:05:21",
+  "normalPass" : "2",
+  "remotePass" : "2",
+  "requiredLevel" : ""
+}

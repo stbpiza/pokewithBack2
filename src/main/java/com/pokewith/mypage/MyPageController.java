@@ -1,5 +1,6 @@
 package com.pokewith.mypage;
 
+import com.pokewith.auth.UsernameService;
 import com.pokewith.mypage.dto.RpGetMyPageDto;
 import com.pokewith.mypage.dto.RqUpdateMyPageDto;
 import io.swagger.annotations.ApiResponse;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 public class MyPageController {
 
     private final MyPageService myPageService;
+    private final UsernameService usernameService;
 
     @GetMapping("/mypage")
     @ApiResponses(value = {
@@ -42,9 +44,8 @@ public class MyPageController {
     })
     public ResponseEntity<String> updateMyPage(@Valid @RequestBody RqUpdateMyPageDto dto, HttpServletRequest request) {
         log.info("/api/mypage");
-        log.info("dto", dto);
-        HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute("userId");
+        log.info(String.valueOf(dto));
+        Long userId = usernameService.getUsername(request);
         return myPageService.updateMyPage(userId, dto);
     }
 }
