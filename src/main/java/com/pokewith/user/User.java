@@ -73,6 +73,10 @@ public class User extends TimeEntity {
 
     private int hateCount;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 15)
+    private UserState userState;
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Raid> raids = new ArrayList<>();
@@ -87,6 +91,23 @@ public class User extends TimeEntity {
         this.nickname1 = nickname1;
         this.friendCode1 = friendCode1;
         this.userType = UserType.ROLE_NOTUSER;
+        this.userState = UserState.FREE;
+    }
+
+    public void EmailCheck() {
+        this.userType = UserType.ROLE_USER;
+    }
+
+    public void setPostState() {
+        this.userState = UserState.POST;
+    }
+
+    public void setCommentState() {
+        this.userState = UserState.COMMENT;
+    }
+
+    public void setFreeState() {
+        this.userState = UserState.FREE;
     }
 
     public void updateUser(RqUpdateMyPageDto dto) {
@@ -100,6 +121,10 @@ public class User extends TimeEntity {
         this.friendCode4 = dto.getFriendCode4();
         this.nickname5 = dto.getNickname5();
         this.friendCode5 = dto.getFriendCode5();
+    }
+
+    public User(Long userId){
+        this.userId = userId;
     }
 
     public String getUserIdToString() { return Long.toString(userId); }
