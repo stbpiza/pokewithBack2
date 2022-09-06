@@ -195,14 +195,14 @@ function createPost(){
   let modalBodyStr = '';
   modalBodyStr += "<p>pokemon : <input type='text' id='pokemon' class='form-control' onkeyup='setTimeout(pokemon, 500)' name='pokemon' placeholder='pokemon of number'><div id='pokemonImg'> </div> </p>";
   modalBodyStr += `<p>Level of Raid : <select name="searchYear" id="raidLevel" class='form-control' name="raidLevel">
-                      <option value="1">1</option>
-                      <option value="3">3</option>
-                      <option value="5">5</option>
-                      <option value="mega">mega</option>
+                      <option value="ONE">1</option>
+                      <option value="THREE">3</option>
+                      <option value="FIVE">5</option>
+                      <option value="MEGA">mega</option>
                       </select></p>`;
   modalBodyStr += "<p>Start Time of Raid : <input type='datetime-local' id='startTime' class='form-control' name='startTime'></p>";
   modalBodyStr += "<p>End Time of Raid : <input type='datetime-local' id='endTime' class='form-control' name='endTime'></p>";
-  modalBodyStr += "<p>Required Player Level : <input type='number' max='40' id='minLevel' class='form-control' name='minLevel'></p>";
+  modalBodyStr += "<p>Required Player Level : <input type='number' max='50' id='minLevel' class='form-control' name='minLevel'></p>";
   modalBodyStr += "<p>Premium Pass : <input type='number' id='nPass' class='form-control' name='nPass'></p>";
   modalBodyStr += "<p>Remote Pass : <input type='number' id='rPass' class='form-control' name='rPass'></p>";
   modalBody.innerHTML = modalBodyStr;
@@ -251,29 +251,38 @@ function pokemon(){
 function addPost(){
   const addData = {
     pokemon : document.getElementById("pokemon").value,
-    raidLevel : document.getElementById("raidLevel").value,
-    startTime : document.getElementById("startTime").value.slice(11),
-    endTime : document.getElementById("endTime").value.slice(11),
-    minLevel : document.getElementById("minLevel").value,
-    nPass : document.getElementById("nPass").value,
-    rPass : document.getElementById("rPass").value,
+    raidType : document.getElementById("raidLevel").value,
+    startTime : document.getElementById("startTime").value,
+    endTime : document.getElementById("endTime").value,
+    requiredLevel : document.getElementById("minLevel").value,
+    normalPass : document.getElementById("nPass").value,
+    remotePass : document.getElementById("rPass").value,
   }
 
 
 
   const strObject = JSON.stringify(addData);
+  console.log("보내는 데이터 : "+strObject);
 
-  var url = '/index';
-  
-	sendAjax(url, 'POST', strObject, function (res) {
-    console.log(res.response);
-	console.log("보내는 데이터 : "+strObject);
-    if(res.response == 1) {
-      alert("Post Success!");
-    }else {
-      alert("You have already registered post or comment.");
-      window.location.replace("/post");
-    }
+  var url = '/api/raid';
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: strObject,
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Post Success!");
+          window.location.replace("/mypost");
+        } else if (response.status === 400) {
+          alert("Post fail")
+        } else if (response.status === 409) {
+          alert("You have already registered post or comment.");
+          window.location.replace("/mypost");
+        }
   });
 
   setTimeout("location.reload()", 1000);
@@ -297,7 +306,7 @@ function allComment(resultData, num) {
   startDiv.setAttribute("class", "card-body commentBody"+num);
 
   for(let i = 0; i<resultData.length; i++){
-    if(num == resultData[i].p_id){
+    if(num === resultData[i].p_id){
       let commentId = resultData[i].c_id;
       let commentW = document.createElement("div");
       commentW.setAttribute("class", "commentWrap comment"+commentId);
@@ -322,16 +331,16 @@ function allComment(resultData, num) {
   let nickname3 = resultData.user[0].nickname3;
   let nickname4 = resultData.user[0].nickname4;
   let nickname5 = resultData.user[0].nickname5;
-  if(nickname2 == ''){
+  if(nickname2 === ''){
 	nickname2 = 'empty';
   } 
-  if(nickname3 == ''){
+  if(nickname3 === ''){
 	nickname3 = 'empty';
   }
-  if(nickname4 == ''){
+  if(nickname4 === ''){
 	nickname4 = 'empty';
   }
-  if(nickname5 == ''){
+  if(nickname5 === ''){
 	nickname5 = 'empty';
   }  
 
@@ -509,22 +518,22 @@ const sidebarList = document.querySelectorAll(".sidebar-list");
 function loadSidebar(data){
 	const userInfoGet = data;
 	sidebarList[0].innerText = userInfoGet.nickname1;
-	if(userInfoGet.nickname2 == "") {
+	if(userInfoGet.nickname2 === "") {
 		sidebarList[1].innerText = "Empty";
 	} else {
   	sidebarList[1].innerText = userInfoGet.nickname2;		
 	}
-	if(userInfoGet.nickname3 == "") {
+	if(userInfoGet.nickname3 === "") {
 		sidebarList[2].innerText = "Empty";
 	} else {
   	sidebarList[2].innerText = userInfoGet.nickname3;		
 	}
-	if(userInfoGet.nickname4 == "") {
+	if(userInfoGet.nickname4 === "") {
 		sidebarList[3].innerText = "Empty";
 	} else {
   	sidebarList[3].innerText = userInfoGet.nickname4;		
 	}
-	if(userInfoGet.nickname5 == "") {
+	if(userInfoGet.nickname5 === "") {
 		sidebarList[4].innerText = "Empty";
 	} else {
   	sidebarList[4].innerText = userInfoGet.nickname5;		
