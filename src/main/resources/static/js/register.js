@@ -124,10 +124,10 @@ function postUserInfo() {
     body: jsonData,
     })
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
              alert("signup success")
           window.location.href = "/";
-        } else if (response.status == 400) {
+        } else if (response.status === 400) {
            alert("signup fail")
         }
   })
