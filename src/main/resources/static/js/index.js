@@ -73,17 +73,17 @@ function allPostHtml(requiredData, n){
   }
   
   cardDiv.innerHTML += '<input type="hidden" id="postId" name="postId" value="'+ requiredData.raidDtoList[n].raidId +'">';
-  cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/150.png" width="150px" /></p>';
-  //cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/'+resultData[n].pokemon+'.png" width="150px" /></p>';
+  // cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/150.png" width="150px" /></p>';
+  cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/'+requiredData.raidDtoList[n].pokemon+'.png" width="150px" /></p>';
   cardDiv.innerHTML += '<p> Level of Raid : ' + str + '</p>';
-  cardDiv.innerHTML += '<p> Start Time of Raid : ' + requiredData.raidDtoList[n].startTime+'</p>';
-  cardDiv.innerHTML += '<p> End Time of Raid : ' + requiredData.raidDtoList[n].endTime+'</p>';
+  cardDiv.innerHTML += '<p> Start Time of Raid : ' + requiredData.raidDtoList[n].startTime.replace("T", " ").substr(0, 16)+'</p>';
+  cardDiv.innerHTML += '<p> End Time of Raid : ' + requiredData.raidDtoList[n].endTime.replace("T", " ").substr(0, 16)+'</p>';
   cardDiv.innerHTML += '<p> Required Player Level : ' + requiredData.raidDtoList[n].requiredLevel+'</p>';
   cardDiv.innerHTML += '<p> Premium Pass : <img src="/static/img/3_premium.png" style="width:60px"> / <img src="/static/img/2_premium.png" style="width:50px">' + requiredData.raidDtoList[n].normalPass+'</p>';
   cardDiv.innerHTML += '<p> Remote Pass : <img src="/static/img/1_remote.png" style="width:60px"> ' + requiredData.raidDtoList[n].remotePass + '</p>';
 
 
-  if(requiredData.raidDtoList[n].raidState ==="invite"){
+  if(requiredData.raidDtoList[n].raidState ==="INVITE"){
   let commentDiv3 = document.createElement('div');
   commentDiv3.setAttribute('class', 'commentBox');
   commentDiv3.setAttribute('id', 'commentBox');
@@ -395,7 +395,7 @@ function hideComment(num) {
   var commentBox = document.querySelector(".commentBody"+num);
   var arrowDown = document.getElementById("comment"+num);
 
-  if(commentBox.style.display == 'block'){
+  if(commentBox.style.display === 'block'){
     commentBox.style.display = 'none';
     arrowDown.innerHTML = 'comment <i class="fa fa-sort-down"></i>';
   } else {
@@ -415,7 +415,7 @@ function commitComment(num) {
   
   var sum = 0; 
   for (var i=0; i<check_count; i++) {
-      if (document.getElementsByName("nickname"+num)[i].checked == true) {
+      if (document.getElementsByName("nickname"+num)[i].checked === true) {
           var checkedStr = document.getElementsByName("nickname"+num)[i].value;
           sum += checkedStr.length;     
       }
@@ -431,7 +431,7 @@ function commitComment(num) {
   var url = '/comment';
   sendAjax(url, 'POST', strObject, function (res) {
     console.log(res.response);
-    if(res.response == 1) {
+    if(res.response === 1) {
       alert("Comment Success!");
       window.location.replace("/post");
     }else {
@@ -458,23 +458,29 @@ function makeFilteringButton(){
 
   let selectOne = document.createElement("option");
   selectOne.setAttribute("value", "ONE");
-  let selectOneText = document.createTextNode("1~2");
+  let selectOneText = document.createTextNode("1");
   selectOne.appendChild(selectOneText);
 
   let selectTwo = document.createElement("option");
-  selectTwo.setAttribute("value", "FIVE");
-  let selectTwoText = document.createTextNode("5");
+  selectTwo.setAttribute("value", "THREE");
+  let selectTwoText = document.createTextNode("3");
   selectTwo.appendChild(selectTwoText);
 
   let selectThree = document.createElement("option");
-  selectThree.setAttribute("value", "MEGA");
-  let selectThreeText = document.createTextNode("mega");
+  selectThree.setAttribute("value", "FIVE");
+  let selectThreeText = document.createTextNode("5");
   selectThree.appendChild(selectThreeText);
+
+  let selectFour = document.createElement("option");
+  selectFour.setAttribute("value", "MEGA");
+  let selectFourText = document.createTextNode("mega");
+  selectFour.appendChild(selectFourText);
 
   document.getElementById("filterSelect").appendChild(selectTotal);
   document.getElementById("filterSelect").appendChild(selectOne);
   document.getElementById("filterSelect").appendChild(selectTwo);
   document.getElementById("filterSelect").appendChild(selectThree);
+  document.getElementById("filterSelect").appendChild(selectFour);
 }
 
 function makeFilterSwich(){
