@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class RqPostRaidDto {
 
     @NotNull
-    private int pokemon;
+    private String pokemon;
 
     @NotNull
     private RaidType raidType;

@@ -23,7 +23,7 @@ public class Raid extends TimeEntity {
     private Long raidId;
 
     @Column(nullable = false)
-    private int pokemon;
+    private String pokemon;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

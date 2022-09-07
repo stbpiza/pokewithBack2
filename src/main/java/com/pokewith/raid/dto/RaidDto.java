@@ -15,7 +15,7 @@ public class RaidDto {
 
     private Long raidId;
 
-    private int pokemon;
+    private String pokemon;
 
     private RaidType raidType;
 
