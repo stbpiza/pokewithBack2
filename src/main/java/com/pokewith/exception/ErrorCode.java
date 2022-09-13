@@ -15,6 +15,7 @@ public enum ErrorCode {
     DB_ERROR(HttpStatus.CONFLICT, "알수없는 db 에러"),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 값 요청"),
     CONFLICT(HttpStatus.CONFLICT, "409"),
+    NOT_FOUND(HttpStatus.NOT_FOUND, "404"),
     FORBIDDEN(HttpStatus.FORBIDDEN, "권한없음");
 
 

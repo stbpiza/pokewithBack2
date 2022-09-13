@@ -2,6 +2,7 @@ package com.pokewith.raid;
 
 import com.pokewith.auth.UsernameService;
 import com.pokewith.raid.dto.RpRaidListDto;
+import com.pokewith.raid.dto.RqPostRaidCommentDto;
 import com.pokewith.raid.dto.RqPostRaidDto;
 import com.pokewith.raid.dto.RqRaidListSearchDto;
 import io.swagger.annotations.ApiOperation;
@@ -36,8 +37,15 @@ public class RaidController {
     @ApiOperation(value = "", notes = "")
     public ResponseEntity<String> postRaid(@Valid @RequestBody RqPostRaidDto dto, HttpServletRequest request) {
         log.info("/api/raid");
-        log.info(dto.toString());
         Long userId = usernameService.getUsername(request);
         return raidService.postRaid(dto, userId);
+    }
+
+    @PostMapping("/comment")
+    @ApiOperation(value = "", notes = "")
+    public ResponseEntity<String> postRaidComment(@Valid @RequestBody RqPostRaidCommentDto dto, HttpServletRequest request) {
+        log.info("/api/comment");
+        Long userId = usernameService.getUsername(request);
+        return raidService.postRaidComment(dto, userId);
     }
 }

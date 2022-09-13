@@ -44,3 +44,16 @@ Content-Type: application/json
   "remotePass" : "2",
   "requiredLevel" : ""
 }
+
+###
+POST http://localhost:8888/api/comment
+Content-Type: application/json
+
+{
+  "raidId" : 7,
+  "account1" : true,
+  "account2" : true,
+  "account3" : true,
+  "account4" : true,
+  "account5" : true
+}

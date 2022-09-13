@@ -1,10 +1,10 @@
 package com.pokewith.raid;
 
+import com.pokewith.exception.BadRequestException;
+import com.pokewith.exception.ConflictException;
+import com.pokewith.exception.NotFoundException;
 import com.pokewith.exception.auth.DbErrorException;
-import com.pokewith.raid.dto.RaidDto;
-import com.pokewith.raid.dto.RpRaidListDto;
-import com.pokewith.raid.dto.RqPostRaidDto;
-import com.pokewith.raid.dto.RqRaidListSearchDto;
+import com.pokewith.raid.dto.*;
 import com.pokewith.user.User;
 import com.pokewith.user.UserRepository;
 import com.pokewith.user.UserState;
@@ -47,12 +47,7 @@ public class RaidServiceImpl implements RaidService {
     @Override
     public ResponseEntity<String> postRaid(RqPostRaidDto dto, Long userId) {
 
-        User member = userRepository.findById(userId).orElseThrow(DbErrorException::new);
-
-        // 이미 참여중인 레이드가 있는지 확인
-        if (member.getUserState() != UserState.FREE) {
-            return new ResponseEntity<>("", HttpStatus.CONFLICT);
-        }
+        User member = getUserAndCheckUserState(userId);
 
         Raid raid = Raid.builder()
                 .dto(dto)
@@ -65,5 +60,52 @@ public class RaidServiceImpl implements RaidService {
         member.setPostState();
 
         return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity<String> postRaidComment(RqPostRaidCommentDto dto, Long userId) {
+
+        User member = getUserAndCheckUserState(userId);
+
+        Raid raid = getRaidAndCheckRaidState(dto.getRaidId());
+
+        RaidComment raidComment = RaidComment.builder()
+                .dto(dto)
+                .raid(raid)
+                .user(member)
+                .build();
+
+        em.persist(raidComment);
+
+        // userState 참여중으로 변경
+        member.setCommentState();
+
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    /**
+     *  분리한 메소드
+     **/
+
+    private User getUserAndCheckUserState(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(DbErrorException::new);
+
+        // 이미 참여중인 레이드가 있는지 확인
+        if (user.getUserState() != UserState.FREE) {
+            throw new ConflictException();
+        }
+
+        return user;
+    }
+
+    private Raid getRaidAndCheckRaidState(Long raidId) {
+        Raid raid = raidRepository.findById(raidId).orElseThrow(NotFoundException::new);
+
+        // 모집중 상태인 레이드인지 확인
+        if (raid.getRaidState() != RaidState.INVITE) {
+            throw new BadRequestException();
+        }
+        return raid;
     }
 }

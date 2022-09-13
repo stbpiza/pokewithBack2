@@ -70,4 +70,8 @@ public class Raid extends TimeEntity {
 
         this.user = user;
     }
+
+    public Raid(Long raidId) {
+        this.raidId = raidId;
+    }
 }
