@@ -105,4 +105,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>("", HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(NotFoundException e) {
+        return new ResponseEntity<>("", HttpStatus.NOT_FOUND);
+    }
+
 }
