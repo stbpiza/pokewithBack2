@@ -1,10 +1,7 @@
 package com.pokewith.raid;
 
 import com.pokewith.auth.UsernameService;
-import com.pokewith.raid.dto.RpRaidListDto;
-import com.pokewith.raid.dto.RqPostRaidCommentDto;
-import com.pokewith.raid.dto.RqPostRaidDto;
-import com.pokewith.raid.dto.RqRaidListSearchDto;
+import com.pokewith.raid.dto.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,5 +44,12 @@ public class RaidController {
         log.info("/api/comment");
         Long userId = usernameService.getUsername(request);
         return raidService.postRaidComment(dto, userId);
+    }
+
+    @GetMapping("/comment/{raidId}")
+    @ApiOperation(value = "", notes = "")
+    public ResponseEntity<RpRaidCommentListDto> getRaidCommentList(@PathVariable("raidId") Long raidId) {
+        log.info("/api/comment/" + raidId);
+        return raidService.getRaidCommentList(raidId);
     }
 }

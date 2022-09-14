@@ -34,7 +34,7 @@ function sendAjax(url, method, data, callback){
 //allPostHtml() : 전체/필터 게시글 출력 함수
 function allPostHtml(requiredData, n){
 
-  let num = requiredData.raidDtoList[n].p_id;
+  let num = requiredData.raidDtoList[n].raidId;
   console.log(num);
     
   let startDiv = document.createElement("div");
@@ -305,79 +305,88 @@ function allComment(resultData, num) {
   let startDiv = document.createElement("div");
   startDiv.setAttribute("class", "card-body commentBody"+num);
 
-  for(let i = 0; i<resultData.length; i++){
-    if(num === resultData[i].p_id){
-      let commentId = resultData[i].c_id;
+  for(let i = 0; i<resultData.raidCommentDtoList.length; i++){
+    // if(num === resultData.raidCommentDtoList[i].raidId){
+      let commentId = resultData.raidCommentDtoList[i].raidCommentId;
       let commentW = document.createElement("div");
       commentW.setAttribute("class", "commentWrap comment"+commentId);
 
       let commentText = '';
-      commentText += '<div> <p class="commentP">' + resultData[i].nickname1;
-      commentText += '</p> <div style="float: right; width:60%;"><img src="/static/img/1_remote.png" style="width:60px; margin-right:20px">' + resultData[i].checkNum.length + "</div></div>";
+      let account = 0;
+      if (resultData.raidCommentDtoList[i].account1) account++;
+      if (resultData.raidCommentDtoList[i].account2) account++;
+      if (resultData.raidCommentDtoList[i].account3) account++;
+      if (resultData.raidCommentDtoList[i].account4) account++;
+      if (resultData.raidCommentDtoList[i].account5) account++;
+      commentText += '<div> <p class="commentP">' + resultData.raidCommentDtoList[i].nickname1;
+      commentText += '</p> <div style="float: right; width:60%;"><img src="/static/img/1_remote.png" style="width:60px; margin-right:20px">' + account + "</div></div>";
       commentW.innerHTML = commentText;
 
       startDiv.appendChild(commentW);
-    }
+    // }
   }
 
   let commentForm = document.createElement("div");
-  commentForm.setAttribute('class', 'comment-wrap wrap'+ num);
-  startDiv.appendChild(commentForm);
 
-  console.log("user "+ resultData.user[0].nickname1);
-  
-  let nickname1 = resultData.user[0].nickname1;
-  let nickname2 = resultData.user[0].nickname2;
-  let nickname3 = resultData.user[0].nickname3;
-  let nickname4 = resultData.user[0].nickname4;
-  let nickname5 = resultData.user[0].nickname5;
-  if(nickname2 === ''){
-	nickname2 = 'empty';
-  } 
-  if(nickname3 === ''){
-	nickname3 = 'empty';
+  console.log("user "+ userInfo.nickname1);
+
+  let nickname1 = userInfo.nickname1;
+  let nickname2 = userInfo.nickname2;
+  let nickname3 = userInfo.nickname3;
+  let nickname4 = userInfo.nickname4;
+  let nickname5 = userInfo.nickname5;
+  if(nickname1 === ''){
+
+  } else {
+    commentForm.setAttribute('class', 'comment-wrap wrap'+ num);
+    startDiv.appendChild(commentForm);
+    if (nickname2 === '') {
+      nickname2 = 'empty';
+    }
+    if (nickname3 === '') {
+      nickname3 = 'empty';
+    }
+    if (nickname4 === '') {
+      nickname4 = 'empty';
+    }
+    if (nickname5 === '') {
+      nickname5 = 'empty';
+    }
+
+    let str = "";
+    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='1'> 1. " + nickname1 + "</p>";
+    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='2'> 2. " + nickname2 + "</p>";
+    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='3'> 3. " + nickname3 + "</p>";
+    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='4'> 4. " + nickname4 + "</p>";
+    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='5'> 5. " + nickname5 + "</p></br>";
+    commentForm.innerHTML = str;
+
+
+    commentSubmit = document.createElement('input');
+    commentSubmit.setAttribute('class', 'comment-submit');
+    commentSubmit.setAttribute('type', 'submit');
+    commentSubmit.setAttribute('value', 'submit');
+    commentSubmit.setAttribute('onclick', 'commitComment(' + num + ')');
+
+    commentForm.appendChild(commentSubmit);
   }
-  if(nickname4 === ''){
-	nickname4 = 'empty';
-  }
-  if(nickname5 === ''){
-	nickname5 = 'empty';
-  }  
 
-  let str = "";
-  str+="<p class='checked'><input type='checkbox' name='nickname"+num+"' value='1'> 1. "+nickname1+"</p>";
-  str+="<p class='checked'><input type='checkbox' name='nickname"+num+"' value='2'> 2. "+nickname2+"</p>";
-  str+="<p class='checked'><input type='checkbox' name='nickname"+num+"' value='3'> 3. "+nickname3+"</p>";
-  str+="<p class='checked'><input type='checkbox' name='nickname"+num+"' value='4'> 4. "+nickname4+"</p>";
-  str+="<p class='checked'><input type='checkbox' name='nickname"+num+"' value='5'> 5. "+nickname5+"</p></br>";
-  commentForm.innerHTML = str;
-  
+    currentDiv.appendChild(startDiv);
 
-  commentSubmit = document.createElement('input');
-  commentSubmit.setAttribute('class', 'comment-submit');
-  commentSubmit.setAttribute('type', 'submit');
-  commentSubmit.setAttribute('value', 'submit');
-  commentSubmit.setAttribute('onclick', 'commitComment('+num+')');
+    var arrowUp = document.getElementById("comment" + num);
+    arrowUp.setAttribute('onclick', 'hideComment(' + num + ')');
 
-  commentForm.appendChild(commentSubmit);
+    arrowUp.innerHTML = 'comment <i class="fa fa-sort-up"></i>';
 
-  
-  currentDiv.appendChild(startDiv);
-
-  var arrowUp = document.getElementById("comment"+num);
-  arrowUp.setAttribute('onclick', 'hideComment('+num+')');
-  
-  arrowUp.innerHTML = 'comment <i class="fa fa-sort-up"></i>';
-
-  var commentBox = document.querySelector(".commentBody"+num);
-  commentBox.style.display = 'block';
+    var commentBox = document.querySelector(".commentBody" + num);
+    commentBox.style.display = 'block';
 
 }
 
 
 //allCommentView() : 특정 포스트의 모든 댓글을 출력하기 전 거치는 ajax
 function allCommentAjax(num) {
-  var url = '/comment/'+num;
+  var url = '/api/comment/'+num;
 
   const postId = num;
   
@@ -510,14 +519,28 @@ function filterOptionCheck(){
 
 
 // Init paint sidebar
-function myPageAjax() {
+function mypageFetch() {
   const url = "/api/mypage";
 
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
+      userInfo = data;
       loadSidebar(data);
   });
+}
+
+let userInfo = {
+  nickname1: "",
+  friendCode1: "",
+  nickname2: "",
+  friendCode2: "",
+  nickname3: "",
+  friendCode3: "",
+  nickname4: "",
+  friendCode4: "",
+  nickname5: "",
+  friendCode5: "",
 }
 
 const sidebarList = document.querySelectorAll(".sidebar-list");
@@ -546,12 +569,12 @@ function loadSidebar(data){
 	}
 }
 
-//윈도우가 로드될 때 myPageAjax()를 실행시키기 위한 함수
+//윈도우가 로드될 때 mypageFetch()를 실행시키기 위한 함수
 if (window.addEventListener)
-	  window.addEventListener("load", myPageAjax, false);
+	  window.addEventListener("load", mypageFetch, false);
 else if (window.attachEvent)
-    window.attachEvent("onload", myPageAjax);
-else window.onload = myPageAjax;
+    window.attachEvent("onload", mypageFetch);
+else window.onload = mypageFetch;
 // End of paint sidebar
 
 //윈도우가 로드될 때 makeFilteringButton()를 실행시키기 위한 함수
