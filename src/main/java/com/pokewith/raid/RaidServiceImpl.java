@@ -30,6 +30,7 @@ public class RaidServiceImpl implements RaidService {
     private final RaidRepository raidRepository;
     private final RaidQueryRepository raidQueryRepository;
     private final UserRepository userRepository;
+    private final RaidCommentQueryRepository raidCommentQueryRepository;
     private final EntityManager em;
 
     @Override
@@ -82,6 +83,15 @@ public class RaidServiceImpl implements RaidService {
         member.setCommentState();
 
         return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<RpRaidCommentListDto> getRaidCommentList(Long raidId) {
+        List<RaidComment> raidCommentList = raidCommentQueryRepository.getRaidCommentListByRaidId(raidId);
+
+        return new ResponseEntity<>(RpRaidCommentListDto.builder()
+                .raidCommentList(raidCommentList)
+                .build(), HttpStatus.OK);
     }
 
     /**

@@ -1,9 +1,6 @@
 package com.pokewith.raid;
 
-import com.pokewith.raid.dto.RpRaidListDto;
-import com.pokewith.raid.dto.RqPostRaidCommentDto;
-import com.pokewith.raid.dto.RqPostRaidDto;
-import com.pokewith.raid.dto.RqRaidListSearchDto;
+import com.pokewith.raid.dto.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
@@ -13,4 +10,6 @@ public interface RaidService {
     ResponseEntity<String> postRaid(RqPostRaidDto dto, Long userId);
 
     ResponseEntity<String> postRaidComment(RqPostRaidCommentDto dto, Long userId);
+
+    ResponseEntity<RpRaidCommentListDto> getRaidCommentList(Long raidId);
 }
