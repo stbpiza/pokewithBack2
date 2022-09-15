@@ -26,7 +26,7 @@ function saveUserInfo() {
   const codeRgx = RegExp(/^[\d]{4}[-][\d]{4}[-][\d]{4}[-][\d]{4}$/);
 
   for (let i = 0; i < pointer.childNodes.length; i++) {
-    if (i % 2 == 1) {
+    if (i % 2 === 1) {
       pointer.childNodes[i].classList.add("d-none");
       pointer.nextSibling.childNodes[1].classList.add("d-none");
     } else {
@@ -72,7 +72,7 @@ function saveUserInfo() {
 function editUserInfo() {
   const pointer = this.parentNode.previousSibling;
   for (let i = 0; i < pointer.childNodes.length; i++) {
-    if (i % 2 == 1) {
+    if (i % 2 === 1) {
       pointer.childNodes[i].classList.remove("d-none");
       pointer.nextSibling.childNodes[1].classList.remove("d-none");
     } else {
@@ -178,22 +178,22 @@ function paintUserInfo(data) {
 
   //PAINT SIDEBAR USER INFORMATION
   sidebarList[0].innerText = userInfoGet.nickname1;
-	if(userInfoGet.nickname2 == "") {
+	if(userInfoGet.nickname2 === "") {
 		sidebarList[1].innerText = "Empty";
 	} else {
   	sidebarList[1].innerText = userInfoGet.nickname2;		
 	}
-	if(userInfoGet.nickname3 == "") {
+	if(userInfoGet.nickname3 === "") {
 		sidebarList[2].innerText = "Empty";
 	} else {
   	sidebarList[2].innerText = userInfoGet.nickname3;		
 	}
-	if(userInfoGet.nickname4 == "") {
+	if(userInfoGet.nickname4 === "") {
 		sidebarList[3].innerText = "Empty";
 	} else {
   	sidebarList[3].innerText = userInfoGet.nickname4;		
 	}
-	if(userInfoGet.nickname5 == "") {
+	if(userInfoGet.nickname5 === "") {
 		sidebarList[4].innerText = "Empty";
 	} else {
   	sidebarList[4].innerText = userInfoGet.nickname5;		
@@ -266,12 +266,12 @@ function postUserInfo() {
     body: jsonData,
     })
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           alert("save success")
-        } else if (response.status == 400) {
+        } else if (response.status === 400) {
           alert("save fail")
         }
-  })
+      })
 }
 
 // USING AJAX CALL

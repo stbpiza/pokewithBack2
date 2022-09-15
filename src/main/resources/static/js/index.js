@@ -1,7 +1,7 @@
 
 //sendAjax() : ajax 연결 (POST/GET)
 function sendAjax(url, method, data, callback){
-  var httpReq = new XMLHttpRequest();
+  const httpReq = new XMLHttpRequest();
 
   httpReq.open(method, url, true);
   console.log('good');
@@ -264,7 +264,7 @@ function addPost(){
   const strObject = JSON.stringify(addData);
   console.log("보내는 데이터 : "+strObject);
 
-  var url = '/api/raid';
+  const url = '/api/raid';
 
   fetch(url, {
     method: "POST",
@@ -340,27 +340,22 @@ function allComment(resultData, num) {
   } else {
     commentForm.setAttribute('class', 'comment-wrap wrap'+ num);
     startDiv.appendChild(commentForm);
-    if (nickname2 === '') {
-      nickname2 = 'empty';
-    }
-    if (nickname3 === '') {
-      nickname3 = 'empty';
-    }
-    if (nickname4 === '') {
-      nickname4 = 'empty';
-    }
-    if (nickname5 === '') {
-      nickname5 = 'empty';
-    }
-
     let str = "";
-    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='1'> 1. " + nickname1 + "</p>";
-    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='2'> 2. " + nickname2 + "</p>";
-    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='3'> 3. " + nickname3 + "</p>";
-    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='4'> 4. " + nickname4 + "</p>";
-    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='5'> 5. " + nickname5 + "</p></br>";
-    commentForm.innerHTML = str;
+    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='account1'> 1. " + nickname1 + "</p>";
+    if (nickname2 !== null) {
+      str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='account2'> 2. " + nickname2 + "</p>";
+    }
+    if (nickname3 !== null) {
+      str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='account3'> 3. " + nickname3 + "</p>";
+    }
+    if (nickname4 !== null) {
+      str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='account4'> 4. " + nickname4 + "</p>";
+    }
+    if (nickname5 !== null) {
+      str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='account5'> 5. " + nickname5 + "</p></br>";
+    }
 
+    commentForm.innerHTML = str;
 
     commentSubmit = document.createElement('input');
     commentSubmit.setAttribute('class', 'comment-submit');
@@ -373,12 +368,12 @@ function allComment(resultData, num) {
 
     currentDiv.appendChild(startDiv);
 
-    var arrowUp = document.getElementById("comment" + num);
+    let arrowUp = document.getElementById("comment" + num);
     arrowUp.setAttribute('onclick', 'hideComment(' + num + ')');
 
     arrowUp.innerHTML = 'comment <i class="fa fa-sort-up"></i>';
 
-    var commentBox = document.querySelector(".commentBody" + num);
+    let commentBox = document.querySelector(".commentBody" + num);
     commentBox.style.display = 'block';
 
 }
@@ -386,23 +381,21 @@ function allComment(resultData, num) {
 
 //allCommentView() : 특정 포스트의 모든 댓글을 출력하기 전 거치는 ajax
 function allCommentAjax(num) {
-  var url = '/api/comment/'+num;
+  const url = '/api/comment/'+num;
 
-  const postId = num;
-  
-  sendAjax(url, 'GET', null, function(res){
-    console.log(res);
-    var result = JSON.parse(res.response);
-    
-    allComment(result, num);
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(JSON.stringify(data));
+      allComment(data, num);
   });
 };
 
 
 //hideComment() : 특정 포스트의 모든 댓글을 숨기고 보여주는 함수.
 function hideComment(num) {
-  var commentBox = document.querySelector(".commentBody"+num);
-  var arrowDown = document.getElementById("comment"+num);
+  let commentBox = document.querySelector(".commentBody"+num);
+  let arrowDown = document.getElementById("comment"+num);
 
   if(commentBox.style.display === 'block'){
     commentBox.style.display = 'none';
@@ -418,36 +411,54 @@ function hideComment(num) {
 /* 댓글을 생성하게 되면 바로 mypost 화면으로 리다이렉트 된다. */
 function commitComment(num) {
   
-  var check_count = document.getElementsByName("nickname"+num).length;
+  let check_count = document.getElementsByName("nickname"+num).length;
 
   console.log(check_count);
-  
-  var sum = 0; 
-  for (var i=0; i<check_count; i++) {
-      if (document.getElementsByName("nickname"+num)[i].checked === true) {
-          var checkedStr = document.getElementsByName("nickname"+num)[i].value;
-          sum += checkedStr.length;     
-      }
-  }
 
   const commitData = {
-    p_id : num,
-    checkNum : sum
+    raidId : num,
+    account1 : document.getElementsByName("nickname"+num)[0].checked,
+    account2 : false,
+    account3 : false,
+    account4 : false,
+    account5 : false
   }
 
-  const strObject = JSON.stringify(commitData);
+  if (document.getElementsByName("nickname"+num)[1]) {
+    commitData.account2 = document.getElementsByName("nickname"+num)[1].checked;
+  }
+  if (document.getElementsByName("nickname"+num)[2]) {
+    commitData.account3 = document.getElementsByName("nickname"+num)[2].checked;
+  }
+  if (document.getElementsByName("nickname"+num)[3]) {
+    commitData.account4 = document.getElementsByName("nickname"+num)[3].checked;
+  }
+  if (document.getElementsByName("nickname"+num)[4]) {
+    commitData.account5 = document.getElementsByName("nickname"+num)[4].checked;
+  }
 
-  var url = '/comment';
-  sendAjax(url, 'POST', strObject, function (res) {
-    console.log(res.response);
-    if(res.response === 1) {
-      alert("Comment Success!");
-      window.location.replace("/post");
-    }else {
-      alert("You have already registered post or comment.");
-      window.location.replace("/post");
-    }
-  });
+  const jsonData = JSON.stringify(commitData);
+
+  const url = '/api/comment';
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: jsonData,
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Comment Success!");
+          window.location.replace("/mypost");
+        } else if (response.status === 409) {
+          alert("You have already registered post or comment.");
+          window.location.replace("/mypost");
+        } else {
+          alert("Comment fail.");
+        }
+      })
 }
 
 
