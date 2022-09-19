@@ -31,9 +31,10 @@ function sendAjax(url, method, data, callback){
 }
 
 //showMyPost() : myPost 게시글을 보는 함수
-function showMyPost(resultData){
+function showMyPost(result){
 
-	if(resultData.p_id == null){
+	const resultData = result.raidDto;
+	if(resultData.raidId == null){
 	  let currentDiv = document.querySelector("#my-box");
 	  let endPage = document.createElement("div");
 	  endPage.setAttribute("class", "card-body endBody");
@@ -44,7 +45,7 @@ function showMyPost(resultData){
 	
 	  currentDiv.appendChild(endPage);
 	} else {
-		let num = resultData.p_id;
+		let num = resultData.raidId;
 		let chat = resultData.chat;
 		console.log(num);
 		console.log(typeof(chat));
@@ -58,8 +59,8 @@ function showMyPost(resultData){
 		
 		let nickName = '';
 		nickName += '<p class="m-0 text-gray"><b>'+resultData.nickname1
-		            + '</b><i class="fa fa-thumbs-up updown" aria-hidden="true" style="font-size:10px"></i>' + resultData.u_like
-		            + ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + resultData.u_hate + '</p>'
+		            + '</b><i class="fa fa-thumbs-up updown" aria-hidden="true" style="font-size:10px"></i>' + resultData.likeCount
+		            + ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + resultData.hateCount + '</p>'
 		nickDiv.innerHTML = nickName;
 		startDiv.appendChild(nickDiv);
 		
@@ -71,13 +72,13 @@ function showMyPost(resultData){
 		let endBtnText = document.createTextNode("end");
 		endBtn.appendChild(endBtnText);
 		
-		if(resultData.userId == resultData.suserId){
+		if(resultData.userId === resultData.suserId){
 			endBtn.style.display = 'block';
 		} else {
 			endBtn.style.display = 'none';
 		}
 		
-		if(resultData.p_end == null || resultData.p_end == "2") {
+		if(resultData.raidState == null || resultData.raidState === "DONE") {
 		  let currentDiv = document.querySelector("#my-box");
 		  let endPage = document.createElement("div");
 		  endPage.setAttribute("class", "card-body endBody");
@@ -93,25 +94,25 @@ function showMyPost(resultData){
 		  cardDiv.setAttribute("class", "myCard card-body cardBody"+num);
 		  startDiv.appendChild(cardDiv);
 		
-		  if(resultData.raidLevel == '1') {
+		  if(resultData.raidType === 'ONE') {
 		      str = "<img src = '/static/img/1.png' style='width:50px'>"
-		  } else if(resultData.raidLevel == '3') {
+		  } else if(resultData.raidType === 'THREE') {
 		      str = "<img src = '/static/img/3.png' style='width:50px'>"
-		  } else if(resultData.raidLevel == '5') {
+		  } else if(resultData.raidType === 'FIVE') {
 		      str = "<img src = '/static/img/5.png' style='width:50px'>"
 		  } else {
 		      str = "<img src = '/static/img/mega.png' style='width:50px'>"
 		  }
 		  
-		  cardDiv.innerHTML += '<input type="hidden" id="postId" name="postId" value="'+ resultData.p_id +'">';
+		  cardDiv.innerHTML += '<input type="hidden" id="postId" name="postId" value="'+ resultData.raidId +'">';
 		  cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/150.png" width="150px" /></p>';
 		  //cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/'+resultData.pokemon+'.png" width="150px" /></p>';
 		  cardDiv.innerHTML += '<p> Level of Raid : ' + str + '</p>';
 		  cardDiv.innerHTML += '<p> Start Time of Raid : ' + resultData.startTime+'</p>';
 		  cardDiv.innerHTML += '<p> End Time of Raid : ' + resultData.endTime+'</p>';
-		  cardDiv.innerHTML += '<p> Required Player Level : ' + resultData.minLevel+'</p>';
-		  cardDiv.innerHTML += '<p> Premium Pass : <img src="/static/img/3_premium.png" class="remote1"> / <img src="/static/img/2_premium.png" class="remote2"> <span id="npass">' + resultData.nPass+'</span></p>';
-		  cardDiv.innerHTML += '<p> Remote Pass : <img src="/static/img/1_remote.png" class="remote1"> <span id="rpass">' + resultData.rPass + '</span></p>';
+		  cardDiv.innerHTML += '<p> Required Player Level : ' + resultData.requiredLevel+'</p>';
+		  cardDiv.innerHTML += '<p> Premium Pass : <img src="/static/img/3_premium.png" class="remote1"> / <img src="/static/img/2_premium.png" class="remote2"> <span id="npass">' + resultData.normalPass+'</span></p>';
+		  cardDiv.innerHTML += '<p> Remote Pass : <img src="/static/img/1_remote.png" class="remote1"> <span id="rpass">' + resultData.remotePass + '</span></p>';
 		
 		  let commentDiv3 = document.createElement('div');
 		  commentDiv3.setAttribute('class', 'commentBox');
