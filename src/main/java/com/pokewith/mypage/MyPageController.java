@@ -32,8 +32,7 @@ public class MyPageController {
     })
     public ResponseEntity<RpGetMyPageDto> getMyPage(HttpServletRequest request) {
         log.info("/api/mypage");
-        HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute("userId");
+        Long userId = usernameService.getUsername(request);
         return myPageService.getMyPage(userId);
     }
 
