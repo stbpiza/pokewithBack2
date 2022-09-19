@@ -169,7 +169,7 @@ function showMyPost(resultData){
 //allPost() : myPost 게시글을 출력하기 전 거치는 ajax
 /* 세션이 도입되면 하드 코딩했던 부분 지움 */
 function myPostAjax() {
-	let url = '/mypost';
+	let url = '/api/mypost';
 	
 	sendAjax(url, 'GET', null, function(res){
 	  console.log(res.response);
@@ -523,47 +523,61 @@ function deleteComment(c_id, p_id){
 }
 
 // Init paint sidebar
-function myPageAjax() {
-  const url = "/mypage";
+function mypageFetch() {
+	const url = "/api/mypage";
 
-  sendAjax(url, "GET", null, function (res) {
-    let result = JSON.parse(res.response);
-	console.log(result);
-	loadSidebar(result);
-  });
+	fetch(url)
+		.then((response) => response.json())
+		.then((data) => {
+			userInfo = data;
+			loadSidebar(data);
+		});
+}
+
+let userInfo = {
+	nickname1: "",
+	friendCode1: "",
+	nickname2: "",
+	friendCode2: "",
+	nickname3: "",
+	friendCode3: "",
+	nickname4: "",
+	friendCode4: "",
+	nickname5: "",
+	friendCode5: "",
 }
 
 const sidebarList = document.querySelectorAll(".sidebar-list");
 function loadSidebar(data){
 	const userInfoGet = data;
 	sidebarList[0].innerText = userInfoGet.nickname1;
-	if(userInfoGet.nickname2 == "") {
+	if(userInfoGet.nickname2 === "") {
 		sidebarList[1].innerText = "Empty";
 	} else {
-  	sidebarList[1].innerText = userInfoGet.nickname2;		
+		sidebarList[1].innerText = userInfoGet.nickname2;
 	}
-	if(userInfoGet.nickname3 == "") {
+	if(userInfoGet.nickname3 === "") {
 		sidebarList[2].innerText = "Empty";
 	} else {
-  	sidebarList[2].innerText = userInfoGet.nickname3;		
+		sidebarList[2].innerText = userInfoGet.nickname3;
 	}
-	if(userInfoGet.nickname4 == "") {
+	if(userInfoGet.nickname4 === "") {
 		sidebarList[3].innerText = "Empty";
 	} else {
-  	sidebarList[3].innerText = userInfoGet.nickname4;		
+		sidebarList[3].innerText = userInfoGet.nickname4;
 	}
-	if(userInfoGet.nickname5 == "") {
+	if(userInfoGet.nickname5 === "") {
 		sidebarList[4].innerText = "Empty";
 	} else {
-  	sidebarList[4].innerText = userInfoGet.nickname5;		
+		sidebarList[4].innerText = userInfoGet.nickname5;
 	}
 }
 
 if (window.addEventListener)
-	  window.addEventListener("load", myPageAjax, false);
+	  window.addEventListener("load", mypageFetch, false);
 else if (window.attachEvent)
-    window.attachEvent("onload", myPageAjax);
+    window.attachEvent("onload", mypageFetch);
 
-else window.onload = myPageAjax;	
+else window.onload = mypageFetch;
 
 // End of paint sidebar

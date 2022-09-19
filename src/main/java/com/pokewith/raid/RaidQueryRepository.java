@@ -13,8 +13,11 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 
 import java.util.List;
+import java.util.Optional;
 
-import static com.pokewith.raid.QRaid.*;
+
+import static com.pokewith.raid.QRaid.raid;
+import static com.pokewith.raid.QRaidComment.raidComment;
 import static com.pokewith.user.QUser.user;
 
 @Repository
@@ -44,6 +47,19 @@ public class RaidQueryRepository {
 
         return new PageImpl<>(content, pageable, total);
     }
+
+    public Optional<Raid> getLastInviteRaidByUserId(Long userId) {
+        return Optional.ofNullable(
+                query
+                .selectDistinct(raid)
+                .from(raid)
+                .leftJoin(raid.user, user)
+                .leftJoin(raid.raidComments, raidComment)
+                .leftJoin(raidComment.user, user)
+                .where(raid.user.userId.eq(userId), raid.raidState.ne(RaidState.DONE))
+                .fetchOne());
+    }
+
 
     /**
      * 분리된 메소드
