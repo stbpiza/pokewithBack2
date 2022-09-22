@@ -191,9 +191,9 @@ else window.onload = myPostAjax;
 
 
 //allComment(num) : myPost 게시글의 모든 댓글을 보는 함수
-function allComment(resultData) {
+function allComment(resultData, num) {
 	
-	if(resultData.data.length == 0){
+	if(resultData.raidCommentDtoList.length === 0){
 	  let myCard = document.querySelector(".myCard");
 	  
 	  let nullDiv = document.createElement("div");
@@ -205,11 +205,11 @@ function allComment(resultData) {
 	  arrowUp.setAttribute('onclick', 'nullComment()');
 	  arrowUp.innerHTML = 'comment <i class="fa fa-sort-up"></i>';	  
 	} else {
-	  let num = resultData.data[0].p_id;
+	  // let num = resultData.raidCommentDtoList[0].raidId;
 	  let currentDiv = document.querySelector(".cardBody"+num);
 	
 	  let checkNum = document.createElement('div');
-	  checkNum.setAttribute('id', 'checkNum');	
+	  checkNum.setAttribute('id', 'checkNum');
 	  checkNum.innerHTML = 'Selectable number of accounts';
 	  currentDiv.appendChild(checkNum);
 	
@@ -222,9 +222,9 @@ function allComment(resultData) {
 	  currentDiv.appendChild(startDiv);
 	
 	  arr = [];
-	  for(let i = 0; i<resultData.data.length; i++){
-	    if(num == resultData.data[i].p_id && resultData.data[i].c_end == '0'){
-	      let commentId = resultData.data[i].c_id;
+	  for(let i = 0; i<resultData.raidCommentDtoList.length; i++){
+	    if(resultData.raidCommentDtoList[i].raidCommentState === 'WAITING'){
+	      let commentId = resultData.raidCommentDtoList[i].raidCommentId;
 	      let commentW = document.createElement("div");
 	      commentW.setAttribute("class", "commentWrap comment"+commentId);
  		   startDiv.appendChild(commentW);
@@ -235,58 +235,64 @@ function allComment(resultData) {
           let commentP = document.createElement("p");
           commentP.setAttribute("class", "commentP");
           commentTextDiv.appendChild(commentP);
-			
+
+			let account = 0;
+			if (resultData.raidCommentDtoList[i].account1) account++;
+			if (resultData.raidCommentDtoList[i].account2) account++;
+			if (resultData.raidCommentDtoList[i].account3) account++;
+			if (resultData.raidCommentDtoList[i].account4) account++;
+			if (resultData.raidCommentDtoList[i].account5) account++;
 
 			let commentInput = document.createElement("input");
 			commentInput.setAttribute("type", "checkbox");
-			commentInput.setAttribute("id", "checkUser"+resultData.data[i].c_id);
+			commentInput.setAttribute("id", "checkUser"+resultData.raidCommentDtoList[i].raidCommentId);
 			commentInput.setAttribute("class", "checkUser");
-			commentInput.setAttribute("name", resultData.data[i].c_id);
-			commentInput.setAttribute("value", resultData.data[i].checkNum);
-			commentInput.setAttribute("onclick", "checkUser(this, "+resultData.data[i].p_id+")");
+			commentInput.setAttribute("name", resultData.raidCommentDtoList[i].c_id);
+			commentInput.setAttribute("value", account);
+			commentInput.setAttribute("onclick", "checkUser(this, "+num+")");
 			commentP.appendChild(commentInput);
 
-			let commentPText = document.createTextNode(resultData.data[i].nickname1);
+			let commentPText = document.createTextNode(resultData.raidCommentDtoList[i].nickname1);
 			commentP.appendChild(commentPText);
-		
+
 			let commentDiv = document.createElement("div");
 			commentDiv.setAttribute("class", "commentDiv");
 			commentW.appendChild(commentDiv);
-		
+
 			let flexDiv = document.createElement("div");
 			flexDiv.setAttribute("class", "d-flex align-items-center justify-content-between");
 			commentDiv.appendChild(flexDiv);
-		
+
 			let remoteResult = document.createElement("div");
 			remoteResult.setAttribute("id", "remoteResult");
 			flexDiv.appendChild(remoteResult);
-		
+
 			let remoteImg = document.createElement("img");
 			remoteImg.setAttribute("class", "remote1");
 			remoteImg.setAttribute("src", "/static/img/1_remote.png");
 			remoteResult.appendChild(remoteImg);
-		
+
 			let spanDiv = document.createElement("span");
 			spanDiv.setAttribute("class", "commentLength");
 			spanDiv.setAttribute("id", "commentLength"+commentId);
-			spanDiv.innerHTML = resultData.data[i].checkNum.length;
+			spanDiv.innerHTML = account;
 			remoteResult.appendChild(spanDiv);
 
 			let deleteIcon = document.createElement("i");
 			deleteIcon.setAttribute("class", "fas fa-times delete");
-			deleteIcon.setAttribute("onClick", "deleteComment("+resultData.data[i].c_id+", "+resultData.data[i].p_id+")");
+			deleteIcon.setAttribute("onClick", "deleteComment("+resultData.raidCommentDtoList[i].raidCommentId+", "+num+")");
 			flexDiv.appendChild(deleteIcon);
-		
-			if(resultData.data[i].userId === resultData.suserId){
+
+			if(resultData.raidCommentDtoList[i].userId === userInfo.userId){
 				deleteIcon.style.display = 'block';
 			} else {
 				deleteIcon.style.display = 'none';
 			}
 				   	    
 	    } else {
-			if(resultData.data[i].c_end == '1'){
-				nickDiv2.innerHTML += "<h5 class='nick1'>"+resultData.data[i].nickname1+"'s</5>";
-				showNick(resultData.data[i]);			
+			if(resultData.raidCommentDtoList[i].raidCommentState === 'JOINED'){
+				nickDiv2.innerHTML += "<h5 class='nick1'>"+resultData.raidCommentDtoList[i].nickname1+"'s</5>";
+				showNick(resultData.raidCommentDtoList[i]);
 			}
 			checkNum.style.display = 'none'; 
 		}
@@ -309,14 +315,14 @@ function allComment(resultData) {
 //allPost() : myPost 게시글의 댓글을 출력하기 전 거치는 ajax
 function allCommentAjax(num) {
 
-	let url = '/comment/mypost/'+num;
+	let url = '/api/comment/'+num;
 	
 	const postId = num;
 	
 	sendAjax(url, 'GET', null, function(res){
 	  console.log(res.response);
 	  var result = JSON.parse(res.response);   
-	  allComment(result);
+	  allComment(result, num);
 	});
 };
 
@@ -336,8 +342,8 @@ function checkUser(here, num) {
 	let count = checkedUser.length;
 	let temp=[];
 	for(let i=0; i < count; i++ ){
-	  if( checkedUser[i].checked == true ){
-	    sum += parseInt(checkedUser[i].value.length);
+	  if( checkedUser[i].checked === true ){
+	    sum += parseInt(checkedUser[i].value);
 	    temp.push(checkedUser[i].name);
 	    checkSubmit(num);
 	  }
@@ -536,6 +542,7 @@ function mypageFetch() {
 }
 
 let userInfo = {
+	userId: "",
 	nickname1: "",
 	friendCode1: "",
 	nickname2: "",

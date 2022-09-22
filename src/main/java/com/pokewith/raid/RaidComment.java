@@ -25,6 +25,10 @@ public class RaidComment extends TimeEntity {
     private boolean account4;
     private boolean account5;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RaidCommentState raidCommentState;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
@@ -45,5 +49,6 @@ public class RaidComment extends TimeEntity {
         this.account5 = dto.isAccount5();
         this.user = user;
         this.raid = raid;
+        this.raidCommentState = RaidCommentState.WAITING;
     }
 }

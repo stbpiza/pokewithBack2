@@ -10,6 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RpGetMyPageDto {
 
+    private Long userId;
+
     private String nickname1;
 
     private String friendCode1;
@@ -31,6 +33,7 @@ public class RpGetMyPageDto {
     private String friendCode5;
 
     public RpGetMyPageDto(User user) {
+        this.userId = user.getUserId();
         this.nickname1 = user.getNickname1();
         this.friendCode1 = user.getFriendCode1();
         this.nickname2 = user.getNickname2();
