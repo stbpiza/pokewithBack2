@@ -1,6 +1,6 @@
 package com.pokewith.user;
 
-import com.pokewith.mypage.dto.RqUpdateMyPageDto;
+import com.pokewith.mypage.dto.request.RqUpdateMyPageDto;
 import com.pokewith.raid.Raid;
 import com.pokewith.raid.RaidComment;
 import com.pokewith.superclass.TimeEntity;

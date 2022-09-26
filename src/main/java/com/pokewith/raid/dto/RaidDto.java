@@ -31,6 +31,8 @@ public class RaidDto {
 
     private int requiredLevel;
 
+    private Long userId;
+
     private String nickname1;
 
     private int likeCount;
@@ -49,6 +51,7 @@ public class RaidDto {
             this.raidState = raid.getRaidState();
             this.requiredLevel = raid.getRequiredLevel();
 
+            this.userId = raid.getUser().getUserId();
             this.nickname1 = raid.getUser().getNickname1();
             this.likeCount = raid.getUser().getLikeCount();
             this.hateCount = raid.getUser().getHateCount();

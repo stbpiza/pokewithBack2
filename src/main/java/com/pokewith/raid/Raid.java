@@ -74,4 +74,12 @@ public class Raid extends TimeEntity {
     public Raid(Long raidId) {
         this.raidId = raidId;
     }
+
+    public void startRaid() {
+        this.raidState = RaidState.DOING;
+    }
+
+    public void endRaid() {
+        this.raidState = RaidState.DONE;
+    }
 }

@@ -175,11 +175,15 @@ function myPostAjax() {
 	sendAjax(url, 'GET', null, function(res){
 	  console.log(res.response);
 	  var result = JSON.parse(res.response);
-	  
+
+	  raidInfo = result;
 	  showMyPost(result);
 	});
 };
 
+let raidInfo = {
+
+}
 
 
 //mypost 페이지 들어왔을 시 바로 showMyPost() 함수가 호출되도록 함
@@ -247,10 +251,13 @@ function allComment(resultData, num) {
 			commentInput.setAttribute("type", "checkbox");
 			commentInput.setAttribute("id", "checkUser"+resultData.raidCommentDtoList[i].raidCommentId);
 			commentInput.setAttribute("class", "checkUser");
-			commentInput.setAttribute("name", resultData.raidCommentDtoList[i].c_id);
+			commentInput.setAttribute("name", resultData.raidCommentDtoList[i].raidCommentId);
 			commentInput.setAttribute("value", account);
 			commentInput.setAttribute("onclick", "checkUser(this, "+num+")");
 			commentP.appendChild(commentInput);
+			if (raidInfo.raidDto.userId !== userInfo.userId) {
+				commentInput.disabled = true;
+			}
 
 			let commentPText = document.createTextNode(resultData.raidCommentDtoList[i].nickname1);
 			commentP.appendChild(commentPText);
@@ -288,7 +295,8 @@ function allComment(resultData, num) {
 			} else {
 				deleteIcon.style.display = 'none';
 			}
-				   	    
+
+
 	    } else {
 			if(resultData.raidCommentDtoList[i].raidCommentState === 'JOINED'){
 				nickDiv2.innerHTML += "<h5 class='nick1'>"+resultData.raidCommentDtoList[i].nickname1+"'s</5>";
@@ -383,9 +391,9 @@ function checkSubmit(num){
 }
 
 //showCheck() : 서버 쪽에 데이터를 보내주고 새로고침하는 함수
-function sendCheck(p_id) {
+function sendCheck(raidId) {
 
-	console.log(p_id)
+	console.log(raidId)
 	console.log('arr length = '+comment_id_names);
 	console.log(typeof(comment_id_names));
 	console.log(comment_id_names);
@@ -393,8 +401,8 @@ function sendCheck(p_id) {
 	if(confirm("Did you check the user's nickname well?")){
 	    
 	  const sendData = {
-	    p_id : p_id,
-	    c_id : comment_id_names,
+	  	raidId : raidId,
+	    raidCommentIdList : comment_id_names,
 	    chat : Math.random().toString(36).substr(2,11)
 	  }
 	
@@ -402,10 +410,10 @@ function sendCheck(p_id) {
 	  
 	  console.log(strObject);
 	
-	  var url = '/mypost';
-	  sendAjax(url, 'PUT', strObject);
+	  var url = '/api/mypost/start';
+	  sendAjax(url, 'POST', strObject);
 	  
-	  setTimeout("location.reload()", 1000);
+	  // setTimeout("location.reload()", 1000);
 	} else {
 	  alert('You canceled it.');
 	}
