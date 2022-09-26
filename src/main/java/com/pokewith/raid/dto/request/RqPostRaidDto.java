@@ -1,4 +1,4 @@
-package com.pokewith.raid.dto;
+package com.pokewith.raid.dto.request;
 
 import com.pokewith.raid.RaidState;
 import com.pokewith.raid.RaidType;

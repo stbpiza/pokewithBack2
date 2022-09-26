@@ -72,7 +72,7 @@ function showMyPost(result){
 		let endBtnText = document.createTextNode("end");
 		endBtn.appendChild(endBtnText);
 		
-		if(resultData.userId === resultData.suserId){
+		if(resultData.userId === userInfo.userId){
 			endBtn.style.display = 'block';
 		} else {
 			endBtn.style.display = 'none';
@@ -105,8 +105,8 @@ function showMyPost(result){
 		  }
 		  
 		  cardDiv.innerHTML += '<input type="hidden" id="postId" name="postId" value="'+ resultData.raidId +'">';
-		  cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/150.png" width="150px" /></p>';
-		  //cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/'+resultData.pokemon+'.png" width="150px" /></p>';
+		  // cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/150.png" width="150px" /></p>';
+		  cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/'+resultData.pokemon+'.png" width="150px" /></p>';
 		  cardDiv.innerHTML += '<p> Level of Raid : ' + str + '</p>';
 		  cardDiv.innerHTML += '<p> Start Time of Raid : ' + resultData.startTime+'</p>';
 		  cardDiv.innerHTML += '<p> End Time of Raid : ' + resultData.endTime+'</p>';
@@ -465,7 +465,7 @@ function hideComment(num) {
 	let commentBox = document.querySelector(".commentBody"+num);
 	let arrowDown = document.getElementById("comment"+num);
 	
-	if(commentBox.style.display == 'block'){
+	if(commentBox.style.display === 'block'){
 	    checkNum.style.display = 'none';
 	    commentBox.style.display = 'none';
 	    arrowDown.innerHTML = 'comment <i class="fa fa-sort-down"></i>';
@@ -482,7 +482,7 @@ function nullComment() {
 	let nullDiv = document.querySelector(".nullDiv");
 	let arrowDown = document.querySelector(".hide-link");
 	
-	if(nullDiv.style.display == 'block'){
+	if(nullDiv.style.display === 'block'){
 	    nullDiv.style.display = 'none';
 	    arrowDown.innerHTML = 'comment <i class="fa fa-sort-down"></i>';
 	} else {

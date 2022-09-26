@@ -1,8 +1,9 @@
-package com.pokewith.user;
+package com.pokewith.user.controller;
 
-import com.pokewith.user.dto.RqEmailCheckDto;
-import com.pokewith.user.dto.RqLogInDto;
-import com.pokewith.user.dto.RqSignUpDto;
+import com.pokewith.user.service.UserService;
+import com.pokewith.user.dto.request.RqEmailCheckDto;
+import com.pokewith.user.dto.request.RqLogInDto;
+import com.pokewith.user.dto.request.RqSignUpDto;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;

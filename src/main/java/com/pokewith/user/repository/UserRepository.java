@@ -1,5 +1,6 @@
-package com.pokewith.user;
+package com.pokewith.user.repository;
 
+import com.pokewith.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

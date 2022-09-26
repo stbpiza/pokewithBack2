@@ -1,7 +1,7 @@
-package com.pokewith.raid;
+package com.pokewith.raid.repository;
 
-import com.pokewith.raid.dto.RqRaidListSearchDto;
-import com.pokewith.user.QUser;
+import com.pokewith.raid.*;
+import com.pokewith.raid.dto.request.RqRaidListSearchDto;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -35,7 +35,7 @@ public class RaidQueryRepository {
         QueryResults<Raid> results = query
                 .selectDistinct(raid)
                 .from(raid)
-                .leftJoin(raid.user, user)
+                .leftJoin(raid.user, user).fetchJoin()
                 .where(typeEq(dto.getType()), stateEq(dto.getState()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -53,9 +53,9 @@ public class RaidQueryRepository {
                 query
                 .selectDistinct(raid)
                 .from(raid)
-                .leftJoin(raid.user, user)
-                .leftJoin(raid.raidComments, raidComment)
-                .leftJoin(raidComment.user, user)
+                .leftJoin(raid.user, user).fetchJoin()
+                .leftJoin(raid.raidComments, raidComment).fetchJoin()
+                .leftJoin(raidComment.user, user).fetchJoin()
                 .where(raid.user.userId.eq(userId), raid.raidState.ne(RaidState.DONE))
                 .fetchOne());
     }
