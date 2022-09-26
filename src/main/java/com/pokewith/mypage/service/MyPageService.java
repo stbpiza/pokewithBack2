@@ -1,7 +1,7 @@
 package com.pokewith.mypage.service;
 
-import com.pokewith.mypage.dto.RpGetMyPageDto;
-import com.pokewith.mypage.dto.RqUpdateMyPageDto;
+import com.pokewith.mypage.dto.response.RpGetMyPageDto;
+import com.pokewith.mypage.dto.request.RqUpdateMyPageDto;
 import org.springframework.http.ResponseEntity;
 
 public interface MyPageService {

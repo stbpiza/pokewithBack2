@@ -1,4 +1,4 @@
-package com.pokewith.mypost.dto;
+package com.pokewith.mypost.dto.response;
 
 import com.pokewith.raid.dto.RaidDto;
 import lombok.Builder;

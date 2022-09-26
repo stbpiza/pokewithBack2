@@ -1,4 +1,4 @@
-package com.pokewith.mypage.dto;
+package com.pokewith.mypage.dto.response;
 
 import com.pokewith.user.User;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.pokewith.mypage.dto;
+package com.pokewith.mypage.dto.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

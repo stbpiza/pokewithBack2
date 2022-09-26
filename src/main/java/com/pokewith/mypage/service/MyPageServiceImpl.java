@@ -1,8 +1,8 @@
 package com.pokewith.mypage.service;
 
 import com.pokewith.exception.BadRequestException;
-import com.pokewith.mypage.dto.RpGetMyPageDto;
-import com.pokewith.mypage.dto.RqUpdateMyPageDto;
+import com.pokewith.mypage.dto.response.RpGetMyPageDto;
+import com.pokewith.mypage.dto.request.RqUpdateMyPageDto;
 import com.pokewith.user.User;
 import com.pokewith.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

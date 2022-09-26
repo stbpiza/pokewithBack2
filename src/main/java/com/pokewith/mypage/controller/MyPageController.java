@@ -2,8 +2,8 @@ package com.pokewith.mypage.controller;
 
 import com.pokewith.auth.UsernameService;
 import com.pokewith.mypage.service.MyPageService;
-import com.pokewith.mypage.dto.RpGetMyPageDto;
-import com.pokewith.mypage.dto.RqUpdateMyPageDto;
+import com.pokewith.mypage.dto.response.RpGetMyPageDto;
+import com.pokewith.mypage.dto.request.RqUpdateMyPageDto;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;

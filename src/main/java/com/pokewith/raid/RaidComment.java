@@ -51,4 +51,16 @@ public class RaidComment extends TimeEntity {
         this.raid = raid;
         this.raidCommentState = RaidCommentState.WAITING;
     }
+
+    public void joinedComment() {
+        this.raidCommentState = RaidCommentState.JOINED;
+    }
+
+    public void rejectedComment() {
+        this.raidCommentState = RaidCommentState.REJECTED;
+    }
+
+    public void endComment() {
+        this.raidCommentState = RaidCommentState.END;
+    }
 }
