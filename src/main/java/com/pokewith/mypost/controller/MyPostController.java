@@ -1,6 +1,7 @@
-package com.pokewith.mypost;
+package com.pokewith.mypost.controller;
 
 import com.pokewith.auth.UsernameService;
+import com.pokewith.mypost.service.MyPostService;
 import com.pokewith.mypost.dto.RpGetMyPostDto;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;

@@ -1,8 +1,8 @@
-package com.pokewith.user;
+package com.pokewith.user.service;
 
-import com.pokewith.user.dto.RqEmailCheckDto;
-import com.pokewith.user.dto.RqLogInDto;
-import com.pokewith.user.dto.RqSignUpDto;
+import com.pokewith.user.dto.request.RqEmailCheckDto;
+import com.pokewith.user.dto.request.RqLogInDto;
+import com.pokewith.user.dto.request.RqSignUpDto;
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;

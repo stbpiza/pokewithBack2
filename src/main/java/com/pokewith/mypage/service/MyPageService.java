@@ -1,4 +1,4 @@
-package com.pokewith.mypage;
+package com.pokewith.mypage.service;
 
 import com.pokewith.mypage.dto.RpGetMyPageDto;
 import com.pokewith.mypage.dto.RqUpdateMyPageDto;

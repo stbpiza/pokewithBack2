@@ -1,6 +1,7 @@
-package com.pokewith.mypage;
+package com.pokewith.mypage.controller;
 
 import com.pokewith.auth.UsernameService;
+import com.pokewith.mypage.service.MyPageService;
 import com.pokewith.mypage.dto.RpGetMyPageDto;
 import com.pokewith.mypage.dto.RqUpdateMyPageDto;
 import io.swagger.annotations.ApiResponse;
@@ -12,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Slf4j

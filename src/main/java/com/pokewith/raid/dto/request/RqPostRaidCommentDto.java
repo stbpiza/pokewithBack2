@@ -1,4 +1,4 @@
-package com.pokewith.raid.dto;
+package com.pokewith.raid.dto.request;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;

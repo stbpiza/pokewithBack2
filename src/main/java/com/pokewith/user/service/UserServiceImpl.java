@@ -1,10 +1,12 @@
-package com.pokewith.user;
+package com.pokewith.user.service;
 
 import com.pokewith.auth.*;
 import com.pokewith.exception.auth.LoginFailedException;
-import com.pokewith.user.dto.RqEmailCheckDto;
-import com.pokewith.user.dto.RqLogInDto;
-import com.pokewith.user.dto.RqSignUpDto;
+import com.pokewith.user.User;
+import com.pokewith.user.repository.UserRepository;
+import com.pokewith.user.dto.request.RqEmailCheckDto;
+import com.pokewith.user.dto.request.RqLogInDto;
+import com.pokewith.user.dto.request.RqSignUpDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

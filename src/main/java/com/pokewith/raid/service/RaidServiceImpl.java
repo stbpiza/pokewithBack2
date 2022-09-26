@@ -1,12 +1,21 @@
-package com.pokewith.raid;
+package com.pokewith.raid.service;
 
 import com.pokewith.exception.BadRequestException;
 import com.pokewith.exception.ConflictException;
 import com.pokewith.exception.NotFoundException;
 import com.pokewith.exception.auth.DbErrorException;
+import com.pokewith.raid.*;
 import com.pokewith.raid.dto.*;
+import com.pokewith.raid.dto.request.RqPostRaidCommentDto;
+import com.pokewith.raid.dto.request.RqPostRaidDto;
+import com.pokewith.raid.dto.request.RqRaidListSearchDto;
+import com.pokewith.raid.dto.response.RpRaidCommentListDto;
+import com.pokewith.raid.dto.response.RpRaidListDto;
+import com.pokewith.raid.repository.RaidCommentQueryRepository;
+import com.pokewith.raid.repository.RaidQueryRepository;
+import com.pokewith.raid.repository.RaidRepository;
 import com.pokewith.user.User;
-import com.pokewith.user.UserRepository;
+import com.pokewith.user.repository.UserRepository;
 import com.pokewith.user.UserState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

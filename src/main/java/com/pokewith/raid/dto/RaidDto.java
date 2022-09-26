@@ -38,18 +38,22 @@ public class RaidDto {
     private int hateCount;
 
     public RaidDto(Raid raid) {
-        this.raidId = raid.getRaidId();
-        this.pokemon = raid.getPokemon();
-        this.raidType = raid.getRaidType();
-        this.startTime = raid.getStartTime();
-        this.endTime = raid.getEndTime();
-        this.normalPass = raid.getNormalPass();
-        this.remotePass = raid.getRemotePass();
-        this.raidState = raid.getRaidState();
-        this.requiredLevel = raid.getRequiredLevel();
+        try {
+            this.raidId = raid.getRaidId();
+            this.pokemon = raid.getPokemon();
+            this.raidType = raid.getRaidType();
+            this.startTime = raid.getStartTime();
+            this.endTime = raid.getEndTime();
+            this.normalPass = raid.getNormalPass();
+            this.remotePass = raid.getRemotePass();
+            this.raidState = raid.getRaidState();
+            this.requiredLevel = raid.getRequiredLevel();
 
-        this.nickname1 = raid.getUser().getNickname1();
-        this.likeCount = raid.getUser().getLikeCount();
-        this.hateCount = raid.getUser().getHateCount();
+            this.nickname1 = raid.getUser().getNickname1();
+            this.likeCount = raid.getUser().getLikeCount();
+            this.hateCount = raid.getUser().getHateCount();
+        } catch (NullPointerException e) {
+            // 작성한 글이나 댓글이 없으면 빈 DTO 리턴
+        }
     }
 }

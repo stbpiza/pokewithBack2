@@ -1,5 +1,6 @@
-package com.pokewith.raid;
+package com.pokewith.raid.repository;
 
+import com.pokewith.raid.Raid;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

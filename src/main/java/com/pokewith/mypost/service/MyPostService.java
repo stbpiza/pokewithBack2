@@ -1,4 +1,4 @@
-package com.pokewith.mypost;
+package com.pokewith.mypost.service;
 
 import com.pokewith.mypost.dto.RpGetMyPostDto;
 import org.springframework.http.ResponseEntity;

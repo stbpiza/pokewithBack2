@@ -1,10 +1,10 @@
-package com.pokewith.mypage;
+package com.pokewith.mypage.service;
 
 import com.pokewith.exception.BadRequestException;
 import com.pokewith.mypage.dto.RpGetMyPageDto;
 import com.pokewith.mypage.dto.RqUpdateMyPageDto;
 import com.pokewith.user.User;
-import com.pokewith.user.UserRepository;
+import com.pokewith.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

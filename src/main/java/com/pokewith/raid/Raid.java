@@ -1,6 +1,6 @@
 package com.pokewith.raid;
 
-import com.pokewith.raid.dto.RqPostRaidDto;
+import com.pokewith.raid.dto.request.RqPostRaidDto;
 import com.pokewith.superclass.TimeEntity;
 import com.pokewith.user.User;
 import lombok.AccessLevel;

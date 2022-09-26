@@ -2,7 +2,7 @@ package com.pokewith.auth;
 
 import com.pokewith.user.dto.AuthUserDto;
 import com.pokewith.user.User;
-import com.pokewith.user.UserRepository;
+import com.pokewith.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,5 +1,6 @@
-package com.pokewith.raid.dto;
+package com.pokewith.raid.dto.response;
 
+import com.pokewith.raid.dto.RaidDto;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
 package com.pokewith.auth;
 
-import com.pokewith.user.UserRepository;
+import com.pokewith.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
