@@ -195,9 +195,9 @@ else window.onload = myPostAjax;
 
 
 //allComment(num) : myPost 게시글의 모든 댓글을 보는 함수
-function allComment(resultData, num) {
+function allComment(num) {
 	
-	if(resultData.raidCommentDtoList.length === 0){
+	if(commentInfo.raidCommentDtoList.length === 0){
 	  let myCard = document.querySelector(".myCard");
 	  
 	  let nullDiv = document.createElement("div");
@@ -224,11 +224,12 @@ function allComment(resultData, num) {
 	  let startDiv = document.createElement("div");
 	  startDiv.setAttribute("class", "card-body commentBody"+num);
 	  currentDiv.appendChild(startDiv);
-	
+
 	  arr = [];
-	  for(let i = 0; i<resultData.raidCommentDtoList.length; i++){
-	    if(resultData.raidCommentDtoList[i].raidCommentState === 'WAITING'){
-	      let commentId = resultData.raidCommentDtoList[i].raidCommentId;
+	  for(let i = 0; i<commentInfo.raidCommentDtoList.length; i++){
+	    if(commentInfo.raidCommentDtoList[i].raidCommentState === 'WAITING'){
+
+	      let commentId = commentInfo.raidCommentDtoList[i].raidCommentId;
 	      let commentW = document.createElement("div");
 	      commentW.setAttribute("class", "commentWrap comment"+commentId);
  		   startDiv.appendChild(commentW);
@@ -241,17 +242,17 @@ function allComment(resultData, num) {
           commentTextDiv.appendChild(commentP);
 
 			let account = 0;
-			if (resultData.raidCommentDtoList[i].account1) account++;
-			if (resultData.raidCommentDtoList[i].account2) account++;
-			if (resultData.raidCommentDtoList[i].account3) account++;
-			if (resultData.raidCommentDtoList[i].account4) account++;
-			if (resultData.raidCommentDtoList[i].account5) account++;
+			if (commentInfo.raidCommentDtoList[i].account1) account++;
+			if (commentInfo.raidCommentDtoList[i].account2) account++;
+			if (commentInfo.raidCommentDtoList[i].account3) account++;
+			if (commentInfo.raidCommentDtoList[i].account4) account++;
+			if (commentInfo.raidCommentDtoList[i].account5) account++;
 
 			let commentInput = document.createElement("input");
 			commentInput.setAttribute("type", "checkbox");
-			commentInput.setAttribute("id", "checkUser"+resultData.raidCommentDtoList[i].raidCommentId);
+			commentInput.setAttribute("id", "checkUser"+commentInfo.raidCommentDtoList[i].raidCommentId);
 			commentInput.setAttribute("class", "checkUser");
-			commentInput.setAttribute("name", resultData.raidCommentDtoList[i].raidCommentId);
+			commentInput.setAttribute("name", commentInfo.raidCommentDtoList[i].raidCommentId);
 			commentInput.setAttribute("value", account);
 			commentInput.setAttribute("onclick", "checkUser(this, "+num+")");
 			commentP.appendChild(commentInput);
@@ -259,7 +260,7 @@ function allComment(resultData, num) {
 				commentInput.disabled = true;
 			}
 
-			let commentPText = document.createTextNode(resultData.raidCommentDtoList[i].nickname1);
+			let commentPText = document.createTextNode(commentInfo.raidCommentDtoList[i].nickname1);
 			commentP.appendChild(commentPText);
 
 			let commentDiv = document.createElement("div");
@@ -287,10 +288,10 @@ function allComment(resultData, num) {
 
 			let deleteIcon = document.createElement("i");
 			deleteIcon.setAttribute("class", "fas fa-times delete");
-			deleteIcon.setAttribute("onClick", "deleteComment("+resultData.raidCommentDtoList[i].raidCommentId+", "+num+")");
+			deleteIcon.setAttribute("onClick", "deleteComment("+commentInfo.raidCommentDtoList[i].raidCommentId+", "+num+")");
 			flexDiv.appendChild(deleteIcon);
 
-			if(resultData.raidCommentDtoList[i].userId === userInfo.userId){
+			if(commentInfo.raidCommentDtoList[i].userId === userInfo.userId){
 				deleteIcon.style.display = 'block';
 			} else {
 				deleteIcon.style.display = 'none';
@@ -298,11 +299,12 @@ function allComment(resultData, num) {
 
 
 	    } else {
-			if(resultData.raidCommentDtoList[i].raidCommentState === 'JOINED'){
-				nickDiv2.innerHTML += "<h5 class='nick1'>"+resultData.raidCommentDtoList[i].nickname1+"'s</5>";
-				showNick(resultData.raidCommentDtoList[i]);
+			if(commentInfo.raidCommentDtoList[i].raidCommentState === 'JOINED'){
+				nickDiv2.innerHTML += "<h5 class='nick1'>"+commentInfo.raidCommentDtoList[i].nickname1+"'s</5>";
+				showNick(commentInfo.raidCommentDtoList[i]);
+				nickDiv2.style.display = 'block'
 			}
-			checkNum.style.display = 'none'; 
+			checkNum.style.display = 'none';
 		}
       }
 	
@@ -316,7 +318,11 @@ function allComment(resultData, num) {
 	  arrowUp.innerHTML = 'comment <i class="fa fa-sort-up"></i>';
 		
 	  let commentBox = document.querySelector(".commentBody"+num);
-	  commentBox.style.display = 'block';  	
+	  commentBox.style.display = 'block';
+
+	  if (raidInfo.raidDto.raidState === 'DOING') {
+		  startDiv.style.display = 'none';
+	  }
    }
 }
 
@@ -329,11 +335,15 @@ function allCommentAjax(num) {
 	
 	sendAjax(url, 'GET', null, function(res){
 	  console.log(res.response);
-	  var result = JSON.parse(res.response);   
-	  allComment(result, num);
+	  var result = JSON.parse(res.response);
+	  commentInfo = result;
+	  allComment(num);
 	});
 };
 
+let commentInfo = {
+
+}
 
 //전역 변수 comment_id_names, c_id를 배열로 담는 변수다.
 let comment_id_names = [];
@@ -422,30 +432,12 @@ function sendCheck(raidId) {
 //showNick() : 새로고침 하고 난 뒤 comment를 누르면 고른 사람의 친구코드와 닉네임이 보이게 하는 함수
 function showNick(result){
 
-	console.log(result+", "+ arr);
-	
-	    for(let j = 0; j< result.checkNum.length; j++){
-	      let onePersonCheckNum= result.checkNum[j];
-	      console.log(onePersonCheckNum);
-	      switch(onePersonCheckNum){
-	        case '1' :
-	          // 만일 onePersonCheckNum이 1이라면 그에 해당하는 nickname과 friendcode를 함수에 넣는다. 
-	          showNickMaker(result.nickname1, result.friendCode1);
-	          break;
-	        case '2' : 
-	          showNickMaker(result.nickname2, result.friendCode2);
-	          break;
-	        case '3' : 
-	          showNickMaker(result.nickname3, result.friendCode3);
-	          break;
-	        case '4' : 
-	          showNickMaker(result.nickname4, result.friendCode4); 
-	          break;
-	        case '5' : 
-	          showNickMaker(result.nickname5, result.friendCode5);
-	          break;
-	      }
-	    }
+	if (result.account1) showNickMaker(result.nickname1, result.friendCode1);
+	if (result.account2) showNickMaker(result.nickname2, result.friendCode2);
+	if (result.account3) showNickMaker(result.nickname3, result.friendCode3);
+	if (result.account4) showNickMaker(result.nickname4, result.friendCode4);
+	if (result.account5) showNickMaker(result.nickname5, result.friendCode5);
+
 }
 
 //showNickMaker() : 그 사람의 nickname과 friendCode를 담아 view로 보여주는 함수
@@ -472,14 +464,23 @@ function hideComment(num) {
 	let checkNum = document.querySelector("#checkNum");
 	let commentBox = document.querySelector(".commentBody"+num);
 	let arrowDown = document.getElementById("comment"+num);
-	
-	if(commentBox.style.display === 'block'){
-	    checkNum.style.display = 'none';
-	    commentBox.style.display = 'none';
+	let nickDiv2 = document.getElementById("nickDiv2");
+
+
+	if(commentBox.style.display === 'block') {
+		checkNum.style.display = 'none';
+		commentBox.style.display = 'none';
+	    arrowDown.innerHTML = 'comment <i class="fa fa-sort-down"></i>';
+	} else if (nickDiv2.style.display === 'block') {
+		nickDiv2.style.display = 'none';
 	    arrowDown.innerHTML = 'comment <i class="fa fa-sort-down"></i>';
 	} else {
-	    checkNum.style.display = 'block';
-	    commentBox.style.display = 'block';
+		if (raidInfo.raidDto.raidState === 'INVITE') {
+			checkNum.style.display = 'block';
+	    	commentBox.style.display = 'block';
+		} else {
+			nickDiv2.style.display = 'block';
+		}
 	    arrowDown.innerHTML = 'comment <i class="fa fa-sort-up"></i>';
 	}
 }
