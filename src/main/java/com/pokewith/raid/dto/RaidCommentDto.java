@@ -27,6 +27,12 @@ public class RaidCommentDto {
     private String nickname4;
     private String nickname5;
 
+    private String friendCode1;
+    private String friendCode2;
+    private String friendCode3;
+    private String friendCode4;
+    private String friendCode5;
+
     public RaidCommentDto(RaidComment raidComment) {
         this.raidCommentId = raidComment.getRaidCommentId();
         this.account1 = raidComment.isAccount1();
@@ -42,5 +48,13 @@ public class RaidCommentDto {
         this.nickname3 = raidComment.getUser().getNickname3();
         this.nickname4 = raidComment.getUser().getNickname4();
         this.nickname5 = raidComment.getUser().getNickname5();
+
+        if (raidComment.getRaidCommentState().equals(RaidCommentState.JOINED)) {
+            if(account1) this.friendCode1 = raidComment.getUser().getFriendCode1();
+            if(account2) this.friendCode2 = raidComment.getUser().getFriendCode2();
+            if(account3) this.friendCode3 = raidComment.getUser().getFriendCode3();
+            if(account4) this.friendCode4 = raidComment.getUser().getFriendCode4();
+            if(account5) this.friendCode5 = raidComment.getUser().getFriendCode5();
+        }
     }
 }
