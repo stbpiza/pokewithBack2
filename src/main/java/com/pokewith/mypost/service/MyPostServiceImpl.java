@@ -60,14 +60,38 @@ public class MyPostServiceImpl implements MyPostService{
         // 작성자가 본인인지 확인
         checkWriter(raid, userId);
         // 초대중인 레이드인지 확인
-        checkRaidState(raid);
+        checkRaidStateInvite(raid);
 
         // 레이드 진행중으로 변경
         raid.startRaid();
 
         // 댓글 상태 변경
         List<RaidComment> raidCommentList = raidCommentQueryRepository.getRaidCommentListByRaidId(dto.getRaidId());
-        setCommentStateAll(raidCommentList, dto.getRaidCommentIdList());
+        setCommentStateAllJoinedOrRejected(raidCommentList, dto.getRaidCommentIdList());
+
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity<String> endRaid(Long raidId, Long userId) {
+
+        Raid raid = raidRepository.findById(raidId).orElseThrow(NotFoundException::new);
+
+        // 작성자 확인
+        checkWriter(raid, userId);
+        // 이미 종료된 레이드인지 확인
+        checkRaidStateDone(raid);
+
+        // 레이드 종료
+        raid.endRaid();
+        // 작성자 상태 변경
+        User member = userRepository.findById(userId).orElseThrow(NotFoundException::new);
+        member.setFreeState();
+
+        // 댓글 상태 변경
+        List<RaidComment> raidCommentList = raidCommentQueryRepository.getRaidCommentListByRaidId(raidId);
+        setCommentStateAllEnd(raidCommentList);
 
         return new ResponseEntity<>("", HttpStatus.OK);
     }
@@ -98,14 +122,21 @@ public class MyPostServiceImpl implements MyPostService{
         }
     }
 
-    private void checkRaidState(Raid raid) {
+    private void checkRaidStateInvite(Raid raid) {
         // 초대중인 레이드인지 확인
         if (!raid.getRaidState().equals(RaidState.INVITE)) {
             throw new BadRequestException();
         }
     }
 
-    private void setCommentStateAll(List<RaidComment> raidCommentList, List<Long> raidCommentIdList) {
+    private void checkRaidStateDone(Raid raid) {
+        // 이미 종료된 레이드인지 확인
+        if (raid.getRaidState().equals(RaidState.DONE)) {
+            throw new BadRequestException();
+        }
+    }
+
+    private void setCommentStateAllJoinedOrRejected(List<RaidComment> raidCommentList, List<Long> raidCommentIdList) {
         for (RaidComment raidComment : raidCommentList) {
             for (Long commentId : raidCommentIdList) {
                 if (commentId.equals(raidComment.getRaidCommentId())) {
@@ -115,6 +146,15 @@ public class MyPostServiceImpl implements MyPostService{
             // 채택 리스트에 없는경우 거절로 변환
             if (raidComment.getRaidCommentState().equals(RaidCommentState.WAITING)) {
                 raidComment.rejectedComment();
+                raidComment.getUser().setFreeState();
+            }
+        }
+    }
+
+    private void setCommentStateAllEnd(List<RaidComment> raidCommentList) {
+        for (RaidComment raidComment : raidCommentList) {
+            if(!raidComment.getRaidCommentState().equals(RaidCommentState.REJECTED)) {
+                raidComment.endComment();
                 raidComment.getUser().setFreeState();
             }
         }

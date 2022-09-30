@@ -48,4 +48,17 @@ public class MyPostController {
         Long userId = usernameService.getUsername(request);
         return myPostService.startRaid(dto, userId);
     }
+
+    @DeleteMapping("/mypost/{raidId}")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "레이드 종료 성공"),
+            @ApiResponse(code = 400, message = "유효성검사 실패(이미 종료된 레이드)"),
+            @ApiResponse(code = 403, message = "권한 없음"),
+            @ApiResponse(code = 404, message = "없는 id로 요청")
+    })
+    public ResponseEntity<String> endRaid(@PathVariable("raidId") Long raidId, HttpServletRequest request) {
+        log.info("/api/mypost/raidId");
+        Long userId = usernameService.getUsername(request);
+        return myPostService.endRaid(raidId, userId);
+    }
 }
