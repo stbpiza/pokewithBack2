@@ -8,4 +8,6 @@ public interface MyPostService {
     ResponseEntity<RpGetMyPostDto> getMyPost(Long userId);
 
     ResponseEntity<String> startRaid(RqStartRaidDto dto, Long userId);
+
+    ResponseEntity<String> endRaid(Long raidId, Long userId);
 }
