@@ -28,10 +28,10 @@ public class ChatRoom {
     public void handleMessage(WebSocketSession session, ChatMessage chatMessage, ObjectMapper objectMapper) throws IOException {
         if (chatMessage.getType().equals(MessageType.ENTER)) {
             sessions.add(session);
-            chatMessage.setMessage(chatMessage.getWriter() + "enter");
+            chatMessage.setMessage(chatMessage.getWriter() + " enter");
         } else if (chatMessage.getType().equals(MessageType.LEAVE)) {
             sessions.remove(session);
-            chatMessage.setMessage(chatMessage.getWriter() + "leave");
+            chatMessage.setMessage(chatMessage.getWriter() + " leave");
         } else {
             chatMessage.setMessage(chatMessage.getWriter() + " : " + chatMessage.getMessage());
         }
