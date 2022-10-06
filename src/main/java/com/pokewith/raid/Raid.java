@@ -45,6 +45,7 @@ public class Raid extends TimeEntity {
     @Column(nullable = false)
     private RaidState raidState;
 
+    private String chat;
 
     private int requiredLevel;
 
@@ -81,5 +82,9 @@ public class Raid extends TimeEntity {
 
     public void endRaid() {
         this.raidState = RaidState.DONE;
+    }
+
+    public void makeChat(String chat) {
+        this.chat = chat;
     }
 }

@@ -45,89 +45,89 @@
 						placeholder="Please select" autofocus onload="getTime()">
 						<option
 							value="<img src = /static/img/chat/1.png class=img-sm>">
-							이상해씨</option>
+							1</option>
 						<option
 							value="<img src = /static/img/chat/2.png class=img-sm>">
-							꼬부기</option>
+							2</option>
 						<option
 							value="<img src = /static/img/chat/3.png class=img-sm>">
-							파이리</option>
+							3</option>
 							<option
 							value="<img src = /static/img/chat/4.png class=img-sm>">
-							피카츄</option>
+							4</option>
 							<option
 							value="<img src = /static/img/chat/5.png class=img-sm>">
-							버터풀</option>
+							5</option>
 							<option
 							value="<img src = /static/img/chat/6.png class=img-sm>">
-							잠만보</option>
+							6</option>
 							<option
 							value="<img src = /static/img/chat/7.png class=img-sm>">
-							꼬렛</option>
+							7</option>
 							<option
 							value="<img src = /static/img/chat/8.png class=img-sm>">
-							구구</option>
+							8</option>
 							<option
 							value="<img src = /static/img/chat/9.png class=img-sm>">
-							나옹</option>
+							9</option>
 					</select> <select id="code2" class="message-box" required
 						placeholder="Please select" autofocus onload="getTime()">
 						<option
 							value="<img src = /static/img/chat/1.png class=img-sm>">
-							이상해씨</option>
+							1</option>
 						<option
 							value="<img src = /static/img/chat/2.png class=img-sm>">
-							꼬부기</option>
+							2</option>
 						<option
 							value="<img src = /static/img/chat/3.png class=img-sm>">
-							파이리</option>
+							3</option>
 							<option
 							value="<img src = /static/img/chat/4.png class=img-sm>">
-							피카츄</option>
+							4</option>
 							<option
 							value="<img src = /static/img/chat/5.png class=img-sm>">
-							버터풀</option>
+							5</option>
 							<option
 							value="<img src = /static/img/chat/6.png class=img-sm>">
-							잠만보</option>
+							6</option>
 							<option
 							value="<img src = /static/img/chat/7.png class=img-sm>">
-							꼬렛</option>
+							7</option>
 							<option
 							value="<img src = /static/img/chat/8.png class=img-sm>">
-							구구</option>
+							8</option>
 							<option
 							value="<img src = /static/img/chat/9.png class=img-sm>">
-							나옹</option>
+							9</option>
 					</select> <select id="code3" class="message-box" required
 						placeholder="Please select" autofocus onload="getTime()">
 						<option
 							value="<img src = /static/img/chat/1.png class=img-sm>">
-							이상해씨</option>
+							1</option>
 						<option
 							value="<img src = /static/img/chat/2.png class=img-sm>">
-							꼬부기</option>
+							2</option>
 						<option
 							value="<img src = /static/img/chat/3.png class=img-sm>">
-							파이리</option>
+							3</option>
 							<option
 							value="<img src = /static/img/chat/4.png class=img-sm>">
-							피카츄</option>
+							4</option>
 							<option
 							value="<img src = /static/img/chat/5.png class=img-sm>">
-							버터풀</option>
+							5</option>
 							<option
 							value="<img src = /static/img/chat/6.png class=img-sm>">
-							잠만보</option>
+							6</option>
 							<option
 							value="<img src = /static/img/chat/7.png class=img-sm>">
-							꼬렛</option>
+							7</option>
 							<option
 							value="<img src = /static/img/chat/8.png class=img-sm>">
-							구구</option>
+							8</option>
 							<option
 							value="<img src = /static/img/chat/9.png class=img-sm>">
-							나옹</option>
+							9</option>
 					</select>
 				</div>
 				<div class="code-send">
@@ -198,7 +198,7 @@
     function disconnect(){
         webSocket.send(JSON.stringify({chatRoomId : roomId,type:'LEAVE',writer:nickname}));
         webSocket.close();
-        // window.location.href="/mypost";
+        window.location.href="/mypost";
 
 	 }
     
@@ -210,7 +210,7 @@
         let now2 = today.toLocaleTimeString();
         let now = "<span class=timestamp>" + now2 + "</span>";
     	 msg = document.getElementById("message").value; 
-    	 if(msg != "") {
+    	 if(msg !== "") {
     		 msg += now;
              console.log(msg);
             webSocket.send(JSON.stringify({chatRoomId : roomId,type:'CHAT',writer:nickname,message : msg}));
@@ -229,7 +229,7 @@
         code2 = document.getElementById("code2").value;
         code3 = document.getElementById("code3").value;
         
-        if(code1 && code2 && code3 != "") {
+        if(code1 && code2 && code3 !== "") {
         let result = code1 + code2 + code3;
      	   
      	
