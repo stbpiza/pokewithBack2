@@ -22,6 +22,4 @@ public class RqStartRaidDto {
     @Size(min = 1, max = 5)
     private List<Long> raidCommentIdList = new ArrayList<>();
 
-    @NotNull
-    private String chat;
 }

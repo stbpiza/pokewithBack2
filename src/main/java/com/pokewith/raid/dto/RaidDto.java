@@ -31,6 +31,8 @@ public class RaidDto {
 
     private int requiredLevel;
 
+    private String chat;
+
     private Long userId;
 
     private String nickname1;
@@ -50,6 +52,7 @@ public class RaidDto {
             this.remotePass = raid.getRemotePass();
             this.raidState = raid.getRaidState();
             this.requiredLevel = raid.getRequiredLevel();
+            this.chat = raid.getChat();
 
             this.userId = raid.getUser().getUserId();
             this.nickname1 = raid.getUser().getNickname1();

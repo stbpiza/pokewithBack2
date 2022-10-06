@@ -148,14 +148,14 @@ function showMyPost(result){
 		
 		  //enter
 		  let chattingLink = document.createElement("a");
-		  chattingLink.href = '/rooms/' + resultData.chat;
+		  chattingLink.href = '/room/' + resultData.chat;
 		  chattingLink.className = 'chattingLink';
 		  chattingLinkText = document.createTextNode("Start Chatting!");
 		  chattingLink.appendChild(chattingLinkText);
 		  chattingDiv.appendChild(chattingLink);  
 		  currentDiv.appendChild(startDiv);
 		
-		  if(chat == null){
+		  if(chat === null){
 		    //null일 때
 		    chattingDiv.style.display = 'none';
 		  }else{
@@ -413,7 +413,7 @@ function sendCheck(raidId) {
 	  const sendData = {
 	  	raidId : raidId,
 	    raidCommentIdList : comment_id_names,
-	    chat : Math.random().toString(36).substr(2,11)
+	    // chat : Math.random().toString(36).substr(2,11)
 	  }
 	
 	  const strObject = JSON.stringify(sendData);
@@ -509,12 +509,19 @@ function endPost(num, chat) {
 
 	if(confirm('Are you sure you want to end the raid?')){
 	
-	  const addData = { p_id : num, chat : chat };
+	  const addData = { chat : chat };
 	  const strObject = JSON.stringify(addData);
 	  console.log(strObject);
 	
-	  var url = '/mypost/end';
-	  sendAjax(url, 'POST', strObject);
+	  var url = '/api/mypost/' + num;
+	  fetch(url, {
+		  method: "DELETE",
+		  headers: {
+			  "Content-type": "application/json",
+		  },
+		  body: strObject,
+	  })
+		  .then()
 
 	  setTimeout("location.reload()", 1000);
 

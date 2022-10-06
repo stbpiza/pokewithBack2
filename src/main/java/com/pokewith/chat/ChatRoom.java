@@ -15,7 +15,7 @@ import java.util.Set;
 public class ChatRoom {
 
     private String roomId;
-    private String name;
+    private Long name;
     private Set<WebSocketSession> sessions = new HashSet<>();
 
     public static ChatRoom create(ChatRoomForm form) {
@@ -46,7 +46,7 @@ public class ChatRoom {
     }
 
     @Builder
-    public ChatRoom(String roomId, String name) {
+    public ChatRoom(String roomId, Long name) {
         this.roomId = roomId;
         this.name = name;
     }

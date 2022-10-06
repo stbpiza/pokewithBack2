@@ -30,7 +30,7 @@ public class ChatController {
         if(chatRoomRepository.findRoomById(id) == null) {
             ChatRoomForm form = new ChatRoomForm();
             form.setChat(id);
-            form.setName(userId.toString());
+            form.setName(userId);
             chatRoomRepository.createChatRoom(form);
         }
 
