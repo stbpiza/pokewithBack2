@@ -1,5 +1,7 @@
-package com.pokewith.chat;
+package com.pokewith.chat.repository;
 
+import com.pokewith.chat.ChatRoom;
+import com.pokewith.chat.ChatRoomForm;
 import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +35,7 @@ public class ChatRoomRepository {
         return chatRoom;
     }
 
-    public void deleteChatRoom(ChatRoom room) {
-        chatRoomMap.remove(room.getRoomId());
+    public void deleteChatRoom(String id) {
+        chatRoomMap.remove(id);
     }
 }

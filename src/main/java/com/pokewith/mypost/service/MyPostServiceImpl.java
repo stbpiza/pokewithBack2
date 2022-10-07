@@ -1,5 +1,6 @@
 package com.pokewith.mypost.service;
 
+import com.pokewith.chat.repository.ChatRoomRepository;
 import com.pokewith.exception.BadRequestException;
 import com.pokewith.exception.ForbiddenException;
 import com.pokewith.exception.NotFoundException;
@@ -37,6 +38,7 @@ public class MyPostServiceImpl implements MyPostService{
     private final RaidQueryRepository raidQueryRepository;
     private final RaidCommentQueryRepository raidCommentQueryRepository;
     private final UserRepository userRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final EntityManager em;
 
 
@@ -97,6 +99,9 @@ public class MyPostServiceImpl implements MyPostService{
         // 댓글 상태 변경
         List<RaidComment> raidCommentList = raidCommentQueryRepository.getRaidCommentListByRaidId(raidId);
         setCommentStateAllEnd(raidCommentList);
+
+        // 채팅방 삭제
+        chatRoomRepository.deleteChatRoom(raid.getChat());
 
         return new ResponseEntity<>("", HttpStatus.OK);
     }

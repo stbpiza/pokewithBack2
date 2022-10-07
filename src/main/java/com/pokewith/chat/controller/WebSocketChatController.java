@@ -1,6 +1,9 @@
-package com.pokewith.chat;
+package com.pokewith.chat.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pokewith.chat.ChatMessage;
+import com.pokewith.chat.ChatRoom;
+import com.pokewith.chat.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

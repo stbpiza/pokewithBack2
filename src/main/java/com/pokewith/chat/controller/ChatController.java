@@ -1,6 +1,10 @@
-package com.pokewith.chat;
+package com.pokewith.chat.controller;
 
 import com.pokewith.auth.UsernameService;
+import com.pokewith.chat.ChatRoom;
+import com.pokewith.chat.ChatRoomForm;
+import com.pokewith.chat.repository.ChatRoomRepository;
+import com.pokewith.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ChatController {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatService chatService;
     private final UsernameService usernameService;
 
     @GetMapping("/allroom")
@@ -27,16 +32,29 @@ public class ChatController {
 
         Long userId = usernameService.getUsername(request);
 
+        // 채팅방 없으면 생성
         if(chatRoomRepository.findRoomById(id) == null) {
-            ChatRoomForm form = new ChatRoomForm();
-            form.setChat(id);
-            form.setName(userId);
+            // db에 채팅방 id 없으면 메인으로 이동
+            if(!chatService.checkChatInRaid(id)) {
+                return "index";
+            }
+            ChatRoomForm form = ChatRoomForm.builder()
+                    .name(userId)
+                    .chat(id)
+                    .build();
             chatRoomRepository.createChatRoom(form);
         }
 
+        // 채팅방 접속
         ChatRoom room = chatRoomRepository.findRoomById(id);
         model.addAttribute("room", room);
         return "room";
 
     }
+
+    /**
+     *  분리한 메소드
+     **/
+
+
 }
