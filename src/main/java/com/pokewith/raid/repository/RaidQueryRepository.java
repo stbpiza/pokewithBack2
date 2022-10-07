@@ -60,6 +60,14 @@ public class RaidQueryRepository {
                 .fetchOne());
     }
 
+    public Optional<Raid> getDoingRaidByChat(String chat) {
+        return Optional.ofNullable(
+                query
+                .selectDistinct(raid)
+                .from(raid)
+                .where(raid.chat.eq(chat), raid.raidState.eq(RaidState.DOING))
+                .fetchOne());
+    }
 
     /**
      * 분리된 메소드

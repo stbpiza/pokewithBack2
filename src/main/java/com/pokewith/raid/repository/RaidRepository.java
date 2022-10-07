@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface RaidRepository extends JpaRepository<Raid, Long> {
     @EntityGraph(attributePaths = {"user"})
     Optional<Raid> findById(Long raidId);
+
+    Optional<Raid> findByChat(String chat);
 }
