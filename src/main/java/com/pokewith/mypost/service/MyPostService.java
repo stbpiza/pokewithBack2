@@ -10,4 +10,6 @@ public interface MyPostService {
     ResponseEntity<String> startRaid(RqStartRaidDto dto, Long userId);
 
     ResponseEntity<String> endRaid(Long raidId, Long userId);
+
+    ResponseEntity<String> endRaidOneComment(Long userid);
 }
