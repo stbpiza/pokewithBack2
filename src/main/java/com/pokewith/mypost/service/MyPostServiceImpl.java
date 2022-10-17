@@ -106,6 +106,20 @@ public class MyPostServiceImpl implements MyPostService{
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
+    @Transactional
+    @Override
+    public ResponseEntity<String> endRaidOneComment(Long userid) {
+
+        RaidComment raidComment = raidCommentQueryRepository.getLastCommentAndRaidByUserId(userid)
+                .orElseThrow(BadRequestException::new);
+
+        raidComment.endComment();
+
+        raidComment.getUser().setFreeState();
+
+        return new ResponseEntity<>("", HttpStatus.OK);
+
+    }
 
     /**
      *  분리한 메소드
