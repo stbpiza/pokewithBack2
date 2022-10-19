@@ -4,6 +4,7 @@ import com.pokewith.chat.repository.ChatRoomRepository;
 import com.pokewith.exception.BadRequestException;
 import com.pokewith.exception.ForbiddenException;
 import com.pokewith.exception.NotFoundException;
+import com.pokewith.mypost.dto.request.RqPostLikeAndHateDto;
 import com.pokewith.mypost.dto.request.RqStartRaidDto;
 import com.pokewith.mypost.dto.response.RpGetMyPostDto;
 import com.pokewith.raid.Raid;
@@ -119,6 +120,10 @@ public class MyPostServiceImpl implements MyPostService{
 
         return new ResponseEntity<>("", HttpStatus.OK);
 
+    }
+
+    public ResponseEntity<String> postLikeAndHate(RqPostLikeAndHateDto dto) {
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     /**
