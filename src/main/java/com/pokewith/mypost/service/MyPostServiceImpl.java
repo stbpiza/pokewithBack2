@@ -126,6 +126,8 @@ public class MyPostServiceImpl implements MyPostService{
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
+
+
     /**
      *  분리한 메소드
      **/

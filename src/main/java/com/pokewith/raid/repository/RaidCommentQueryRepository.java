@@ -46,4 +46,16 @@ public class RaidCommentQueryRepository {
                         .or(raidComment.raidCommentState.eq(RaidCommentState.WAITING)))
                 .fetchOne());
     }
+
+    public List<RaidComment> getRaidCommentListForLikeAndHate(Long raidId) {
+        return query
+                .selectDistinct(raidComment)
+                .from(raidComment)
+                .leftJoin(raidComment.raid, raid).fetchJoin()
+                .leftJoin(raidComment.user, user).fetchJoin()
+                .leftJoin(raid.user, user).fetchJoin()
+                .where(raid.raidId.eq(raidId), raidComment.raidCommentState.eq(RaidCommentState.JOINED)
+                        .or(raidComment.raidCommentState.eq(RaidCommentState.END)))
+                .fetch();
+    }
 }
