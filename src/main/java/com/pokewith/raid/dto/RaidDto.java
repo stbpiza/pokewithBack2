@@ -41,7 +41,9 @@ public class RaidDto {
 
     private int hateCount;
 
-    public RaidDto(Raid raid) {
+    private boolean isVote;
+
+    public RaidDto(Raid raid, boolean isVote) {
         try {
             this.raidId = raid.getRaidId();
             this.pokemon = raid.getPokemon();
@@ -58,6 +60,8 @@ public class RaidDto {
             this.nickname1 = raid.getUser().getNickname1();
             this.likeCount = raid.getUser().getLikeCount();
             this.hateCount = raid.getUser().getHateCount();
+
+            this.isVote = isVote;
         } catch (NullPointerException e) {
             // 작성한 글이나 댓글이 없으면 빈 DTO 리턴
         }
