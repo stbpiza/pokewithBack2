@@ -122,6 +122,8 @@ public class MyPostServiceImpl implements MyPostService{
 
     }
 
+
+
     public ResponseEntity<String> postLikeAndHate(RqPostLikeAndHateDto dto) {
         return new ResponseEntity<>("", HttpStatus.OK);
     }

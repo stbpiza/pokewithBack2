@@ -30,6 +30,7 @@ public class RaidCommentQueryRepository {
                 .from(raidComment)
                 .leftJoin(raidComment.raid, raid).fetchJoin()
                 .leftJoin(raidComment.user, user).fetchJoin()
+                .leftJoin(raid.user, user).fetchJoin()
                 .where(raid.raidId.eq(raidId))
                 .fetch();
     }
