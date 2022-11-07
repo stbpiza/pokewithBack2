@@ -60,6 +60,8 @@ public class RaidComment extends TimeEntity {
         this.raidCommentState = RaidCommentState.REJECTED;
     }
 
+    public void voteComment() { this.raidCommentState = RaidCommentState.VOTE; }
+
     public void endComment() {
         this.raidCommentState = RaidCommentState.END;
     }

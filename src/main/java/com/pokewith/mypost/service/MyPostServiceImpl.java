@@ -50,8 +50,10 @@ public class MyPostServiceImpl implements MyPostService{
 
         Raid raid = getMyPostRaid(member);
 
+        boolean isVote = checkVote(member, raid);
+
         return new ResponseEntity<>(RpGetMyPostDto.builder()
-                .raidDto(new RaidDto(raid))
+                .raidDto(new RaidDto(raid, isVote))
                 .build(), HttpStatus.OK);
     }
 
@@ -114,9 +116,7 @@ public class MyPostServiceImpl implements MyPostService{
         RaidComment raidComment = raidCommentQueryRepository.getLastCommentAndRaidByUserId(userid)
                 .orElseThrow(BadRequestException::new);
 
-        raidComment.endComment();
-
-        raidComment.getUser().setFreeState();
+        raidComment.voteComment();
 
         return new ResponseEntity<>("", HttpStatus.OK);
 
@@ -146,6 +146,24 @@ public class MyPostServiceImpl implements MyPostService{
         } else {
             return null;
         }
+    }
+
+    private boolean checkVote(User member, Raid raid) {
+        boolean isVote = false;
+        if (member.getUserState().equals(UserState.POST)) {
+            if (raid.getRaidState().equals(RaidState.VOTE)) {
+                isVote = true;
+            }
+        } else if (member.getUserState().equals(UserState.COMMENT)) {
+            for (RaidComment raidComment :raid.getRaidComments()) {
+                if (raidComment.getUser().getUserId().equals(member.getUserId())
+                        && raidComment.getRaidCommentState().equals(RaidCommentState.VOTE)) {
+                    isVote = true;
+                    break;
+                }
+            }
+        }
+        return isVote;
     }
 
     private void checkWriter(Raid raid, Long userId) {
