@@ -41,29 +41,21 @@ public class RaidDto {
 
     private int hateCount;
 
-    private boolean isVote;
+    public RaidDto(Raid raid) {
+        this.raidId = raid.getRaidId();
+        this.pokemon = raid.getPokemon();
+        this.raidType = raid.getRaidType();
+        this.startTime = raid.getStartTime();
+        this.endTime = raid.getEndTime();
+        this.normalPass = raid.getNormalPass();
+        this.remotePass = raid.getRemotePass();
+        this.raidState = raid.getRaidState();
+        this.requiredLevel = raid.getRequiredLevel();
+        this.chat = raid.getChat();
 
-    public RaidDto(Raid raid, boolean isVote) {
-        try {
-            this.raidId = raid.getRaidId();
-            this.pokemon = raid.getPokemon();
-            this.raidType = raid.getRaidType();
-            this.startTime = raid.getStartTime();
-            this.endTime = raid.getEndTime();
-            this.normalPass = raid.getNormalPass();
-            this.remotePass = raid.getRemotePass();
-            this.raidState = raid.getRaidState();
-            this.requiredLevel = raid.getRequiredLevel();
-            this.chat = raid.getChat();
-
-            this.userId = raid.getUser().getUserId();
-            this.nickname1 = raid.getUser().getNickname1();
-            this.likeCount = raid.getUser().getLikeCount();
-            this.hateCount = raid.getUser().getHateCount();
-
-            this.isVote = isVote;
-        } catch (NullPointerException e) {
-            // 작성한 글이나 댓글이 없으면 빈 DTO 리턴
-        }
+        this.userId = raid.getUser().getUserId();
+        this.nickname1 = raid.getUser().getNickname1();
+        this.likeCount = raid.getUser().getLikeCount();
+        this.hateCount = raid.getUser().getHateCount();
     }
 }

@@ -33,7 +33,7 @@ function sendAjax(url, method, data, callback){
 //showMyPost() : myPost 게시글을 보는 함수
 function showMyPost(result){
 
-	const resultData = result.raidDto;
+	const resultData = result;
 	if(resultData.raidId == null){
 	  let currentDiv = document.querySelector("#my-box");
 	  let endPage = document.createElement("div");
@@ -256,7 +256,7 @@ function allComment(num) {
 			commentInput.setAttribute("value", account);
 			commentInput.setAttribute("onclick", "checkUser(this, "+num+")");
 			commentP.appendChild(commentInput);
-			if (raidInfo.raidDto.userId !== userInfo.userId) {
+			if (raidInfo.userId !== userInfo.userId) {
 				commentInput.disabled = true;
 			}
 
@@ -320,7 +320,7 @@ function allComment(num) {
 	  let commentBox = document.querySelector(".commentBody"+num);
 	  commentBox.style.display = 'block';
 
-	  if (raidInfo.raidDto.raidState === 'DOING') {
+	  if (raidInfo.raidState === 'DOING') {
 		  startDiv.style.display = 'none';
 	  }
    }
@@ -475,7 +475,7 @@ function hideComment(num) {
 		nickDiv2.style.display = 'none';
 	    arrowDown.innerHTML = 'comment <i class="fa fa-sort-down"></i>';
 	} else {
-		if (raidInfo.raidDto.raidState === 'INVITE') {
+		if (raidInfo.raidState === 'INVITE') {
 			checkNum.style.display = 'block';
 	    	commentBox.style.display = 'block';
 		} else {
