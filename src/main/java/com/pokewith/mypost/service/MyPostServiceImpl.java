@@ -53,7 +53,8 @@ public class MyPostServiceImpl implements MyPostService{
         boolean isVote = checkVote(member, raid);
 
         return new ResponseEntity<>(RpGetMyPostDto.builder()
-                .raidDto(new RaidDto(raid, isVote))
+                .raid(raid)
+                .isVote(isVote)
                 .build(), HttpStatus.OK);
     }
 
