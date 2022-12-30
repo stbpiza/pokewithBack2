@@ -4,6 +4,7 @@ import com.pokewith.auth.UsernameService;
 import com.pokewith.mypage.service.MyPageService;
 import com.pokewith.mypage.dto.response.RpGetMyPageDto;
 import com.pokewith.mypage.dto.request.RqUpdateMyPageDto;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class MyPageController {
     private final UsernameService usernameService;
 
     @GetMapping("/mypage")
+    @ApiOperation(value = "본인 닉네임 + 친구코드 조회 api", notes = "마이페이지에서 본인 닉네임과 친구코드 조회하는 api")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "닉네임 친구코드 조회 성공"),
             @ApiResponse(code = 400, message = "유효성검사 실패(없는 userId)")
@@ -36,7 +38,8 @@ public class MyPageController {
         return myPageService.getMyPage(userId);
     }
 
-    @PostMapping("/mypage")
+    @PutMapping("/mypage")
+    @ApiOperation(value = "본인 닉네임 + 친구코드 변경 api", notes = "마이페이지에서 본인 닉네임과 친구코드 변경하는 api")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "닉네임 친구코드 변경 성공"),
             @ApiResponse(code = 400, message = "유효성검사 실패")

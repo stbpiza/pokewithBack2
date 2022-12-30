@@ -215,7 +215,7 @@ function setUserInfo(data) {
 }
 
 //BINDING SAVE BUTTON EVENT
-sendBtn.addEventListener("click", postUserInfo);
+sendBtn.addEventListener("click", putUserInfo);
 
 //AJAX REQUEST
 function sendAjax(url, method, data, callback) {
@@ -252,14 +252,14 @@ function getUserInfo() {
 
 }
 
-//POST USER INFORMATION
-function postUserInfo() {
+//PUT USER INFORMATION
+function putUserInfo() {
   let inputData = userInfoInput;
   let jsonData = JSON.stringify(inputData);
   const url = "/api/mypage";
 
   fetch(url, {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-type": "application/json",
     },
