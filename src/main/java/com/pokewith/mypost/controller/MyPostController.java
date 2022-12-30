@@ -4,6 +4,7 @@ import com.pokewith.auth.UsernameService;
 import com.pokewith.mypost.dto.request.RqStartRaidDto;
 import com.pokewith.mypost.service.MyPostService;
 import com.pokewith.mypost.dto.response.RpGetMyPostDto;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class MyPostController {
     private final MyPostService myPostService;
 
     @GetMapping("/mypost")
+    @ApiOperation(value = "마이포스트 본인 작성글 or 댓글 단 작성글 조회 api", notes = "본인이 직접 작성한 게시물 혹은 댓글을 단 게시물 조회")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "마이포스트 조회 성공"),
             @ApiResponse(code = 404, message = "작성한 글이나 댓글 없음")
@@ -37,6 +39,7 @@ public class MyPostController {
     }
 
     @PostMapping("/mypost/start")
+    @ApiOperation(value = "본인 작성글 레이드 시작 api", notes = "초대할 댓글 선택해서 레이드 시작하는 api")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "레이드 시작 성공"),
             @ApiResponse(code = 400, message = "유효성검사 실패"),
@@ -50,6 +53,7 @@ public class MyPostController {
     }
 
     @DeleteMapping("/mypost/{raidId}")
+    @ApiOperation(value = "본인 작성글 레이드 종료 api", notes = "레이드 끝난 후 상태를 end로 변경하는 api")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "레이드 종료 성공"),
             @ApiResponse(code = 400, message = "유효성검사 실패(이미 종료된 레이드)"),
