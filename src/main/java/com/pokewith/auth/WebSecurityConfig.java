@@ -2,6 +2,7 @@ package com.pokewith.auth;
 
 import com.pokewith.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -60,7 +61,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/favicon.ico"
                         ,"/error"
-                        ,"/static/**"
                         ,"/"
                         ,"/index"
                         ,"/mypage"
@@ -70,6 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         ,"/register"
                         ,"/room"
                 );
+        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
     @Override

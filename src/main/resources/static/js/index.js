@@ -76,8 +76,8 @@ function allPostHtml(requiredData, n){
   // cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/150.png" width="150px" /></p>';
   cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/'+requiredData.raidDtoList[n].pokemon+'.png" width="150px" /></p>';
   cardDiv.innerHTML += '<p> Level of Raid : ' + str + '</p>';
-  cardDiv.innerHTML += '<p> Start Time of Raid : ' + requiredData.raidDtoList[n].startTime.replace("T", " ").substr(0, 16)+'</p>';
-  cardDiv.innerHTML += '<p> End Time of Raid : ' + requiredData.raidDtoList[n].endTime.replace("T", " ").substr(0, 16)+'</p>';
+  cardDiv.innerHTML += '<p> Start Time of Raid : ' + requiredData.raidDtoList[n].startTime+'</p>';
+  cardDiv.innerHTML += '<p> End Time of Raid : ' + requiredData.raidDtoList[n].endTime+'</p>';
   cardDiv.innerHTML += '<p> Required Player Level : ' + requiredData.raidDtoList[n].requiredLevel+'</p>';
   cardDiv.innerHTML += '<p> Premium Pass : <img src="/static/img/3_premium.png" style="width:60px"> / <img src="/static/img/2_premium.png" style="width:50px">' + requiredData.raidDtoList[n].normalPass+'</p>';
   cardDiv.innerHTML += '<p> Remote Pass : <img src="/static/img/1_remote.png" style="width:60px"> ' + requiredData.raidDtoList[n].remotePass + '</p>';
@@ -134,6 +134,7 @@ function allPostAjax(selectOption, switchOption) {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
+        console.log(JSON.stringify(data));
         for (let i = 0; i < data.raidDtoList.length; i++) {
           allPostHtml(data, i);
         }
