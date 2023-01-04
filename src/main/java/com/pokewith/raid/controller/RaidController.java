@@ -29,14 +29,14 @@ public class RaidController {
     private final UsernameService usernameService;
 
     @GetMapping("/raid")
-    @ApiOperation(value = "", notes = "")
+    @ApiOperation(value = "레이드 리스트 조회용 api", notes = "메인 페이지에서 레이드 리스트 조회용 api")
     public ResponseEntity<RpRaidListDto> getRaidList(RqRaidListSearchDto dto, Pageable pageable) {
         log.info("/api/raid");
         return raidService.getRaidList(dto, pageable);
     }
 
     @PostMapping("/raid")
-    @ApiOperation(value = "", notes = "")
+    @ApiOperation(value = "레이드 게시물 작성용 api", notes = "메인 페이지에서 레이드 게시물 작성용 api")
     public ResponseEntity<String> postRaid(@Valid @RequestBody RqPostRaidDto dto, HttpServletRequest request) {
         log.info("/api/raid");
         Long userId = usernameService.getUsername(request);
@@ -44,7 +44,7 @@ public class RaidController {
     }
 
     @PostMapping("/comment")
-    @ApiOperation(value = "", notes = "")
+    @ApiOperation(value = "레이드 참여 댓글 작성용 api", notes = "레이드 참여 댓글 작성용 api")
     public ResponseEntity<String> postRaidComment(@Valid @RequestBody RqPostRaidCommentDto dto, HttpServletRequest request) {
         log.info("/api/comment");
         Long userId = usernameService.getUsername(request);
@@ -52,7 +52,7 @@ public class RaidController {
     }
 
     @GetMapping("/comment/{raidId}")
-    @ApiOperation(value = "", notes = "")
+    @ApiOperation(value = "레이드 참여 댓글 조회용 api", notes = "레이드 참여 댓글 조회용 api")
     public ResponseEntity<RpRaidCommentListDto> getRaidCommentList(@PathVariable("raidId") Long raidId) {
         log.info("/api/comment/" + raidId);
         return raidService.getRaidCommentList(raidId);

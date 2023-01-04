@@ -1,5 +1,6 @@
 package com.pokewith.mypost.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pokewith.raid.Raid;
 import com.pokewith.raid.RaidState;
 import com.pokewith.raid.RaidType;
@@ -20,8 +21,10 @@ public class RpGetMyPostDto {
 
     private RaidType raidType;
 
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
 
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
     private int normalPass;

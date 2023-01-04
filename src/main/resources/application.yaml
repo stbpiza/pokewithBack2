@@ -37,7 +37,6 @@ spring:
     cache: false
 
   mvc:
-    static-path-pattern: "/static/**"
     pathmatch:
       matching-strategy: ant_path_matcher
 
