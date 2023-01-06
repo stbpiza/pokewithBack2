@@ -53,7 +53,7 @@ function allPostHtml(requiredData, n){
   let nickName = '';
   nickName += '<p class="m-0 text-gray"><b>'+requiredData.raidDtoList[n].nickname1
               + '</b><i class="fa fa-thumbs-up updown" aria-hidden="true" style="font-size:10px"></i>' + requiredData.raidDtoList[n].likeCount
-              + ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + requiredData.raidDtoList[n].hateCount + '</p>'
+              + ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + requiredData.raidDtoList[n].dislikeCount + '</p>'
   nickDiv.innerHTML = nickName;
 
   startDiv.appendChild(nickDiv);

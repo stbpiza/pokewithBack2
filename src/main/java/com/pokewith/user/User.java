@@ -71,7 +71,7 @@ public class User extends TimeEntity {
 
     private int likeCount;
 
-    private int hateCount;
+    private int dislikeCount;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)

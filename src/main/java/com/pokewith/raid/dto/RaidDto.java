@@ -42,7 +42,7 @@ public class RaidDto {
 
     private int likeCount;
 
-    private int hateCount;
+    private int dislikeCount;
 
     public RaidDto(Raid raid) {
         this.raidId = raid.getRaidId();
@@ -59,6 +59,6 @@ public class RaidDto {
         this.userId = raid.getUser().getUserId();
         this.nickname1 = raid.getUser().getNickname1();
         this.likeCount = raid.getUser().getLikeCount();
-        this.hateCount = raid.getUser().getHateCount();
+        this.dislikeCount = raid.getUser().getDislikeCount();
     }
 }

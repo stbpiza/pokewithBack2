@@ -1,13 +1,13 @@
 package com.pokewith.mypost.dto;
 
-import com.pokewith.user.LikeOrHate;
+import com.pokewith.user.LikeOrDislike;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor
-public class LikeAndHateDto {
+public class LikeAndDislikeDto {
     private Long userId;
-    private LikeOrHate likeOrHate;
+    private LikeOrDislike likeOrDislike;
 }
