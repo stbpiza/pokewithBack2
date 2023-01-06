@@ -49,7 +49,7 @@ public class RaidCommentQueryRepository {
                 .fetchOne());
     }
 
-    public List<RaidComment> getRaidCommentListForLikeAndHate(Long raidId) {
+    public List<RaidComment> getRaidCommentListForLikeAndDislike(Long raidId) {
         return query
                 .selectDistinct(raidComment)
                 .from(raidComment)

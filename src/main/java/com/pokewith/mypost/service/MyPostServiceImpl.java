@@ -4,7 +4,7 @@ import com.pokewith.chat.repository.ChatRoomRepository;
 import com.pokewith.exception.BadRequestException;
 import com.pokewith.exception.ForbiddenException;
 import com.pokewith.exception.NotFoundException;
-import com.pokewith.mypost.dto.request.RqPostLikeAndHateDto;
+import com.pokewith.mypost.dto.request.RqPostLikeAndDislikeDto;
 import com.pokewith.mypost.dto.request.RqStartRaidDto;
 import com.pokewith.mypost.dto.response.RpGetMyPostDto;
 import com.pokewith.raid.Raid;
@@ -13,7 +13,6 @@ import com.pokewith.raid.RaidCommentState;
 import com.pokewith.raid.RaidState;
 import com.pokewith.raid.repository.RaidCommentQueryRepository;
 import com.pokewith.raid.repository.RaidQueryRepository;
-import com.pokewith.raid.dto.RaidDto;
 import com.pokewith.raid.repository.RaidRepository;
 import com.pokewith.user.User;
 import com.pokewith.user.UserState;
@@ -125,7 +124,7 @@ public class MyPostServiceImpl implements MyPostService{
 
 
 
-    public ResponseEntity<String> postLikeAndHate(RqPostLikeAndHateDto dto) {
+    public ResponseEntity<String> postLikeAndDislike(RqPostLikeAndDislikeDto dto) {
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 

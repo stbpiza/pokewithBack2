@@ -60,7 +60,7 @@ function showMyPost(result){
 		let nickName = '';
 		nickName += '<p class="m-0 text-gray"><b>'+resultData.nickname1
 		            + '</b><i class="fa fa-thumbs-up updown" aria-hidden="true" style="font-size:10px"></i>' + resultData.likeCount
-		            + ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + resultData.hateCount + '</p>'
+		            + ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + resultData.dislikeCount + '</p>'
 		nickDiv.innerHTML = nickName;
 		startDiv.appendChild(nickDiv);
 		
