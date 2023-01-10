@@ -1,6 +1,7 @@
 package com.pokewith.mypost.controller;
 
 import com.pokewith.auth.UsernameService;
+import com.pokewith.mypost.dto.request.RqPostLikeAndDislikeDto;
 import com.pokewith.mypost.dto.request.RqStartRaidDto;
 import com.pokewith.mypost.service.MyPostService;
 import com.pokewith.mypost.dto.response.RpGetMyPostDto;
@@ -64,5 +65,19 @@ public class MyPostController {
         log.info("/api/mypost/raidId");
         Long userId = usernameService.getUsername(request);
         return myPostService.endRaid(raidId, userId);
+    }
+
+    @PostMapping("/mypost/vote")
+    @ApiOperation(value = "본인 작성글 레이드 종료 후 좋아요 싫어요 api", notes = "레이드 끝난 후 팀원들에게 좋아요 싫어요 주는 api")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "좋아요 싫어요 성공"),
+            @ApiResponse(code = 400, message = "유효성검사 실패(이미 투표한 경우)"),
+            @ApiResponse(code = 403, message = "권한 없음"),
+            @ApiResponse(code = 404, message = "없는 id로 요청")
+    })
+    public ResponseEntity<String> voteLikeOrDislike(RqPostLikeAndDislikeDto dto, HttpServletRequest request) {
+        log.info("/api/mypost/vote");
+        Long userId = usernameService.getUsername(request);
+        return myPostService.postLikeAndDislike(userId, dto);
     }
 }

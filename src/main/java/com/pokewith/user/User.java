@@ -123,6 +123,14 @@ public class User extends TimeEntity {
         this.friendCode5 = dto.getFriendCode5();
     }
 
+    public void upLikeCount() {
+        this.likeCount++;
+    }
+
+    public void upDislikeCount() {
+        this.dislikeCount++;
+    }
+
     public User(Long userId){
         this.userId = userId;
     }

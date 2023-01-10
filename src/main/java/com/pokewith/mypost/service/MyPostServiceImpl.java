@@ -4,6 +4,7 @@ import com.pokewith.chat.repository.ChatRoomRepository;
 import com.pokewith.exception.BadRequestException;
 import com.pokewith.exception.ForbiddenException;
 import com.pokewith.exception.NotFoundException;
+import com.pokewith.mypost.dto.LikeAndDislikeDto;
 import com.pokewith.mypost.dto.request.RqPostLikeAndDislikeDto;
 import com.pokewith.mypost.dto.request.RqStartRaidDto;
 import com.pokewith.mypost.dto.response.RpGetMyPostDto;
@@ -14,6 +15,7 @@ import com.pokewith.raid.RaidState;
 import com.pokewith.raid.repository.RaidCommentQueryRepository;
 import com.pokewith.raid.repository.RaidQueryRepository;
 import com.pokewith.raid.repository.RaidRepository;
+import com.pokewith.user.LikeOrDislike;
 import com.pokewith.user.User;
 import com.pokewith.user.UserState;
 import com.pokewith.user.repository.UserRepository;
@@ -111,10 +113,10 @@ public class MyPostServiceImpl implements MyPostService{
 
     @Transactional
     @Override
-    public ResponseEntity<String> endRaidOneComment(Long userid) {
+    public ResponseEntity<String> endRaidOneComment(Long userId) {
 
-        RaidComment raidComment = raidCommentQueryRepository.getLastCommentAndRaidByUserId(userid)
-                .orElseThrow(BadRequestException::new);
+        RaidComment raidComment = raidCommentQueryRepository.getLastCommentAndRaidByUserId(userId)
+                .orElseThrow(ForbiddenException::new);
 
         raidComment.voteComment();
 
@@ -123,10 +125,26 @@ public class MyPostServiceImpl implements MyPostService{
     }
 
 
+    @Transactional
+    @Override
+    public ResponseEntity<String> postLikeAndDislike(Long userId, RqPostLikeAndDislikeDto dto) {
 
-    public ResponseEntity<String> postLikeAndDislike(RqPostLikeAndDislikeDto dto) {
+        User member = userRepository.findById(userId).orElseThrow(NotFoundException::new);
+
+        // 작성한 글, 댓글 없으면 에러
+        if (member.getUserState().equals(UserState.FREE)) {
+            throw new BadRequestException();
+        }
+
+        insertLikeAndDislike(dto.getLikeAndDislikeDtoList());
+
+        endMyRaidOrComment(member);
+
+        member.setFreeState();
+
         return new ResponseEntity<>("", HttpStatus.OK);
     }
+
 
 
 
@@ -208,6 +226,30 @@ public class MyPostServiceImpl implements MyPostService{
                 raidComment.endComment();
                 raidComment.getUser().setFreeState();
             }
+        }
+    }
+
+    private void insertLikeAndDislike(List<LikeAndDislikeDto> likeAndDislikeDtoList) {
+        for (LikeAndDislikeDto likeAndDislikeDto : likeAndDislikeDtoList) {
+            User member = userRepository.findById(likeAndDislikeDto.getUserId())
+                    .orElseThrow(ForbiddenException::new);
+            if (likeAndDislikeDto.getLikeOrDislike().equals(LikeOrDislike.LIKE)) {
+                member.upLikeCount();
+            } else {
+                member.upDislikeCount();
+            }
+        }
+    }
+
+    private void endMyRaidOrComment(User member) {
+        if (member.getUserState().equals(UserState.POST)) {
+            Raid raid = raidQueryRepository.getLastInviteRaidByUserId(member.getUserId())
+                    .orElseThrow(NotFoundException::new);
+            raid.endRaid();
+        } else if (member.getUserState().equals(UserState.COMMENT)) {
+            RaidComment raidComment = raidCommentQueryRepository.getLastCommentAndRaidByUserId(member.getUserId())
+                    .orElseThrow(NotFoundException::new);
+            raidComment.endComment();
         }
     }
 }
