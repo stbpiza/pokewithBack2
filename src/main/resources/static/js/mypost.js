@@ -33,136 +33,167 @@ function sendAjax(url, method, data, callback){
 //showMyPost() : myPost 게시글을 보는 함수
 function showMyPost(result){
 
+	if (result.vote) {
+		getAllComment(result.raidId, true);
+		nowMyVote(result);
+	} else {
+		nowMyRaid(result);
+	}
+
+}
+
+function nowMyVote(result) {
+	let currentDiv = document.querySelector("#my-box");
+
+	let startDiv = document.createElement("div");
+	startDiv.setAttribute("class", "card shadow mb-5 max-width700");
+
+	let writerDiv = document.createElement("div");
+	writerDiv.setAttribute("class", "card-header py-3 d-flex flex-row align-items-center justify-content-between max-width1000");
+
+	let writerContent = '';
+	writerContent += '<p class="m-0 text-gray width250"><b>'+result.nickname1
+		+ '</b><i class="fa fa-thumbs-up updown" aria-hidden="true" style="font-size:10px"></i>' + result.likeCount
+		+ ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + result.dislikeCount + '</p>'
+	    + '<div><button class="btn btn-success mr-3">like</button><button class="btn btn-warning mr-3">dislike</button></div>'
+	writerDiv.innerHTML = writerContent;
+
+
+	startDiv.appendChild(writerDiv);
+	currentDiv.appendChild(startDiv);
+}
+
+function nowMyRaid(result) {
 	const resultData = result;
 	if(resultData.raidId == null){
-	  let currentDiv = document.querySelector("#my-box");
-	  let endPage = document.createElement("div");
-	  endPage.setAttribute("class", "card-body endBody");
-	
-	  endStr = '<p class="endStr">Nothing!</p>';
-	
-	  endPage.innerHTML = endStr;
-	
-	  currentDiv.appendChild(endPage);
+		let currentDiv = document.querySelector("#my-box");
+		let endPage = document.createElement("div");
+		endPage.setAttribute("class", "card-body endBody");
+
+		endStr = '<p class="endStr">Nothing!</p>';
+
+		endPage.innerHTML = endStr;
+
+		currentDiv.appendChild(endPage);
 	} else {
 		let num = resultData.raidId;
 		let chat = resultData.chat;
 		console.log(num);
 		console.log(typeof(chat));
-		
+
 		let startDiv = document.createElement("div");
 		startDiv.setAttribute("class", "card shadow");
 		startDiv.setAttribute("id", "result-box");
-		
+
 		let nickDiv = document.createElement("div");
 		nickDiv.setAttribute("class", "card-header py-3 d-flex flex-row align-items-center justify-content-between");
-		
+
 		let nickName = '';
 		nickName += '<p class="m-0 text-gray"><b>'+resultData.nickname1
-		            + '</b><i class="fa fa-thumbs-up updown" aria-hidden="true" style="font-size:10px"></i>' + resultData.likeCount
-		            + ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + resultData.dislikeCount + '</p>'
+			+ '</b><i class="fa fa-thumbs-up updown" aria-hidden="true" style="font-size:10px"></i>' + resultData.likeCount
+			+ ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + resultData.dislikeCount + '</p>'
 		nickDiv.innerHTML = nickName;
 		startDiv.appendChild(nickDiv);
-		
+
 		let endBtn = document.createElement("button");
 		endBtn.setAttribute("class", "endCheck");
 		endBtn.setAttribute("Onclick", 'endPost('+num+', "'+chat+'")');
 		nickDiv.appendChild(endBtn);
-		
+
 		let endBtnText = document.createTextNode("end");
 		endBtn.appendChild(endBtnText);
-		
+
 		if(resultData.userId === userInfo.userId){
 			endBtn.style.display = 'block';
 		} else {
 			endBtn.style.display = 'none';
 		}
-		
+
 		if(resultData.raidState == null || resultData.raidState === "DONE") {
-		  let currentDiv = document.querySelector("#my-box");
-		  let endPage = document.createElement("div");
-		  endPage.setAttribute("class", "card-body endBody");
-		
-		  endStr = '<p class="endStr">Nothing!</p>';
-		
-		  endPage.innerHTML = endStr;
-		
-		  currentDiv.appendChild(endPage);
+			let currentDiv = document.querySelector("#my-box");
+			let endPage = document.createElement("div");
+			endPage.setAttribute("class", "card-body endBody");
+
+			endStr = '<p class="endStr">Nothing!</p>';
+
+			endPage.innerHTML = endStr;
+
+			currentDiv.appendChild(endPage);
 		} else {
-		
-		  let cardDiv = document.createElement("div");
-		  cardDiv.setAttribute("class", "myCard card-body cardBody"+num);
-		  startDiv.appendChild(cardDiv);
-		
-		  if(resultData.raidType === 'ONE') {
-		      str = "<img src = '/static/img/1.png' style='width:50px'>"
-		  } else if(resultData.raidType === 'THREE') {
-		      str = "<img src = '/static/img/3.png' style='width:50px'>"
-		  } else if(resultData.raidType === 'FIVE') {
-		      str = "<img src = '/static/img/5.png' style='width:50px'>"
-		  } else {
-		      str = "<img src = '/static/img/mega.png' style='width:50px'>"
-		  }
-		  
-		  cardDiv.innerHTML += '<input type="hidden" id="postId" name="postId" value="'+ resultData.raidId +'">';
-		  // cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/150.png" width="150px" /></p>';
-		  cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/'+resultData.pokemon+'.png" width="150px" /></p>';
-		  cardDiv.innerHTML += '<p> Level of Raid : ' + str + '</p>';
-		  cardDiv.innerHTML += '<p> Start Time of Raid : ' + resultData.startTime+'</p>';
-		  cardDiv.innerHTML += '<p> End Time of Raid : ' + resultData.endTime+'</p>';
-		  cardDiv.innerHTML += '<p> Required Player Level : ' + resultData.requiredLevel+'</p>';
-		  cardDiv.innerHTML += '<p> Premium Pass : <img src="/static/img/3_premium.png" class="remote1"> / <img src="/static/img/2_premium.png" class="remote2"> <span id="npass">' + resultData.normalPass+'</span></p>';
-		  cardDiv.innerHTML += '<p> Remote Pass : <img src="/static/img/1_remote.png" class="remote1"> <span id="rpass">' + resultData.remotePass + '</span></p>';
-		
-		  let commentDiv3 = document.createElement('div');
-		  commentDiv3.setAttribute('class', 'commentBox');
-		  commentDiv3.setAttribute('id', 'commentBox');
-		
-		  let commentA = document.createElement('button');
-		  commentA.setAttribute('id', 'comment'+num)
-		  commentA.setAttribute('class', 'hide-link');
-		  commentA.setAttribute('onclick', 'allCommentAjax('+num+')');
-		
-		
-		  let commentText = document.createTextNode('comment');
-		  commentA.appendChild(commentText);
-		
-		  let arrowDown = document.createElement("i");
-		  arrowDown.setAttribute("class", "fa fa-sort-down");
-		
-		  commentA.appendChild(arrowDown);
-		
-		  commentDiv3.appendChild(commentA);
-		
-		  let divide = document.createElement('div');
-		  divide.setAttribute('class', 'dropdown-divider');
-		
-		  commentDiv3.appendChild(divide);
-		  cardDiv.appendChild(commentDiv3);
-		
-		  let currentDiv = document.querySelector("#my-box");
-		
-		  let chattingDiv = document.createElement("div");
-		  chattingDiv.setAttribute("class", "chattingDiv");
-		  currentDiv.appendChild(chattingDiv);
-		
-		  //enter
-		  let chattingLink = document.createElement("a");
-		  chattingLink.href = '/room/' + resultData.chat;
-		  chattingLink.className = 'chattingLink';
-		  chattingLinkText = document.createTextNode("Start Chatting!");
-		  chattingLink.appendChild(chattingLinkText);
-		  chattingDiv.appendChild(chattingLink);  
-		  currentDiv.appendChild(startDiv);
-		
-		  if(chat === null){
-		    //null일 때
-		    chattingDiv.style.display = 'none';
-		  }else{
-		    //null이 아닐 때
-		    chattingDiv.style.display = 'block';
-		  }
-		}	
+
+			let cardDiv = document.createElement("div");
+			cardDiv.setAttribute("class", "myCard card-body cardBody"+num);
+			startDiv.appendChild(cardDiv);
+
+			if(resultData.raidType === 'ONE') {
+				str = "<img src = '/static/img/1.png' style='width:50px'>"
+			} else if(resultData.raidType === 'THREE') {
+				str = "<img src = '/static/img/3.png' style='width:50px'>"
+			} else if(resultData.raidType === 'FIVE') {
+				str = "<img src = '/static/img/5.png' style='width:50px'>"
+			} else {
+				str = "<img src = '/static/img/mega.png' style='width:50px'>"
+			}
+
+			cardDiv.innerHTML += '<input type="hidden" id="postId" name="postId" value="'+ resultData.raidId +'">';
+			// cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/150.png" width="150px" /></p>';
+			cardDiv.innerHTML += '<p> Pokemon : <img src="/static/img/pokemon/'+resultData.pokemon+'.png" width="150px" /></p>';
+			cardDiv.innerHTML += '<p> Level of Raid : ' + str + '</p>';
+			cardDiv.innerHTML += '<p> Start Time of Raid : ' + resultData.startTime+'</p>';
+			cardDiv.innerHTML += '<p> End Time of Raid : ' + resultData.endTime+'</p>';
+			cardDiv.innerHTML += '<p> Required Player Level : ' + resultData.requiredLevel+'</p>';
+			cardDiv.innerHTML += '<p> Premium Pass : <img src="/static/img/3_premium.png" class="remote1"> / <img src="/static/img/2_premium.png" class="remote2"> <span id="npass">' + resultData.normalPass+'</span></p>';
+			cardDiv.innerHTML += '<p> Remote Pass : <img src="/static/img/1_remote.png" class="remote1"> <span id="rpass">' + resultData.remotePass + '</span></p>';
+
+			let commentDiv3 = document.createElement('div');
+			commentDiv3.setAttribute('class', 'commentBox');
+			commentDiv3.setAttribute('id', 'commentBox');
+
+			let commentA = document.createElement('button');
+			commentA.setAttribute('id', 'comment'+num)
+			commentA.setAttribute('class', 'hide-link');
+			commentA.setAttribute('onclick', 'getAllComment('+num+','+false+')');
+
+
+			let commentText = document.createTextNode('comment');
+			commentA.appendChild(commentText);
+
+			let arrowDown = document.createElement("i");
+			arrowDown.setAttribute("class", "fa fa-sort-down");
+
+			commentA.appendChild(arrowDown);
+
+			commentDiv3.appendChild(commentA);
+
+			let divide = document.createElement('div');
+			divide.setAttribute('class', 'dropdown-divider');
+
+			commentDiv3.appendChild(divide);
+			cardDiv.appendChild(commentDiv3);
+
+			let currentDiv = document.querySelector("#my-box");
+
+			let chattingDiv = document.createElement("div");
+			chattingDiv.setAttribute("class", "chattingDiv");
+			currentDiv.appendChild(chattingDiv);
+
+			//enter
+			let chattingLink = document.createElement("a");
+			chattingLink.href = '/room/' + resultData.chat;
+			chattingLink.className = 'chattingLink';
+			chattingLinkText = document.createTextNode("Start Chatting!");
+			chattingLink.appendChild(chattingLinkText);
+			chattingDiv.appendChild(chattingLink);
+			currentDiv.appendChild(startDiv);
+
+			if(chat === null){
+				//null일 때
+				chattingDiv.style.display = 'none';
+			}else{
+				//null이 아닐 때
+				chattingDiv.style.display = 'block';
+			}
+		}
 	}
 }
     
@@ -326,20 +357,48 @@ function allComment(num) {
    }
 }
 
+function voteComment() {
+
+	let currentDiv = document.querySelector("#my-box");
+
+	let startDiv = document.createElement("div");
+	startDiv.setAttribute("class", "card shadow max-width700");
+
+	for(let i = 0; i<commentInfo.raidCommentDtoList.length; i++) {
+		if (commentInfo.raidCommentDtoList[i].raidCommentState !== 'REJECTED' &&
+			commentInfo.raidCommentDtoList[i].raidCommentState !== 'WAITING') {
+			let commentId = commentInfo.raidCommentDtoList[i].raidCommentId;
+			let commentDiv = document.createElement("div");
+			commentDiv.setAttribute("class", "card-header py-3 d-flex flex-row align-items-center justify-content-between comment"+commentId);
+
+			let writerContent = '';
+			writerContent += '<p class="m-0 text-gray width250"><b>'+commentInfo.raidCommentDtoList[i].nickname1
+				+ '<div><button class="btn btn-success mr-3">like</button><button class="btn btn-warning mr-3">dislike</button></div>'
+			commentDiv.innerHTML = writerContent;
+			startDiv.appendChild(commentDiv);
+		}
+	}
+
+	currentDiv.appendChild(startDiv);
+}
+
 //allPost() : myPost 게시글의 댓글을 출력하기 전 거치는 ajax
-function allCommentAjax(num) {
+function getAllComment(num, vote) {
 
 	let url = '/api/comment/'+num;
-	
-	const postId = num;
-	
-	sendAjax(url, 'GET', null, function(res){
-	  console.log(res.response);
-	  var result = JSON.parse(res.response);
-	  commentInfo = result;
-	  allComment(num);
-	});
-};
+
+	fetch(url)
+		.then((response) => response.json())
+		.then((data) => {
+			  commentInfo = data;
+			  if (!vote) {
+			  allComment(num);
+			  } else {
+				  voteComment()
+			  }
+		});
+
+}
 
 let commentInfo = {
 

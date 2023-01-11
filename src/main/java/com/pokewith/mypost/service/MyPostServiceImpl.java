@@ -95,11 +95,8 @@ public class MyPostServiceImpl implements MyPostService{
         // 이미 종료된 레이드인지 확인
         checkRaidStateDone(raid);
 
-        // 레이드 종료
+        // 레이드 종료(좋아요 싫어요 투표 상태로 변환)
         raid.endRaid();
-        // 작성자 상태 변경
-        User member = userRepository.findById(userId).orElseThrow(NotFoundException::new);
-        member.setFreeState();
 
         // 댓글 상태 변경
         List<RaidComment> raidCommentList = raidCommentQueryRepository.getRaidCommentListByRaidId(raidId);
@@ -136,10 +133,13 @@ public class MyPostServiceImpl implements MyPostService{
             throw new BadRequestException();
         }
 
+        // 좋아요 싫어요 반영
         insertLikeAndDislike(dto.getLikeAndDislikeDtoList());
 
+        // 작성글, 댓글 상태 종료로 변경
         endMyRaidOrComment(member);
 
+        // 본인 상태 변경
         member.setFreeState();
 
         return new ResponseEntity<>("", HttpStatus.OK);
@@ -223,8 +223,7 @@ public class MyPostServiceImpl implements MyPostService{
     private void setCommentStateAllEnd(List<RaidComment> raidCommentList) {
         for (RaidComment raidComment : raidCommentList) {
             if(!raidComment.getRaidCommentState().equals(RaidCommentState.REJECTED)) {
-                raidComment.endComment();
-                raidComment.getUser().setFreeState();
+                raidComment.voteComment();
             }
         }
     }
@@ -245,7 +244,7 @@ public class MyPostServiceImpl implements MyPostService{
         if (member.getUserState().equals(UserState.POST)) {
             Raid raid = raidQueryRepository.getLastInviteRaidByUserId(member.getUserId())
                     .orElseThrow(NotFoundException::new);
-            raid.endRaid();
+            raid.voteEndRaid();
         } else if (member.getUserState().equals(UserState.COMMENT)) {
             RaidComment raidComment = raidCommentQueryRepository.getLastCommentAndRaidByUserId(member.getUserId())
                     .orElseThrow(NotFoundException::new);
