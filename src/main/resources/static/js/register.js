@@ -48,7 +48,7 @@ function handleRegister() {
   const sendEmail = inputEmail.value;
   const emailRgx = RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
   const email = emailRgx.test(sendEmail);
-  if (email == false) {
+  if (email === false) {
     errMsg.innerText = "Email should be email address form.";
     inputEmail.classList.add("err-display");
     return "";
@@ -59,7 +59,7 @@ function handleRegister() {
   const sendPassword = inputPassword.value;
   const passwordRgx = RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$/);
   const password = passwordRgx.test(sendPassword);
-  if (password == false) {
+  if (password === false) {
     errMsg.innerText = "Password should be contain at least one alphabet, number, special character. And 8~20 character.";
     inputPassword.classList.add("err-display");
     return "";
@@ -68,7 +68,7 @@ function handleRegister() {
   }
 
   const sendPassword2 = inputPassword2.value;
-  if (sendPassword != sendPassword2) {
+  if (sendPassword !== sendPassword2) {
     errMsg.innerText = "Password and Password again should be same.";
     inputPassword.classList.add("err-display");
     inputPassword2.classList.add("err-display");
@@ -82,7 +82,7 @@ function handleRegister() {
   const sendName = inputName.value;
   const nameRgx = RegExp(/^[A-Za-z\d]{2,20}$/);
   const name = nameRgx.test(sendName);
-  if (name == false) {
+  if (name === false) {
     errMsg.innerText = "Nickname should be 2~20 character.";
     inputName.classList.add("err-display");
     return "";
@@ -94,7 +94,7 @@ function handleRegister() {
   const sendCode = inputCode.value;
   const codeRgx = RegExp(/^[\d]{4}[-][\d]{4}[-][\d]{4}[-][\d]{4}$/);
   const code = codeRgx.test(sendCode);
-  if (code == false) {
+  if (code === false) {
     errMsg.innerText = "Please insert 12-digit number.(0000-0000-0000-0000)";
     inputCode.classList.add("err-display");
     return "";
@@ -112,8 +112,7 @@ function handleRegister() {
 //POST USER INFORMATION
 
 function postUserInfo() {
-  let inputData = userInfoInput;
-  let jsonData = JSON.stringify(inputData);
+  const jsonData = JSON.stringify(userInfoInput);
   const url = "/api/signup";
 
   fetch(url, {

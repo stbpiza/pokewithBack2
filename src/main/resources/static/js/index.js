@@ -41,7 +41,7 @@ function allPostHtml(requiredData, n){
   startDiv.setAttribute("id", "result-box");
   startDiv.setAttribute("class", "card shadow mb-4");
   
-  if(requiredData.raidDtoList[n].raidState === "DONE"){
+  if(requiredData.raidDtoList[n].raidState === "DONE" || requiredData.raidDtoList[n].raidState === "VOTE"){
     startDiv.setAttribute("class", "ending card shadow mb-4");
   } else if (requiredData.raidDtoList[n].raidState === "DOING") {
     startDiv.setAttribute("class", "raiding card shadow mb-4");

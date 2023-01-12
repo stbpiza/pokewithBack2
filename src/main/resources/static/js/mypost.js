@@ -2,7 +2,7 @@
 
 //sendAjax() : ajax 연결 (POST/GET)
 function sendAjax(url, method, data, callback){
-	var httpReq = new XMLHttpRequest();
+	const httpReq = new XMLHttpRequest();
 	
 	httpReq.open(method, url, true);
 	console.log('good');
@@ -43,19 +43,30 @@ function showMyPost(result){
 }
 
 function nowMyVote(result) {
-	let currentDiv = document.querySelector("#my-box");
+	const currentDiv = document.querySelector("#my-box");
 
-	let startDiv = document.createElement("div");
+	const startDiv = document.createElement("div");
 	startDiv.setAttribute("class", "card shadow mb-5 max-width700");
 
-	let writerDiv = document.createElement("div");
-	writerDiv.setAttribute("class", "card-header py-3 d-flex flex-row align-items-center justify-content-between max-width1000");
+	const writerDiv = document.createElement("div");
+	writerDiv.setAttribute("class", "card-header py-3 d-flex flex-row align-items-center justify-content-between max-width1000 min-height71");
+
+	let button = '<div><button class="btn btn-success mr-3" onclick="clickLike(0)">like</button>'
+		+ '<button class="btn btn-warning mr-3" onclick="clickDislike(0)">dislike</button></div>';
+		voteInfo[0].userId = result.userId;
+
+	if (result.userId === userInfo.userId) {
+		voteInfo[0].likeOrDislike = "";
+		button = '<div> </div>';
+		voteInfo[0].userId = 0;
+	}
 
 	let writerContent = '';
-	writerContent += '<p class="m-0 text-gray width250"><b>'+result.nickname1
+	writerContent += '<p class="m-0 text-gray width300"><b>'+result.nickname1
 		+ '</b><i class="fa fa-thumbs-up updown" aria-hidden="true" style="font-size:10px"></i>' + result.likeCount
 		+ ' <i class="fa fa-thumbs-down" aria-hidden="true" style="font-size:10px"></i>' + result.dislikeCount + '</p>'
-	    + '<div><button class="btn btn-success mr-3">like</button><button class="btn btn-warning mr-3">dislike</button></div>'
+		+ '<div class="" id="vote0">'+voteInfo[0].likeOrDislike+'</div>'
+	    + button
 	writerDiv.innerHTML = writerContent;
 
 
@@ -66,27 +77,25 @@ function nowMyVote(result) {
 function nowMyRaid(result) {
 	const resultData = result;
 	if(resultData.raidId == null){
-		let currentDiv = document.querySelector("#my-box");
-		let endPage = document.createElement("div");
+		const currentDiv = document.querySelector("#my-box");
+		const endPage = document.createElement("div");
 		endPage.setAttribute("class", "card-body endBody");
 
-		endStr = '<p class="endStr">Nothing!</p>';
-
-		endPage.innerHTML = endStr;
+		endPage.innerHTML = '<p class="endStr">Nothing!</p>';
 
 		currentDiv.appendChild(endPage);
 	} else {
-		let num = resultData.raidId;
-		let chat = resultData.chat;
+		const num = resultData.raidId;
+		const chat = resultData.chat;
 		console.log(num);
 		console.log(typeof(chat));
 
-		let startDiv = document.createElement("div");
+		const startDiv = document.createElement("div");
 		startDiv.setAttribute("class", "card shadow");
 		startDiv.setAttribute("id", "result-box");
 
-		let nickDiv = document.createElement("div");
-		nickDiv.setAttribute("class", "card-header py-3 d-flex flex-row align-items-center justify-content-between");
+		const nickDiv = document.createElement("div");
+		nickDiv.setAttribute("class", "card-header py-3 d-flex flex-row align-items-center justify-content-between min-height71");
 
 		let nickName = '';
 		nickName += '<p class="m-0 text-gray"><b>'+resultData.nickname1
@@ -95,12 +104,12 @@ function nowMyRaid(result) {
 		nickDiv.innerHTML = nickName;
 		startDiv.appendChild(nickDiv);
 
-		let endBtn = document.createElement("button");
+		const endBtn = document.createElement("button");
 		endBtn.setAttribute("class", "endCheck");
 		endBtn.setAttribute("Onclick", 'endPost('+num+', "'+chat+'")');
 		nickDiv.appendChild(endBtn);
 
-		let endBtnText = document.createTextNode("end");
+		const endBtnText = document.createTextNode("end");
 		endBtn.appendChild(endBtnText);
 
 		if(resultData.userId === userInfo.userId){
@@ -110,13 +119,11 @@ function nowMyRaid(result) {
 		}
 
 		if(resultData.raidState == null || resultData.raidState === "DONE") {
-			let currentDiv = document.querySelector("#my-box");
-			let endPage = document.createElement("div");
+			const currentDiv = document.querySelector("#my-box");
+			const endPage = document.createElement("div");
 			endPage.setAttribute("class", "card-body endBody");
 
-			endStr = '<p class="endStr">Nothing!</p>';
-
-			endPage.innerHTML = endStr;
+			endPage.innerHTML = '<p class="endStr">Nothing!</p>';
 
 			currentDiv.appendChild(endPage);
 		} else {
@@ -124,6 +131,8 @@ function nowMyRaid(result) {
 			let cardDiv = document.createElement("div");
 			cardDiv.setAttribute("class", "myCard card-body cardBody"+num);
 			startDiv.appendChild(cardDiv);
+
+			let str;
 
 			if(resultData.raidType === 'ONE') {
 				str = "<img src = '/static/img/1.png' style='width:50px'>"
@@ -145,43 +154,43 @@ function nowMyRaid(result) {
 			cardDiv.innerHTML += '<p> Premium Pass : <img src="/static/img/3_premium.png" class="remote1"> / <img src="/static/img/2_premium.png" class="remote2"> <span id="npass">' + resultData.normalPass+'</span></p>';
 			cardDiv.innerHTML += '<p> Remote Pass : <img src="/static/img/1_remote.png" class="remote1"> <span id="rpass">' + resultData.remotePass + '</span></p>';
 
-			let commentDiv3 = document.createElement('div');
+			const commentDiv3 = document.createElement('div');
 			commentDiv3.setAttribute('class', 'commentBox');
 			commentDiv3.setAttribute('id', 'commentBox');
 
-			let commentA = document.createElement('button');
+			const commentA = document.createElement('button');
 			commentA.setAttribute('id', 'comment'+num)
 			commentA.setAttribute('class', 'hide-link');
 			commentA.setAttribute('onclick', 'getAllComment('+num+','+false+')');
 
 
-			let commentText = document.createTextNode('comment');
+			const commentText = document.createTextNode('comment');
 			commentA.appendChild(commentText);
 
-			let arrowDown = document.createElement("i");
+			const arrowDown = document.createElement("i");
 			arrowDown.setAttribute("class", "fa fa-sort-down");
 
 			commentA.appendChild(arrowDown);
 
 			commentDiv3.appendChild(commentA);
 
-			let divide = document.createElement('div');
+			const divide = document.createElement('div');
 			divide.setAttribute('class', 'dropdown-divider');
 
 			commentDiv3.appendChild(divide);
 			cardDiv.appendChild(commentDiv3);
 
-			let currentDiv = document.querySelector("#my-box");
+			const currentDiv = document.querySelector("#my-box");
 
-			let chattingDiv = document.createElement("div");
+			const chattingDiv = document.createElement("div");
 			chattingDiv.setAttribute("class", "chattingDiv");
 			currentDiv.appendChild(chattingDiv);
 
 			//enter
-			let chattingLink = document.createElement("a");
+			const chattingLink = document.createElement("a");
 			chattingLink.href = '/room/' + resultData.chat;
 			chattingLink.className = 'chattingLink';
-			chattingLinkText = document.createTextNode("Start Chatting!");
+			const chattingLinkText = document.createTextNode("Start Chatting!");
 			chattingLink.appendChild(chattingLinkText);
 			chattingDiv.appendChild(chattingLink);
 			currentDiv.appendChild(startDiv);
@@ -205,7 +214,7 @@ function myPostAjax() {
 	
 	sendAjax(url, 'GET', null, function(res){
 	  console.log(res.response);
-	  var result = JSON.parse(res.response);
+	  const result = JSON.parse(res.response);
 
 	  raidInfo = result;
 	  showMyPost(result);
@@ -229,48 +238,47 @@ else window.onload = myPostAjax;
 function allComment(num) {
 	
 	if(commentInfo.raidCommentDtoList.length === 0){
-	  let myCard = document.querySelector(".myCard");
-	  
-	  let nullDiv = document.createElement("div");
-      nullDiv.setAttribute("class", "nullDiv");
-	  nullDiv.innerHTML = 'No comments yet.';
-      myCard.appendChild(nullDiv);
- 
-      let arrowUp = document.querySelector(".hide-link");
-	  arrowUp.setAttribute('onclick', 'nullComment()');
-	  arrowUp.innerHTML = 'comment <i class="fa fa-sort-up"></i>';	  
+		const myCard = document.querySelector(".myCard");
+
+		const nullDiv = document.createElement("div");
+		nullDiv.setAttribute("class", "nullDiv");
+		nullDiv.innerHTML = 'No comments yet.';
+		myCard.appendChild(nullDiv);
+
+		const arrowUp = document.querySelector(".hide-link");
+		arrowUp.setAttribute('onclick', 'nullComment()');
+		arrowUp.innerHTML = 'comment <i class="fa fa-sort-up"></i>';
 	} else {
 	  // let num = resultData.raidCommentDtoList[0].raidId;
-	  let currentDiv = document.querySelector(".cardBody"+num);
-	
-	  let checkNum = document.createElement('div');
-	  checkNum.setAttribute('id', 'checkNum');
-	  checkNum.innerHTML = 'Selectable number of accounts';
-	  currentDiv.appendChild(checkNum);
-	
-	  let nickDiv2 = document.createElement('div');
-	  nickDiv2.setAttribute('id', 'nickDiv2');
-	  currentDiv.appendChild(nickDiv2);	
-	
-	  let startDiv = document.createElement("div");
-	  startDiv.setAttribute("class", "card-body commentBody"+num);
-	  currentDiv.appendChild(startDiv);
+		const currentDiv = document.querySelector(".cardBody"+num);
 
-	  arr = [];
+		const checkNum = document.createElement('div');
+		checkNum.setAttribute('id', 'checkNum');
+		checkNum.innerHTML = 'Selectable number of accounts';
+		currentDiv.appendChild(checkNum);
+
+		const nickDiv2 = document.createElement('div');
+		nickDiv2.setAttribute('id', 'nickDiv2');
+		currentDiv.appendChild(nickDiv2);
+
+		const startDiv = document.createElement("div");
+		startDiv.setAttribute("class", "card-body commentBody"+num);
+		currentDiv.appendChild(startDiv);
+
 	  for(let i = 0; i<commentInfo.raidCommentDtoList.length; i++){
 	    if(commentInfo.raidCommentDtoList[i].raidCommentState === 'WAITING'){
 
-	      let commentId = commentInfo.raidCommentDtoList[i].raidCommentId;
-	      let commentW = document.createElement("div");
-	      commentW.setAttribute("class", "commentWrap comment"+commentId);
- 		   startDiv.appendChild(commentW);
-	
-	      let commentTextDiv = document.createElement("div");
-          commentW.appendChild(commentTextDiv);
-           
-          let commentP = document.createElement("p");
-          commentP.setAttribute("class", "commentP");
-          commentTextDiv.appendChild(commentP);
+			const commentId = commentInfo.raidCommentDtoList[i].raidCommentId;
+			const commentW = document.createElement("div");
+			commentW.setAttribute("class", "commentWrap comment"+commentId);
+			startDiv.appendChild(commentW);
+
+			const commentTextDiv = document.createElement("div");
+			commentW.appendChild(commentTextDiv);
+
+			const commentP = document.createElement("p");
+			commentP.setAttribute("class", "commentP");
+			commentTextDiv.appendChild(commentP);
 
 			let account = 0;
 			if (commentInfo.raidCommentDtoList[i].account1) account++;
@@ -279,7 +287,7 @@ function allComment(num) {
 			if (commentInfo.raidCommentDtoList[i].account4) account++;
 			if (commentInfo.raidCommentDtoList[i].account5) account++;
 
-			let commentInput = document.createElement("input");
+			const commentInput = document.createElement("input");
 			commentInput.setAttribute("type", "checkbox");
 			commentInput.setAttribute("id", "checkUser"+commentInfo.raidCommentDtoList[i].raidCommentId);
 			commentInput.setAttribute("class", "checkUser");
@@ -291,33 +299,33 @@ function allComment(num) {
 				commentInput.disabled = true;
 			}
 
-			let commentPText = document.createTextNode(commentInfo.raidCommentDtoList[i].nickname1);
+			const commentPText = document.createTextNode(commentInfo.raidCommentDtoList[i].nickname1);
 			commentP.appendChild(commentPText);
 
-			let commentDiv = document.createElement("div");
+			const commentDiv = document.createElement("div");
 			commentDiv.setAttribute("class", "commentDiv");
 			commentW.appendChild(commentDiv);
 
-			let flexDiv = document.createElement("div");
+			const flexDiv = document.createElement("div");
 			flexDiv.setAttribute("class", "d-flex align-items-center justify-content-between");
 			commentDiv.appendChild(flexDiv);
 
-			let remoteResult = document.createElement("div");
+			const remoteResult = document.createElement("div");
 			remoteResult.setAttribute("id", "remoteResult");
 			flexDiv.appendChild(remoteResult);
 
-			let remoteImg = document.createElement("img");
+			const remoteImg = document.createElement("img");
 			remoteImg.setAttribute("class", "remote1");
 			remoteImg.setAttribute("src", "/static/img/1_remote.png");
 			remoteResult.appendChild(remoteImg);
 
-			let spanDiv = document.createElement("span");
+			const spanDiv = document.createElement("span");
 			spanDiv.setAttribute("class", "commentLength");
 			spanDiv.setAttribute("id", "commentLength"+commentId);
 			spanDiv.innerHTML = account;
 			remoteResult.appendChild(spanDiv);
 
-			let deleteIcon = document.createElement("i");
+			const deleteIcon = document.createElement("i");
 			deleteIcon.setAttribute("class", "fas fa-times delete");
 			deleteIcon.setAttribute("onClick", "deleteComment("+commentInfo.raidCommentDtoList[i].raidCommentId+", "+num+")");
 			flexDiv.appendChild(deleteIcon);
@@ -338,48 +346,78 @@ function allComment(num) {
 			checkNum.style.display = 'none';
 		}
       }
-	
-	  
-	  let comSub = document.createElement("div");
-	  comSub.setAttribute("class", "comSub");
-	  startDiv.appendChild(comSub);
-	
-	  let arrowUp = document.getElementById("comment"+num);
-	  arrowUp.setAttribute('onclick', 'hideComment('+num+')');
-	  arrowUp.innerHTML = 'comment <i class="fa fa-sort-up"></i>';
-		
-	  let commentBox = document.querySelector(".commentBody"+num);
-	  commentBox.style.display = 'block';
 
-	  if (raidInfo.raidState === 'DOING') {
+
+		const comSub = document.createElement("div");
+		comSub.setAttribute("class", "comSub");
+		startDiv.appendChild(comSub);
+
+		const arrowUp = document.getElementById("comment"+num);
+		arrowUp.setAttribute('onclick', 'hideComment('+num+')');
+		arrowUp.innerHTML = 'comment <i class="fa fa-sort-up"></i>';
+
+		const commentBox = document.querySelector(".commentBody"+num);
+		commentBox.style.display = 'block';
+
+		if (raidInfo.raidState === 'DOING') {
 		  startDiv.style.display = 'none';
-	  }
+		}
    }
 }
 
 function voteComment() {
 
-	let currentDiv = document.querySelector("#my-box");
+	const currentDiv = document.querySelector("#my-box");
 
-	let startDiv = document.createElement("div");
+	const startDiv = document.createElement("div");
 	startDiv.setAttribute("class", "card shadow max-width700");
 
 	for(let i = 0; i<commentInfo.raidCommentDtoList.length; i++) {
+
+		let vote = {
+			likeOrDislike: "Not selected",
+			userId: 0
+		};
+
 		if (commentInfo.raidCommentDtoList[i].raidCommentState !== 'REJECTED' &&
 			commentInfo.raidCommentDtoList[i].raidCommentState !== 'WAITING') {
-			let commentId = commentInfo.raidCommentDtoList[i].raidCommentId;
-			let commentDiv = document.createElement("div");
-			commentDiv.setAttribute("class", "card-header py-3 d-flex flex-row align-items-center justify-content-between comment"+commentId);
+			const commentId = commentInfo.raidCommentDtoList[i].raidCommentId;
+			const commentDiv = document.createElement("div");
+			commentDiv.setAttribute("class", "card-header py-3 d-flex flex-row align-items-center justify-content-between min-height71 comment"+commentId);
+
+			const voteIndex = i+1;
+
+			let button = '<div><button class="btn btn-success mr-3" onclick="clickLike('+voteIndex+')">like</button>'
+				+ '<button class="btn btn-warning mr-3" onclick="clickDislike('+voteIndex+')">dislike</button></div>';
+
+			vote.userId = commentInfo.raidCommentDtoList[i].userId;
+
+			if (commentInfo.raidCommentDtoList[i].userId === userInfo.userId) {
+				vote.likeOrDislike = "";
+				button = '<div> </div>';
+				vote.userId = 0;
+			}
+
+			voteInfo.push(vote);
 
 			let writerContent = '';
-			writerContent += '<p class="m-0 text-gray width250"><b>'+commentInfo.raidCommentDtoList[i].nickname1
-				+ '<div><button class="btn btn-success mr-3">like</button><button class="btn btn-warning mr-3">dislike</button></div>'
+			writerContent += '<p class="m-0 text-gray width300">'+commentInfo.raidCommentDtoList[i].nickname1+'</p>'
+				+ '<div class="" id="vote'+voteIndex+'">'+voteInfo[voteIndex].likeOrDislike+'</div>'
+				+ button
 			commentDiv.innerHTML = writerContent;
 			startDiv.appendChild(commentDiv);
 		}
-	}
 
+	}
 	currentDiv.appendChild(startDiv);
+
+	const submitDiv = document.createElement("div");
+	submitDiv.setAttribute("class", "d-flex flex-row align-items-center justify-content-center max-width700 mt-4")
+
+	submitDiv.innerHTML = '<button class="btn btn-facebook" onclick="postVote()">submit</button>';
+
+	currentDiv.appendChild(submitDiv);
+
 }
 
 //allPost() : myPost 게시글의 댓글을 출력하기 전 거치는 ajax
@@ -412,7 +450,7 @@ let comment_id_names = [];
 선택할 때마다 실시간으로 잔여 계정 수가 바뀐다. 
 MVC 패턴으로 찢을 때 다시 최솟값 체크하는 부분을 수정해야 한다.*/
 function checkUser(here, num) {
-	let checkedUser = document.getElementsByClassName("checkUser");
+	const checkedUser = document.getElementsByClassName("checkUser");
 	console.log('check user : '+checkedUser);
 
 	let sum = 0;
@@ -430,10 +468,10 @@ function checkUser(here, num) {
 	
 	console.log(sum);
 
-	let checkNum = document.querySelector("#checkNum");
-	
-	let rPass = parseInt(document.getElementById("rpass").innerHTML);
-	let nPass = parseInt(document.getElementById("npass").innerHTML);
+	const checkNum = document.querySelector("#checkNum");
+
+	const rPass = parseInt(document.getElementById("rpass").innerHTML);
+	const nPass = parseInt(document.getElementById("npass").innerHTML);
 
 	let leftNum1 = 20 - ( nPass +  rPass + sum);
 	let leftNum2 =  10 - ( rPass + sum);
@@ -455,7 +493,7 @@ function checkUser(here, num) {
 
 //checkSubmit() : 유저를 체크하면 submit 버튼이 생기는 함수
 function checkSubmit(num){
-	let comSub = document.querySelector(".comSub");
+	const comSub = document.querySelector(".comSub");
 	comSub.innerHTML = '<input type="button" value="submit" class="check-submit" onclick="sendCheck('+num+')">';
 }
 
@@ -469,22 +507,22 @@ function sendCheck(raidId) {
 
 	if(confirm("Did you check the user's nickname well?")){
 	    
-	  const sendData = {
-	  	raidId : raidId,
-	    raidCommentIdList : comment_id_names,
-	    // chat : Math.random().toString(36).substr(2,11)
-	  }
-	
-	  const strObject = JSON.stringify(sendData);
-	  
-	  console.log(strObject);
-	
-	  var url = '/api/mypost/start';
-	  sendAjax(url, 'POST', strObject);
+		const sendData = {
+		raidId : raidId,
+		raidCommentIdList : comment_id_names,
+		// chat : Math.random().toString(36).substr(2,11)
+		}
+
+		const strObject = JSON.stringify(sendData);
+
+		console.log(strObject);
+
+		const url = '/api/mypost/start';
+		sendAjax(url, 'POST', strObject);
 	  
 	  // setTimeout("location.reload()", 1000);
 	} else {
-	  alert('You canceled it.');
+		alert('You canceled it.');
 	}
 }
 
@@ -502,10 +540,10 @@ function showNick(result){
 //showNickMaker() : 그 사람의 nickname과 friendCode를 담아 view로 보여주는 함수
 function showNickMaker(nickname, friendCode){
 	console.log('showNickMaker : ' + nickname, friendCode );
-	
-	let nickDiv2 = document.querySelector("#nickDiv2");
-	
-	let resultDiv = document.createElement("div");
+
+	const nickDiv2 = document.querySelector("#nickDiv2");
+
+	const resultDiv = document.createElement("div");
 	resultDiv.setAttribute("class", "checkResult");
 	
 	let onePersonInfo = '';
@@ -520,10 +558,10 @@ function showNickMaker(nickname, friendCode){
 
 //hideComment() : 모든 댓글을 숨기고 보여주는 함수.
 function hideComment(num) {
-	let checkNum = document.querySelector("#checkNum");
-	let commentBox = document.querySelector(".commentBody"+num);
-	let arrowDown = document.getElementById("comment"+num);
-	let nickDiv2 = document.getElementById("nickDiv2");
+	const checkNum = document.querySelector("#checkNum");
+	const commentBox = document.querySelector(".commentBody"+num);
+	const arrowDown = document.getElementById("comment"+num);
+	const nickDiv2 = document.getElementById("nickDiv2");
 
 
 	if(commentBox.style.display === 'block') {
@@ -547,8 +585,8 @@ function hideComment(num) {
 
 //hideComment() : 모든 댓글을 숨기고 보여주는 함수.
 function nullComment() {
-	let nullDiv = document.querySelector(".nullDiv");
-	let arrowDown = document.querySelector(".hide-link");
+	const nullDiv = document.querySelector(".nullDiv");
+	const arrowDown = document.querySelector(".hide-link");
 	
 	if(nullDiv.style.display === 'block'){
 	    nullDiv.style.display = 'none';
@@ -571,8 +609,8 @@ function endPost(num, chat) {
 	  const addData = { chat : chat };
 	  const strObject = JSON.stringify(addData);
 	  console.log(strObject);
-	
-	  var url = '/api/mypost/' + num;
+
+	  const url = '/api/mypost/' + num;
 	  fetch(url, {
 		  method: "DELETE",
 		  headers: {
@@ -598,11 +636,77 @@ function deleteComment(c_id, p_id){
 	  const strObject = JSON.stringify(addData);
 	  console.log(strObject);
 	
-	  var url = '/mypost/mycomment';
+	  const url = '/mypost/mycomment';
 	  sendAjax(url, 'DELETE', strObject);
 	  setTimeout("location.reload()", 1000);
 	}
 }
+
+let voteDto = {
+	likeAndDislikeDtoList : []
+}
+
+let voteInfo = [
+	{
+		likeOrDislike: "Not selected",
+		userId: 0
+	}
+];
+
+function clickLike(num) {
+	voteInfo[num].likeOrDislike = 'LIKE';
+	const id = "vote"+num;
+	document.getElementById(id).innerText = 'LIKE';
+	document.getElementById(id).style.color = '#1cc88a';
+}
+
+function clickDislike(num) {
+	voteInfo[num].likeOrDislike = 'DISLIKE';
+	const id = "vote"+num;
+	document.getElementById(id).innerText = 'DISLIKE';
+	document.getElementById(id).style.color = '#f6c23e';
+}
+
+function postVote() {
+	for (let i = 0; i<voteInfo.length; i++) {
+		if (voteInfo[i].userId === 0) { continue; }
+		if (voteInfo[i].likeOrDislike === 'Not selected') {
+			voteDto.likeAndDislikeDtoList = [];
+			alert("select all please")
+			break;
+		}
+		voteDto.likeAndDislikeDtoList.push(voteInfo[i]);
+
+	}
+	if (voteDto.likeAndDislikeDtoList.length !== 0) {
+		voteFetch();
+	}
+}
+
+function voteFetch() {
+	const jsonData = JSON.stringify(voteDto);
+	const url = "/api/mypost/vote";
+
+	fetch(url, {
+		method: "POST",
+		headers: {
+			"Content-type": "application/json",
+		},
+		body: jsonData,
+	})
+		.then((response) => {
+			if (response.status === 200) {
+				alert("vote success")
+				window.location.href = "/";
+			} else if (response.status === 400) {
+				alert("fail")
+			} else {
+				alert("fail")
+			}
+		})
+}
+
+
 
 // Init paint sidebar
 function mypageFetch() {

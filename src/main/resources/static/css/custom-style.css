@@ -53,10 +53,22 @@
 
 /* mypost.html */
 
-.width250 {
-	width: 250px;
+.width300 {
+	width: 300px;
 }
 
 .max-width700 {
 	max-width: 700px;
+}
+
+.min-height71 {
+	min-height: 71px;
+}
+
+.green {
+	color: #1cc88a;
+}
+
+.yellow {
+	color: #f6c23e;
 }
