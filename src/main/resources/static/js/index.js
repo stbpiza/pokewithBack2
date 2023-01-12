@@ -307,7 +307,7 @@ function allComment(resultData, num) {
   startDiv.setAttribute("class", "card-body commentBody"+num);
 
   for(let i = 0; i<resultData.raidCommentDtoList.length; i++){
-    // if(num === resultData.raidCommentDtoList[i].raidId){
+    if(resultData.raidCommentDtoList[i].raidCommentState === 'WAITING'){
       let commentId = resultData.raidCommentDtoList[i].raidCommentId;
       let commentW = document.createElement("div");
       commentW.setAttribute("class", "commentWrap comment"+commentId);
@@ -324,7 +324,7 @@ function allComment(resultData, num) {
       commentW.innerHTML = commentText;
 
       startDiv.appendChild(commentW);
-    // }
+    }
   }
 
   let commentForm = document.createElement("div");

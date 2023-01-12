@@ -95,18 +95,20 @@ public class MyPostServiceImpl implements MyPostService{
         // 이미 종료된 레이드인지 확인
         checkRaidStateDone(raid);
 
-        // 레이드 종료(좋아요 싫어요 투표 상태로 변환)
-        raid.endRaid();
+        // 레이드 종료 (1.초대중이면 완전 종료, 2.진행중이면 좋아요 싫어요 투표 상태로 변환)
+        endRaidByRaidState(raid);
 
         // 댓글 상태 변경
         List<RaidComment> raidCommentList = raidCommentQueryRepository.getRaidCommentListByRaidId(raidId);
-        setCommentStateAllEnd(raidCommentList);
+        setCommentStateAllEndByRaidState(raidCommentList, raid.getRaidState());
 
         // 채팅방 삭제
-        chatRoomRepository.deleteChatRoom(raid.getChat());
+        deleteChatRoom(raid.getChat());
 
         return new ResponseEntity<>("", HttpStatus.OK);
     }
+
+
 
     @Transactional
     @Override
@@ -115,7 +117,11 @@ public class MyPostServiceImpl implements MyPostService{
         RaidComment raidComment = raidCommentQueryRepository.getLastCommentAndRaidByUserId(userId)
                 .orElseThrow(ForbiddenException::new);
 
-        raidComment.voteComment();
+        // 댓글상태 확인
+        checkCommentState(raidComment.getRaidCommentState());
+
+        // 1.초대중이면 혼자 종료, 2.진행중이면 좋아요 싫어요 투표 상태로 변환
+        endCommentByRaidState(raidComment);
 
         return new ResponseEntity<>("", HttpStatus.OK);
 
@@ -129,9 +135,7 @@ public class MyPostServiceImpl implements MyPostService{
         User member = userRepository.findById(userId).orElseThrow(NotFoundException::new);
 
         // 작성한 글, 댓글 없으면 에러
-        if (member.getUserState().equals(UserState.FREE)) {
-            throw new BadRequestException();
-        }
+        checkUserState(member.getUserState());
 
         // 좋아요 싫어요 반영
         insertLikeAndDislike(dto.getLikeAndDislikeDtoList());
@@ -220,11 +224,54 @@ public class MyPostServiceImpl implements MyPostService{
         }
     }
 
-    private void setCommentStateAllEnd(List<RaidComment> raidCommentList) {
+    private void endRaidByRaidState(Raid raid) {
+        if (raid.getRaidState().equals(RaidState.INVITE)) {
+            raid.finalEndRaid();
+            raid.getUser().setFreeState();
+        } else if (raid.getRaidState().equals(RaidState.DOING)) {
+            raid.endRaid();
+        }
+    }
+
+    private void setCommentStateAllEndByRaidState(List<RaidComment> raidCommentList, RaidState raidState) {
         for (RaidComment raidComment : raidCommentList) {
-            if(!raidComment.getRaidCommentState().equals(RaidCommentState.REJECTED)) {
+            if (raidState.equals(RaidState.INVITE)) {
+                raidComment.rejectedComment();
+                raidComment.getUser().setFreeState();
+                continue;
+            }
+            if(raidComment.getRaidCommentState().equals(RaidCommentState.JOINED)) {
                 raidComment.voteComment();
             }
+        }
+    }
+
+    private void deleteChatRoom(String chat) {
+        if (chat != null) {
+            chatRoomRepository.deleteChatRoom(chat);
+        }
+    }
+
+    private void checkCommentState(RaidCommentState raidCommentState) {
+        if (raidCommentState.equals(RaidCommentState.VOTE) ||
+                raidCommentState.equals(RaidCommentState.REJECTED) ||
+                raidCommentState.equals(RaidCommentState.END)) {
+            throw new BadRequestException();
+        }
+    }
+
+    private void endCommentByRaidState(RaidComment raidComment) {
+        if (raidComment.getRaid().getRaidState().equals(RaidState.INVITE)) {
+            raidComment.rejectedComment();
+            raidComment.getUser().setFreeState();
+        } else {
+            raidComment.voteComment();
+        }
+    }
+
+    private void checkUserState(UserState userstate) {
+        if (userstate.equals(UserState.FREE)) {
+            throw new BadRequestException();
         }
     }
 
@@ -244,11 +291,12 @@ public class MyPostServiceImpl implements MyPostService{
         if (member.getUserState().equals(UserState.POST)) {
             Raid raid = raidQueryRepository.getLastInviteRaidByUserId(member.getUserId())
                     .orElseThrow(NotFoundException::new);
-            raid.voteEndRaid();
+            raid.finalEndRaid();
         } else if (member.getUserState().equals(UserState.COMMENT)) {
             RaidComment raidComment = raidCommentQueryRepository.getLastCommentAndRaidByUserId(member.getUserId())
                     .orElseThrow(NotFoundException::new);
             raidComment.endComment();
         }
     }
+
 }

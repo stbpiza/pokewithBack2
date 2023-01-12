@@ -266,7 +266,7 @@ function allComment(num) {
 		currentDiv.appendChild(startDiv);
 
 	  for(let i = 0; i<commentInfo.raidCommentDtoList.length; i++){
-	    if(commentInfo.raidCommentDtoList[i].raidCommentState === 'WAITING'){
+	    if(raidInfo.raidState === 'INVITE'){
 
 			const commentId = commentInfo.raidCommentDtoList[i].raidCommentId;
 			const commentW = document.createElement("div");
@@ -327,23 +327,31 @@ function allComment(num) {
 
 			const deleteIcon = document.createElement("i");
 			deleteIcon.setAttribute("class", "fas fa-times delete");
-			deleteIcon.setAttribute("onClick", "deleteComment("+commentInfo.raidCommentDtoList[i].raidCommentId+", "+num+")");
+			deleteIcon.setAttribute("onClick", "deleteComment()");
 			flexDiv.appendChild(deleteIcon);
 
 			if(commentInfo.raidCommentDtoList[i].userId === userInfo.userId){
 				deleteIcon.style.display = 'block';
+				checkNum.style.display = 'none';
 			} else {
 				deleteIcon.style.display = 'none';
 			}
 
 
 	    } else {
-			if(commentInfo.raidCommentDtoList[i].raidCommentState === 'JOINED'){
-				nickDiv2.innerHTML += "<h5 class='nick1'>"+commentInfo.raidCommentDtoList[i].nickname1+"'s</5>";
-				showNick(commentInfo.raidCommentDtoList[i]);
-				nickDiv2.style.display = 'block'
+
+			let deleteIcon = '';
+
+			if (commentInfo.raidCommentDtoList[i].userId === userInfo.userId) {
+				deleteIcon = '<i class="fas fa-times delete" onClick="deleteComment()"></i><div> </div>';
 			}
-			checkNum.style.display = 'none';
+
+			nickDiv2.innerHTML += '<div class="d-flex flex-row align-items-center justify-content-between">'
+			+ '<h5 class="nick1">'+commentInfo.raidCommentDtoList[i].nickname1+'</h5>'
+			+ deleteIcon
+			+ '</div>';
+			showNick(commentInfo.raidCommentDtoList[i]);
+			nickDiv2.style.display = 'block'
 		}
       }
 
@@ -630,14 +638,22 @@ function endPost(num, chat) {
 //deleteComment() : 댓글 지우는 기능
 /* session에 있는 nickname1과 mypost에 떠있는 포스트 작성자의 nickname1이
 같을 경우에만 X 버튼 활성화 */
-function deleteComment(c_id, p_id){
+function deleteComment(){
 	if(confirm("Do you really want to erase it?")){
-	  const addData = { c_id : c_id }
-	  const strObject = JSON.stringify(addData);
-	  console.log(strObject);
-	
-	  const url = '/mypost/mycomment';
-	  sendAjax(url, 'DELETE', strObject);
+	  const url = '/api/mypost/comment';
+	  fetch(url, {
+		  method: "DELETE",
+		  headers: {
+			  "Content-type": "application/json",
+		  },
+	  })
+		  .then((response) => {
+			  if (response.status === 200) {
+				  alert('success');
+			  } else {
+				  alert('fail');
+			  }
+		  })
 	  setTimeout("location.reload()", 1000);
 	}
 }

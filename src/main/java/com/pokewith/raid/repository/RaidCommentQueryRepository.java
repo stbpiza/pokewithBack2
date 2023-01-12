@@ -31,7 +31,7 @@ public class RaidCommentQueryRepository {
                 .leftJoin(raidComment.raid, raid).fetchJoin()
                 .leftJoin(raidComment.user, user).fetchJoin()
                 .leftJoin(raid.user, user).fetchJoin()
-                .where(raid.raidId.eq(raidId))
+                .where(raid.raidId.eq(raidId), raidComment.raidCommentState.ne(RaidCommentState.REJECTED))
                 .fetch();
     }
 
