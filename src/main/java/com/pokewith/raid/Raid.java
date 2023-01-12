@@ -84,7 +84,7 @@ public class Raid extends TimeEntity {
         this.raidState = RaidState.VOTE;
     }
 
-    public void voteEndRaid() { this.raidState = RaidState.DONE; }
+    public void finalEndRaid() { this.raidState = RaidState.DONE; }
 
     public void makeChat(String chat) {
         this.chat = chat;

@@ -72,6 +72,19 @@ public class MyPostController {
         return myPostService.endRaid(raidId, userId);
     }
 
+    @DeleteMapping("/mypost/comment")
+    @ApiOperation(value = "본인 작성댓글 종료 api", notes = "본인 댓글만 종료하는 api / 초대중인경우 완전종료, 진행중인경우 좋아요싫어요 상태로 변환")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "댓글 종료 성공"),
+            @ApiResponse(code = 400, message = "유효성검사 실패(이미 종료된 댓글)"),
+            @ApiResponse(code = 403, message = "권한 없음")
+    })
+    public ResponseEntity<String> endOneComment(HttpServletRequest request) {
+        log.info("/api/mypost/comment");
+        Long userId = usernameService.getUsername(request);
+        return myPostService.endRaidOneComment(userId);
+    }
+
     @PostMapping("/mypost/vote")
     @ApiOperation(value = "본인 작성글 레이드 종료 후 좋아요 싫어요 api", notes = "레이드 끝난 후 팀원들에게 좋아요 싫어요 주는 api")
     @ApiResponses(value = {
@@ -83,8 +96,6 @@ public class MyPostController {
     public ResponseEntity<String> voteLikeOrDislike(@RequestBody @Valid RqPostLikeAndDislikeDto dto, HttpServletRequest request
             , BindingResult bindingResult) throws BindException {
         log.info("/api/mypost/vote");
-
-        log.info(String.valueOf(dto));
 
         collectionValidation(dto.getLikeAndDislikeDtoList(), bindingResult);
 
