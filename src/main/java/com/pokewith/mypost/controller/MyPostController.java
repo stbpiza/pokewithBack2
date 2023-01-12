@@ -5,17 +5,21 @@ import com.pokewith.mypost.dto.request.RqPostLikeAndDislikeDto;
 import com.pokewith.mypost.dto.request.RqStartRaidDto;
 import com.pokewith.mypost.service.MyPostService;
 import com.pokewith.mypost.dto.response.RpGetMyPostDto;
+import com.pokewith.valid.CustomValidator;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Collection;
 
 @Slf4j
 @Validated
@@ -26,6 +30,7 @@ public class MyPostController {
 
     private final UsernameService usernameService;
     private final MyPostService myPostService;
+    private final CustomValidator validator;
 
     @GetMapping("/mypost")
     @ApiOperation(value = "마이포스트 본인 작성글 or 댓글 단 작성글 조회 api", notes = "본인이 직접 작성한 게시물 혹은 댓글을 단 게시물 조회")
@@ -75,9 +80,28 @@ public class MyPostController {
             @ApiResponse(code = 403, message = "권한 없음"),
             @ApiResponse(code = 404, message = "없는 id로 요청")
     })
-    public ResponseEntity<String> voteLikeOrDislike(RqPostLikeAndDislikeDto dto, HttpServletRequest request) {
+    public ResponseEntity<String> voteLikeOrDislike(@RequestBody @Valid RqPostLikeAndDislikeDto dto, HttpServletRequest request
+            , BindingResult bindingResult) throws BindException {
         log.info("/api/mypost/vote");
+
+        log.info(String.valueOf(dto));
+
+        collectionValidation(dto.getLikeAndDislikeDtoList(), bindingResult);
+
         Long userId = usernameService.getUsername(request);
+
         return myPostService.postLikeAndDislike(userId, dto);
+    }
+
+    /**
+     *  분리한 메소드
+     **/
+
+    public void collectionValidation(Collection<?> collection, BindingResult bindingResult) throws BindException {
+        validator.validate(collection, bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new BindException(bindingResult);
+        }
+
     }
 }
