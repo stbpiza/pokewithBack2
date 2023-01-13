@@ -1,42 +1,9 @@
 
-//sendAjax() : ajax 연결 (POST/GET)
-function sendAjax(url, method, data, callback){
-  const httpReq = new XMLHttpRequest();
-
-  httpReq.open(method, url, true);
-  console.log('good');
-
-  httpReq.setRequestHeader('Access-Control-Allow-Headers', '*');
-  httpReq.setRequestHeader('Content-type', 'application/json');
-  httpReq.setRequestHeader('Access-Control-Allow-Origin', '*');
-  console.log('ok');
-
-  httpReq.onreadystatechange = function () {
-      console.log('들어옴1');
-      if (httpReq.readyState === 4 && httpReq.status === 200) {
-        console.log('들어옴2');
-        // console.log(httpReq.responseText);
-        callback(httpReq);
-      }
-  };
-
-  if(data != null){
-    console.log("POST방식");
-    httpReq.send(data);
-  } else {
-    console.log("GET방식");
-    httpReq.send();
-  }
-
-}
-
-
 //allPostHtml() : 전체/필터 게시글 출력 함수
 function allPostHtml(requiredData, n){
 
   let num = requiredData.raidDtoList[n].raidId;
-  console.log(num);
-    
+
   let startDiv = document.createElement("div");
   startDiv.setAttribute("id", "result-box");
   startDiv.setAttribute("class", "card shadow mb-4");
@@ -117,8 +84,8 @@ function allPostHtml(requiredData, n){
 }
 
 
-//allPost() : 모든 포스트/필터된 포스트를 출력하기 전 거치는 ajax
-function allPostAjax(selectOption, switchOption) {
+//allPost() : 모든 포스트/필터된 포스트를 출력하기 전 거치는 함수
+function allPostFetch(selectOption, switchOption) {
 
     let state = "";
     let type = "";
@@ -134,7 +101,6 @@ function allPostAjax(selectOption, switchOption) {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        console.log(JSON.stringify(data));
         for (let i = 0; i < data.raidDtoList.length; i++) {
           allPostHtml(data, i);
         }
@@ -148,17 +114,17 @@ function allPostAjax(selectOption, switchOption) {
 function removeAllPost(){
   let card = document.querySelectorAll(".card");
   for(let i = 0; i < card.length; i++){
-    card[i].style.display = 'none';
+    card[i].remove();
   }
 }
 
 
 //윈도우가 로드될 때 allPost()를 실행시키기 위한 함수
 if (window.addEventListener)
-        window.addEventListener("load", allPostAjax, false);
+        window.addEventListener("load", allPostFetch, false);
 else if (window.attachEvent)
-      window.attachEvent("onload", allPostAjax);
-else window.onload = allPostAjax;
+      window.attachEvent("onload", allPostFetch);
+else window.onload = allPostFetch;
 
 
 //post 버튼에 onClick 함수 binding
@@ -166,36 +132,34 @@ let postBtn = document.getElementById('post-btn');
 postBtn.addEventListener('click',createPost);
 
 
-//createPost() : 새로운 post 탬플릿 생성 함수
-function createPost(){
+function setModal() {
+  const modalDiv = document.querySelector("#exampleModalCenter");
 
-  let modalDiv = document.querySelector("#exampleModalCenter");
-
-  let modalBox = document.createElement("div");
+  const modalBox = document.createElement("div");
   modalBox.setAttribute("class", "modal-dialog modal-dialog-centered");
   modalBox.setAttribute("role", "document");
   modalDiv.appendChild(modalBox);
 
-  let modalContent = document.createElement("div");
+  const modalContent = document.createElement("div");
   modalContent.setAttribute("class", "modal-content");
   modalBox.appendChild(modalContent);
 
-  let modalHeader = document.createElement("div");
+  const modalHeader = document.createElement("div");
   modalHeader.setAttribute("class", "modal-header");
-  modalContent.appendChild( modalHeader);
+  modalContent.appendChild(modalHeader);
 
-  modalHeaderStr = '';
-  modalHeaderStr += "<h5 class='modal-title id='exampleModalLongTitle'>New Post</h5>";
+  let modalHeaderStr = '';
+  modalHeaderStr += "<h5 class='modal-title' id='exampleModalLongTitle'>New Post</h5>";
   modalHeaderStr += "<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-  modalHeader.innerHTML =  modalHeaderStr;
+  modalHeader.innerHTML = modalHeaderStr;
 
-  let modalBody = document.createElement("div");
+  const modalBody = document.createElement("div");
   modalBody.setAttribute("class", "modal-body");
   modalContent.appendChild(modalBody);
 
   let modalBodyStr = '';
   modalBodyStr += "<p>pokemon : <input type='text' id='pokemon' class='form-control' onkeyup='setTimeout(pokemon, 500)' name='pokemon' placeholder='pokemon of number'><div id='pokemonImg'> </div> </p>";
-  modalBodyStr += `<p>Level of Raid : <select name="searchYear" id="raidLevel" class='form-control' name="raidLevel">
+  modalBodyStr += `<p>Level of Raid : <select id="raidLevel" class='form-control' name="raidLevel">
                       <option value="ONE">1</option>
                       <option value="THREE">3</option>
                       <option value="FIVE">5</option>
@@ -211,27 +175,36 @@ function createPost(){
   document.getElementById("startTime").value = new Date().toISOString().slice(0, 16);
   document.getElementById("endTime").value = new Date().toISOString().slice(0, 16);
 
-  let modalFooter = document.createElement("div");
+  const modalFooter = document.createElement("div");
   modalFooter.setAttribute("class", "modal-footer");
   modalContent.appendChild(modalFooter);
 
-  let modalSubmit = document.createElement("button");
+  const modalSubmit = document.createElement("button");
   modalSubmit.setAttribute("id", "submit-btn");
   modalSubmit.setAttribute("class", "border-0 btn-info comment-btn");
   modalSubmit.setAttribute("value", "submit");
   modalSubmit.addEventListener("click", addPost);
 
-  let modalSubmitText = document.createTextNode('Submit');
+  const modalSubmitText = document.createTextNode('Submit');
   modalSubmit.appendChild(modalSubmitText);
   modalFooter.appendChild(modalSubmit);
 
-  let modalClose = document.createElement("button");
+  const modalClose = document.createElement("button");
   modalClose.setAttribute("class", "border-0 btn-secondary comment-btn");
   modalClose.setAttribute("data-dismiss", "modal");
 
-  let modalCloseText = document.createTextNode('Close');
+  const modalCloseText = document.createTextNode('Close');
   modalClose.appendChild(modalCloseText);
   modalFooter.appendChild(modalClose);
+
+  modalDiv.setAttribute("style", "display: none")
+}
+
+//createPost() : 새로운 post 탬플릿 생성 함수
+function createPost(){
+
+  document.getElementById("exampleModalCenter").style.display = 'block';
+
 }
 
 function pokemon(){
@@ -260,10 +233,7 @@ function addPost(){
     remotePass : document.getElementById("rPass").value,
   }
 
-
-
   const strObject = JSON.stringify(addData);
-  console.log("보내는 데이터 : "+strObject);
 
   const url = '/api/raid';
 
@@ -285,16 +255,7 @@ function addPost(){
           window.location.replace("/mypost");
         }
   });
-
   setTimeout("location.reload()", 1000);
-
-  // 밑 부분은 앞으로 서버랑 연결할 때 필요 없는 부분
-  // postData.push(addData);
-
-  // console.log(postData.push(addData));
-  // console.log(postData);
-
-  // allPostHtml(addData, postData.length-1);
 }
 
 
@@ -329,8 +290,6 @@ function allComment(resultData, num) {
 
   let commentForm = document.createElement("div");
 
-  console.log("user "+ userInfo.nickname1);
-
   let nickname1 = userInfo.nickname1;
   let nickname2 = userInfo.nickname2;
   let nickname3 = userInfo.nickname3;
@@ -339,26 +298,26 @@ function allComment(resultData, num) {
   if(nickname1 === ''){
 
   } else {
-    commentForm.setAttribute('class', 'comment-wrap wrap'+ num);
+    commentForm.setAttribute('class', 'd-flex flex-column align-items-center wrap'+ num);
     startDiv.appendChild(commentForm);
     let str = "";
-    str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='account1'> 1. " + nickname1 + "</p>";
+    str += "<p class='checked width-half'><input type='checkbox' name='nickname" + num + "' value='account1'> 1. " + nickname1 + "</p>";
     if (nickname2 !== null) {
-      str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='account2'> 2. " + nickname2 + "</p>";
+      str += "<p class='checked width-half'><input type='checkbox' name='nickname" + num + "' value='account2'> 2. " + nickname2 + "</p>";
     }
     if (nickname3 !== null) {
-      str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='account3'> 3. " + nickname3 + "</p>";
+      str += "<p class='checked width-half'><input type='checkbox' name='nickname" + num + "' value='account3'> 3. " + nickname3 + "</p>";
     }
     if (nickname4 !== null) {
-      str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='account4'> 4. " + nickname4 + "</p>";
+      str += "<p class='checked width-half'><input type='checkbox' name='nickname" + num + "' value='account4'> 4. " + nickname4 + "</p>";
     }
     if (nickname5 !== null) {
-      str += "<p class='checked'><input type='checkbox' name='nickname" + num + "' value='account5'> 5. " + nickname5 + "</p></br>";
+      str += "<p class='checked width-half'><input type='checkbox' name='nickname" + num + "' value='account5'> 5. " + nickname5 + "</p></br>";
     }
 
     commentForm.innerHTML = str;
 
-    commentSubmit = document.createElement('input');
+    const commentSubmit = document.createElement('input');
     commentSubmit.setAttribute('class', 'comment-submit');
     commentSubmit.setAttribute('type', 'submit');
     commentSubmit.setAttribute('value', 'submit');
@@ -369,12 +328,12 @@ function allComment(resultData, num) {
 
     currentDiv.appendChild(startDiv);
 
-    let arrowUp = document.getElementById("comment" + num);
+    const arrowUp = document.getElementById("comment" + num);
     arrowUp.setAttribute('onclick', 'hideComment(' + num + ')');
 
     arrowUp.innerHTML = 'comment <i class="fa fa-sort-up"></i>';
 
-    let commentBox = document.querySelector(".commentBody" + num);
+    const commentBox = document.querySelector(".commentBody" + num);
     commentBox.style.display = 'block';
 
 }
@@ -387,7 +346,6 @@ function allCommentAjax(num) {
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      console.log(JSON.stringify(data));
       allComment(data, num);
   });
 };
@@ -395,8 +353,8 @@ function allCommentAjax(num) {
 
 //hideComment() : 특정 포스트의 모든 댓글을 숨기고 보여주는 함수.
 function hideComment(num) {
-  let commentBox = document.querySelector(".commentBody"+num);
-  let arrowDown = document.getElementById("comment"+num);
+  const commentBox = document.querySelector(".commentBody"+num);
+  const arrowDown = document.getElementById("comment"+num);
 
   if(commentBox.style.display === 'block'){
     commentBox.style.display = 'none';
@@ -412,9 +370,7 @@ function hideComment(num) {
 /* 댓글을 생성하게 되면 바로 mypost 화면으로 리다이렉트 된다. */
 function commitComment(num) {
   
-  let check_count = document.getElementsByName("nickname"+num).length;
-
-  console.log(check_count);
+  const check_count = document.getElementsByName("nickname"+num).length;
 
   const commitData = {
     raidId : num,
@@ -465,36 +421,36 @@ function commitComment(num) {
 
 //makeFilteringButton() : 메인 페이지에 filtering할 select 버튼 생성
 function makeFilteringButton(){
-  let filterBox = document.querySelector(".filter");
+  const filterBox = document.querySelector(".filter");
 
-  let select = document.createElement("select");
+  const select = document.createElement("select");
   select.setAttribute("id", "filterSelect");
   select.setAttribute("onchange", "filterOptionCheck()");
   filterBox.appendChild(select);
 
-  let selectTotal = document.createElement("option");
+  const selectTotal = document.createElement("option");
   selectTotal.setAttribute("value", "");
-  let selectTotalText = document.createTextNode("total");
+  const selectTotalText = document.createTextNode("total");
   selectTotal.appendChild(selectTotalText);
 
-  let selectOne = document.createElement("option");
+  const selectOne = document.createElement("option");
   selectOne.setAttribute("value", "ONE");
-  let selectOneText = document.createTextNode("1");
+  const selectOneText = document.createTextNode("1");
   selectOne.appendChild(selectOneText);
 
-  let selectTwo = document.createElement("option");
+  const selectTwo = document.createElement("option");
   selectTwo.setAttribute("value", "THREE");
-  let selectTwoText = document.createTextNode("3");
+  const selectTwoText = document.createTextNode("3");
   selectTwo.appendChild(selectTwoText);
 
-  let selectThree = document.createElement("option");
+  const selectThree = document.createElement("option");
   selectThree.setAttribute("value", "FIVE");
-  let selectThreeText = document.createTextNode("5");
+  const selectThreeText = document.createTextNode("5");
   selectThree.appendChild(selectThreeText);
 
-  let selectFour = document.createElement("option");
+  const selectFour = document.createElement("option");
   selectFour.setAttribute("value", "MEGA");
-  let selectFourText = document.createTextNode("mega");
+  const selectFourText = document.createTextNode("mega");
   selectFour.appendChild(selectFourText);
 
   document.getElementById("filterSelect").appendChild(selectTotal);
@@ -504,27 +460,27 @@ function makeFilteringButton(){
   document.getElementById("filterSelect").appendChild(selectFour);
 }
 
-function makeFilterSwich(){
-  let switchBox = document.getElementById("switchDiv");
+function makeFilterSwitch(){
+  const switchBox = document.getElementById("switchDiv");
 
-  let switchInput = document.createElement("input");
+  const switchInput = document.createElement("input");
   switchInput.setAttribute("type", "checkbox");
   switchInput.setAttribute("class", "custom-control-input");
   switchInput.setAttribute("id", "customSwitch1");
   switchInput.setAttribute("onchange", "filterOptionCheck()");
   switchBox.appendChild(switchInput);
 
-  let switchLabel = document.createElement("label");
+  const switchLabel = document.createElement("label");
   switchLabel.setAttribute("class", "custom-control-label");
   switchLabel.setAttribute("for", "customSwitch1");
   switchBox.appendChild(switchLabel);
 }
 
-//filterOptionCheck() : 필터링할 value 대로 ajax를 걸어주는 함수
+//filterOptionCheck() : 필터링할 value 대로 fetch를 걸어주는 함수
 function filterOptionCheck(){
-  var selectOption = document.getElementById("filterSelect").value;
-  var switchOption = document.getElementById("customSwitch1").checked;
-  return allPostAjax(selectOption, switchOption);
+  const selectOption = document.getElementById("filterSelect").value;
+  const switchOption = document.getElementById("customSwitch1").checked;
+  return allPostFetch(selectOption, switchOption);
 
 }
 
@@ -598,9 +554,10 @@ else window.onload = makeFilteringButton;
 
 //윈도우가 로드될 때 makeFilteringButton()를 실행시키기 위한 함수
 if (window.addEventListener)
-        window.addEventListener("load", makeFilterSwich, false);
+        window.addEventListener("load", makeFilterSwitch, false);
 else if (window.attachEvent)
-      window.attachEvent("onload", makeFilterSwich);
-else window.onload = makeFilterSwich;
+      window.attachEvent("onload", makeFilterSwitch);
+else window.onload = makeFilterSwitch;
 
 
+setModal();

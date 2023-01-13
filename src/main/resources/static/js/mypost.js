@@ -1,35 +1,4 @@
 
-
-//sendAjax() : ajax 연결 (POST/GET)
-function sendAjax(url, method, data, callback){
-	const httpReq = new XMLHttpRequest();
-	
-	httpReq.open(method, url, true);
-	console.log('good');
-	
-	httpReq.setRequestHeader('Access-Control-Allow-Headers', '*');
-	httpReq.setRequestHeader('Content-type', 'application/json');
-	httpReq.setRequestHeader('Access-Control-Allow-Origin', '*');
-	console.log('ok');
-	
-	httpReq.onreadystatechange = function () {
-	    console.log('들어옴1');
-	    if (httpReq.readyState === 4 && httpReq.status === 200) {
-	      console.log('들어옴2');
-	      console.log(httpReq.responseText);
-	      callback(httpReq);
-	    }
-	};
-	
-	if(data != null){
-	  console.log("POST방식");
-	  httpReq.send(data);
-	} else {
-	  console.log("GET방식");
-	  httpReq.send();
-	}
-}
-
 //showMyPost() : myPost 게시글을 보는 함수
 function showMyPost(result){
 
@@ -87,8 +56,6 @@ function nowMyRaid(result) {
 	} else {
 		const num = resultData.raidId;
 		const chat = resultData.chat;
-		console.log(num);
-		console.log(typeof(chat));
 
 		const startDiv = document.createElement("div");
 		startDiv.setAttribute("class", "card shadow");
@@ -212,14 +179,14 @@ function nowMyRaid(result) {
 function myPostAjax() {
 	let url = '/api/mypost';
 	
-	sendAjax(url, 'GET', null, function(res){
-	  console.log(res.response);
-	  const result = JSON.parse(res.response);
-
-	  raidInfo = result;
-	  showMyPost(result);
-	});
-};
+	fetch(url)
+		.then((response) => response.json())
+		.then((data) => {
+		  const result = data;
+		  raidInfo = result;
+		  showMyPost(result);
+		})
+}
 
 let raidInfo = {
 
@@ -428,7 +395,7 @@ function voteComment() {
 
 }
 
-//allPost() : myPost 게시글의 댓글을 출력하기 전 거치는 ajax
+//allPost() : myPost 게시글의 댓글을 출력하기 전 거치는 fetch
 function getAllComment(num, vote) {
 
 	let url = '/api/comment/'+num;
@@ -459,7 +426,7 @@ let comment_id_names = [];
 MVC 패턴으로 찢을 때 다시 최솟값 체크하는 부분을 수정해야 한다.*/
 function checkUser(here, num) {
 	const checkedUser = document.getElementsByClassName("checkUser");
-	console.log('check user : '+checkedUser);
+	// console.log('check user : '+checkedUser);
 
 	let sum = 0;
 	let count = checkedUser.length;
@@ -473,8 +440,8 @@ function checkUser(here, num) {
 	}
 	comment_id_names = temp;
 	checkedUser.value = sum;
-	
-	console.log(sum);
+
+	// console.log(sum);
 
 	const checkNum = document.querySelector("#checkNum");
 
@@ -486,7 +453,7 @@ function checkUser(here, num) {
 	let leftNum3 = 5 - sum;
 	let leftNum = Math.min(leftNum1, leftNum2, leftNum3);
 
-	console.log("최솟값 " + leftNum);
+	// console.log("최솟값 " + leftNum);
 	
 	if(leftNum >= 0) {
 	  checkNum.innerHTML = 'Selectable number of accounts : ' + leftNum;
@@ -508,11 +475,6 @@ function checkSubmit(num){
 //showCheck() : 서버 쪽에 데이터를 보내주고 새로고침하는 함수
 function sendCheck(raidId) {
 
-	console.log(raidId)
-	console.log('arr length = '+comment_id_names);
-	console.log(typeof(comment_id_names));
-	console.log(comment_id_names);
-
 	if(confirm("Did you check the user's nickname well?")){
 	    
 		const sendData = {
@@ -523,12 +485,20 @@ function sendCheck(raidId) {
 
 		const strObject = JSON.stringify(sendData);
 
-		console.log(strObject);
-
 		const url = '/api/mypost/start';
-		sendAjax(url, 'POST', strObject);
+		fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-type": "application/json",
+			},
+			body: strObject,
+		})
+			.then(() => {
+					setTimeout("location.reload()", 1000)
+				}
+			)
 	  
-	  // setTimeout("location.reload()", 1000);
+
 	} else {
 		alert('You canceled it.');
 	}
@@ -547,8 +517,6 @@ function showNick(result){
 
 //showNickMaker() : 그 사람의 nickname과 friendCode를 담아 view로 보여주는 함수
 function showNickMaker(nickname, friendCode){
-	console.log('showNickMaker : ' + nickname, friendCode );
-
 	const nickDiv2 = document.querySelector("#nickDiv2");
 
 	const resultDiv = document.createElement("div");
@@ -616,7 +584,6 @@ function endPost(num, chat) {
 	
 	  const addData = { chat : chat };
 	  const strObject = JSON.stringify(addData);
-	  console.log(strObject);
 
 	  const url = '/api/mypost/' + num;
 	  fetch(url, {
