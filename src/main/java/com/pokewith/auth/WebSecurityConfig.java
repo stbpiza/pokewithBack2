@@ -49,11 +49,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomAuthenticationEntryPoint();
     }
 
-//    @Bean
-//    public OAuth2AuthorizedClientService authorizedClientService() {
-//        return new CustomOAuth2AuthorizedClientService(redisService);
-//    }
-
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -83,6 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/allroom").hasRole("ADMIN")
                 .antMatchers("/api/user/**").hasRole("USER")
                 .antMatchers("/**").permitAll()
                 .antMatchers("/v2/api-docs", "/swagger-ui.html", "/webjars/**",
@@ -90,24 +86,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
                 .accessDeniedHandler(accessDeniedHandler)
-//                .and()
-//                .oauth2Login()
-
-//                .authorizationEndpoint()
-//                .baseUri("/oauth2/**")
-//                .and()
-                // 아직 안쓰는 것들
-//                .userInfoEndpoint()
-//                .userService(customOAuth2UserService)
-//                .and()
-                // 쓰는 것들
-//                .redirectionEndpoint()
-//                .baseUri("/login/oauth2/**")
-//                .and()
-//                .clientRegistrationRepository(clientRegistrationRepository)
-                // oauth2
-//                .authorizedClientService(authorizedClientService())
-//                .successHandler(new CustomOAuth2SuccessHandler(redisService, authService))
                 .and()
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 앞에 넣음
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
