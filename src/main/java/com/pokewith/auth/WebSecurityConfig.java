@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -24,9 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    //private final CustomOAuth2UserService customOAuth2UserService;
     private final RedisService redisService;
-    //private final ClientRegistrationRepository clientRegistrationRepository;
     private final UserRepository userRepository;
     private final AuthService authService;
     private final CustomAccessDeniedHandler accessDeniedHandler;
@@ -38,11 +35,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     // authenticationManager를 Bean 등록
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+//    @Bean
+//    @Override
+//    public AuthenticationManager authenticationManagerBean() throws Exception {
+//        return super.authenticationManagerBean();
+//    }
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
@@ -77,7 +74,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .antMatchers("/allroom").hasRole("ADMIN")
                 .antMatchers("/api/user/**").hasRole("USER")
                 .antMatchers("/**").permitAll()
