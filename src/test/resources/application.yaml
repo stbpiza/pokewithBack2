@@ -1,0 +1,37 @@
+
+server:
+  port: 8888
+
+spring:
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 1000
+
+  cache:
+    type: redis
+
+  redis:
+    host: localhost
+    port: 6379
+
+  thymeleaf:
+    suffix: .html
+    cache: false
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+text:
+  secretKey: pokewith123456
+  myurl: http://localhost
