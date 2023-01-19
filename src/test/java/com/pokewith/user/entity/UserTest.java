@@ -27,6 +27,7 @@ public class UserTest {
                 .friendCode1(friendCode)
                 .build();
 
+
         assertThat(user.getUserType(), is(equalTo(UserType.ROLE_NOTUSER)));
         assertThat(user.getUserState(), is(equalTo(UserState.FREE)));
         assertThat(user.getEmail(), is(equalTo(email)));
@@ -45,7 +46,9 @@ public class UserTest {
                 .friendCode1(friendCode)
                 .build();
 
+
         user.EmailCheck();
+
 
         assertThat(user.getUserType(), is(equalTo(UserType.ROLE_USER)));
 
@@ -61,7 +64,9 @@ public class UserTest {
                 .friendCode1(friendCode)
                 .build();
 
+
         user.setPostState();
+
 
         assertThat(user.getUserState(), is(equalTo(UserState.POST)));
     }
@@ -76,7 +81,9 @@ public class UserTest {
                 .friendCode1(friendCode)
                 .build();
 
+
         user.setCommentState();
+
 
         assertThat(user.getUserState(), is(equalTo(UserState.COMMENT)));
     }
@@ -91,8 +98,10 @@ public class UserTest {
                 .friendCode1(friendCode)
                 .build();
 
+
         user.setPostState();
         user.setFreeState();
+
 
         assertThat(user.getUserState(), is(equalTo(UserState.FREE)));
     }
@@ -130,7 +139,9 @@ public class UserTest {
         dto.setNickname4(nickname4);
         dto.setNickname5(nickname5);
 
+
         user.updateUser(dto);
+
 
         assertThat(user.getNickname1(), is(equalTo(nickname1)));
         assertThat(user.getNickname2(), is(equalTo(nickname2)));
@@ -158,7 +169,9 @@ public class UserTest {
                 .friendCode1(friendCode)
                 .build();
 
+
         user.upLikeCount();
+
 
         assertThat(user.getLikeCount(), is(equalTo(1)));
     }
@@ -173,7 +186,9 @@ public class UserTest {
                 .friendCode1(friendCode)
                 .build();
 
+
         user.upDislikeCount();
+
 
         assertThat(user.getDislikeCount(), is(equalTo(1)));
     }

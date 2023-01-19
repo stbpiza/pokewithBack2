@@ -61,8 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         ,"/login"
                         ,"/register"
                         ,"/room"
+                        ,"/static/**"
                 );
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
     @Override
