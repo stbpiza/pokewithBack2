@@ -4,6 +4,7 @@ import com.pokewith.exception.NotFoundException;
 import com.pokewith.user.User;
 import com.pokewith.user.UserState;
 import com.pokewith.user.UserType;
+import com.pokewith.user.dto.request.RqEmailCheckDto;
 import com.pokewith.user.dto.request.RqSignUpDto;
 import com.pokewith.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,4 +91,29 @@ public class UserServiceTest {
     }
 
 
+    @Test
+    void 이메일중복테스트_중복() {
+        RqEmailCheckDto dto = new RqEmailCheckDto();
+
+        dto.setEmail(email);
+
+
+        ResponseEntity<String> responseEntity = userService.emailCheck(dto);
+
+
+        assertThat(responseEntity.getStatusCode(), is(equalTo(HttpStatus.CONFLICT)));
+    }
+
+    @Test
+    void 이메일중복테스트_통과() {
+        RqEmailCheckDto dto = new RqEmailCheckDto();
+
+        dto.setEmail("aaa@aaa.com");
+
+
+        ResponseEntity<String> responseEntity = userService.emailCheck(dto);
+
+
+        assertThat(responseEntity.getStatusCode(), is(equalTo(HttpStatus.OK)));
+    }
 }
