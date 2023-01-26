@@ -36,6 +36,7 @@ public class RaidTest {
     @Test
     void Raid_Builder_테스트() {
 
+        // 준비
         RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
         rqPostRaidDto.setPokemon(pokemon);
         rqPostRaidDto.setRaidType(raidType);
@@ -45,12 +46,14 @@ public class RaidTest {
         rqPostRaidDto.setRemotePass(remotePass);
 
 
+        // 테스트
         Raid raid = Raid.builder()
                 .dto(rqPostRaidDto)
                 .user(user)
                 .build();
 
 
+        // 확인
         assertThat(raid.getPokemon(), is(equalTo(pokemon)));
         assertThat(raid.getRaidType(), is(equalTo(raidType)));
         assertThat(raid.getStartTime(), is(equalTo(startTime)));
@@ -65,6 +68,7 @@ public class RaidTest {
     @Test
     void startRaid_테스트() {
 
+        // 준비
         RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
         rqPostRaidDto.setPokemon(pokemon);
         rqPostRaidDto.setRaidType(raidType);
@@ -79,15 +83,18 @@ public class RaidTest {
                 .build();
 
 
+        // 테스트
         raid.startRaid();
 
 
+        // 확인
         assertThat(raid.getRaidState(), is(equalTo(RaidState.DOING)));
     }
 
     @Test
     void endRaid_테스트() {
 
+        // 준비
         RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
         rqPostRaidDto.setPokemon(pokemon);
         rqPostRaidDto.setRaidType(raidType);
@@ -102,15 +109,18 @@ public class RaidTest {
                 .build();
 
 
+        // 테스트
         raid.endRaid();
 
 
+        // 확인
         assertThat(raid.getRaidState(), is(equalTo(RaidState.VOTE)));
     }
 
     @Test
     void finalEndRaid_테스트() {
 
+        // 준비
         RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
         rqPostRaidDto.setPokemon(pokemon);
         rqPostRaidDto.setRaidType(raidType);
@@ -125,15 +135,18 @@ public class RaidTest {
                 .build();
 
 
+        // 테스트
         raid.finalEndRaid();
 
 
+        // 확인
         assertThat(raid.getRaidState(), is(equalTo(RaidState.DONE)));
     }
 
     @Test
     void makeChat_테스트() {
 
+        // 준비
         RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
         rqPostRaidDto.setPokemon(pokemon);
         rqPostRaidDto.setRaidType(raidType);
@@ -150,9 +163,11 @@ public class RaidTest {
         String chat = "abcdeabcdeabcdeabcde";
 
 
+        // 테스트
         raid.makeChat(chat);
 
 
+        // 확인
         assertThat(raid.getChat(), is(equalTo(chat)));
     }
 }
