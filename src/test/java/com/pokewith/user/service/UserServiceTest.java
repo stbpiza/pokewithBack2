@@ -28,9 +28,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserServiceTest {
 
-    @PersistenceContext
-    EntityManager em;
-
     @Autowired
     UserServiceImpl userService;
 
@@ -62,6 +59,7 @@ public class UserServiceTest {
     @Test
     void 일반가입테스트() {
 
+        // 준비
         String signUpEmail = "abcd@abc.com";
         String signUpPassword = "1111";
         String signUpNickname = "signUpTest";
@@ -75,9 +73,11 @@ public class UserServiceTest {
         dto.setFriendCode1(signUpFriendCode);
 
 
+        // 테스트
         userService.normalSignUp(dto);
 
 
+        // 확인
         User user = userRepository.findByEmail(signUpEmail)
                 .orElseThrow(NotFoundException::new);
 
@@ -93,27 +93,35 @@ public class UserServiceTest {
 
     @Test
     void 이메일중복테스트_중복() {
+
+        // 준비
         RqEmailCheckDto dto = new RqEmailCheckDto();
 
         dto.setEmail(email);
 
 
+        // 테스트
         ResponseEntity<String> responseEntity = userService.emailCheck(dto);
 
 
+        // 확인
         assertThat(responseEntity.getStatusCode(), is(equalTo(HttpStatus.CONFLICT)));
     }
 
     @Test
     void 이메일중복테스트_통과() {
+
+        // 준비
         RqEmailCheckDto dto = new RqEmailCheckDto();
 
         dto.setEmail("aaa@aaa.com");
 
 
+        // 테스트
         ResponseEntity<String> responseEntity = userService.emailCheck(dto);
 
 
+        // 확인
         assertThat(responseEntity.getStatusCode(), is(equalTo(HttpStatus.OK)));
     }
 }

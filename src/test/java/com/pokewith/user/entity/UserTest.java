@@ -20,6 +20,7 @@ public class UserTest {
     @Test
     void NormalSignUp_Builder_테스트() {
 
+        // 테스트
         User user = User.NormalSignUpBuilder()
                 .email(email)
                 .password(password)
@@ -28,6 +29,7 @@ public class UserTest {
                 .build();
 
 
+        // 확인
         assertThat(user.getUserType(), is(equalTo(UserType.ROLE_NOTUSER)));
         assertThat(user.getUserState(), is(equalTo(UserState.FREE)));
         assertThat(user.getEmail(), is(equalTo(email)));
@@ -39,6 +41,7 @@ public class UserTest {
     @Test
     void EmailCheck_테스트() {
 
+        // 준비
         User user = User.NormalSignUpBuilder()
                 .email(email)
                 .password(password)
@@ -47,9 +50,11 @@ public class UserTest {
                 .build();
 
 
+        // 테스트
         user.EmailCheck();
 
 
+        // 확인
         assertThat(user.getUserType(), is(equalTo(UserType.ROLE_USER)));
 
     }
@@ -57,6 +62,7 @@ public class UserTest {
     @Test
     void setPostState_테스트() {
 
+        // 준비
         User user = User.NormalSignUpBuilder()
                 .email(email)
                 .password(password)
@@ -65,15 +71,18 @@ public class UserTest {
                 .build();
 
 
+        // 테스트
         user.setPostState();
 
 
+        // 확인
         assertThat(user.getUserState(), is(equalTo(UserState.POST)));
     }
 
     @Test
     void setCommentState_테스트() {
 
+        // 준비
         User user = User.NormalSignUpBuilder()
                 .email(email)
                 .password(password)
@@ -82,15 +91,18 @@ public class UserTest {
                 .build();
 
 
+        // 테스트
         user.setCommentState();
 
 
+        // 확인
         assertThat(user.getUserState(), is(equalTo(UserState.COMMENT)));
     }
 
     @Test
     void setFreeState_테스트() {
 
+        // 준비
         User user = User.NormalSignUpBuilder()
                 .email(email)
                 .password(password)
@@ -98,17 +110,22 @@ public class UserTest {
                 .friendCode1(friendCode)
                 .build();
 
-
         user.setPostState();
+
+
+        // 테스트
         user.setFreeState();
 
 
+        // 확인
         assertThat(user.getUserState(), is(equalTo(UserState.FREE)));
     }
 
     @Test
     void updateUser_테스트() {
 
+
+        // 준비
         User user = User.NormalSignUpBuilder()
                 .email(email)
                 .password(password)
@@ -140,9 +157,11 @@ public class UserTest {
         dto.setNickname5(nickname5);
 
 
+        // 테스트
         user.updateUser(dto);
 
 
+        // 확인
         assertThat(user.getNickname1(), is(equalTo(nickname1)));
         assertThat(user.getNickname2(), is(equalTo(nickname2)));
         assertThat(user.getNickname3(), is(equalTo(nickname3)));
@@ -162,6 +181,7 @@ public class UserTest {
     @Test
     void upLikeCount_테스트() {
 
+        // 준비
         User user = User.NormalSignUpBuilder()
                 .email(email)
                 .password(password)
@@ -170,15 +190,18 @@ public class UserTest {
                 .build();
 
 
+        // 테스트
         user.upLikeCount();
 
 
+        // 확인
         assertThat(user.getLikeCount(), is(equalTo(1)));
     }
 
     @Test
     void upDislikeCount_테스트() {
 
+        // 준비
         User user = User.NormalSignUpBuilder()
                 .email(email)
                 .password(password)
@@ -187,9 +210,11 @@ public class UserTest {
                 .build();
 
 
+        // 테스트
         user.upDislikeCount();
 
 
+        // 확인
         assertThat(user.getDislikeCount(), is(equalTo(1)));
     }
 }
