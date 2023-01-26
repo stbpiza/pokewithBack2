@@ -6,7 +6,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/pokewith?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://mysql-poke:3306/pokewith?serverTimezone=Asia/Seoul
     username: root
     password: root1234
     hikari:
@@ -29,7 +29,7 @@ spring:
     type: redis
 
   redis:
-    host: localhost
+    host: redis-poke
     port: 6379
 
   thymeleaf:
