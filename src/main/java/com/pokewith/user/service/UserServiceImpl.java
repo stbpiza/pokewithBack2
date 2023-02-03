@@ -37,6 +37,8 @@ public class UserServiceImpl implements UserService{
     private final EntityManager em;
 
     private final TokenValue tokenValue = new TokenValue();
+    private final String USERID = "userId";
+    private final String NICKNAME1 = "nickname1";
 
     @Transactional
     @Override
@@ -61,13 +63,11 @@ public class UserServiceImpl implements UserService{
         redisService.setNormalData(NormalToken.builder()
                         .username(member.getUserIdToString())
                         .refreshToken(token)
+                        .userType(member.getUserType().toString())
                         .timeToLive(tokenValue.getTokenValidTime())
                 .build());
 
-        HttpSession session = request.getSession();
-        session.setAttribute("userId", member.getUserId());
-        session.setAttribute("nickname1", member.getNickname1());
-        session.setMaxInactiveInterval(24*60*60); //24시간
+        createSession(member, request);
 
         return new ResponseEntity<>("", HttpStatus.OK);
     }
@@ -83,6 +83,7 @@ public class UserServiceImpl implements UserService{
             return new ResponseEntity<>("이미 사용중인 이메일입니다.", HttpStatus.CONFLICT);
         }
     }
+
 
     /**
      *  분리한 메소드
@@ -113,6 +114,13 @@ public class UserServiceImpl implements UserService{
         String token = jwtTokenProvider.createToken(user.getUserIdToString(), roles);
         response.addCookie(authService.createCookie(tokenValue.getAccessToken(), token));
         return token;
+    }
+
+    private void createSession(User user, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute(USERID, user.getUserId());
+        session.setAttribute(NICKNAME1, user.getNickname1());
+        session.setMaxInactiveInterval(24*60*60); //24시간
     }
 
     private Optional<User> findByEmailCheck(RqEmailCheckDto rqEmailCheckDto) {

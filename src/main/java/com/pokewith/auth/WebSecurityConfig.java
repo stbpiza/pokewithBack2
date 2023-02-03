@@ -28,6 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthService authService;
     private final CustomAccessDeniedHandler accessDeniedHandler;
 
+    private final TokenValue tokenValue = new TokenValue();
+
     // 암호화에 필요한 PasswordEncoder를 Bean에 등록
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -71,6 +73,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
 //                .cors().configurationSource(corsConfigurationSource())
 //                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+                .deleteCookies(tokenValue.getAccessToken())
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 .authorizeRequests()

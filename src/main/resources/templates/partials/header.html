@@ -29,7 +29,7 @@
 	          <a th:if="${session.userId != null}" class="dropdown-item" href="/page">My page</a>
 	          <div th:if="${session.userId != null}" class="dropdown-divider"></div>
 	          <a th:if="${session.userId != null}" class="dropdown-item" href="/logout">Logout</a>
-	          <a th:if="${session.userId == null}" class="dropdown-item" href="/login">Start with Facebook</a>
+	          <a th:if="${session.userId == null}" class="dropdown-item" href="/login">Login</a>
 	        </div>
 	      </li>
 	    </ul>

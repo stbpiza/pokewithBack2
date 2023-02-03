@@ -11,7 +11,6 @@ import java.util.Optional;
 public class RedisServiceImpl implements RedisService{
 
     private final NormalRedisRepository normalRedisRepository;
-    private final GitRedisRepository gitRedisRepository;
     private final EmailRedisRepository emailRedisRepository;
 
     /**
@@ -28,21 +27,6 @@ public class RedisServiceImpl implements RedisService{
 
     @Override
     public void deleteNormalData(NormalToken normalToken) { normalRedisRepository.delete(normalToken); }
-
-    /**
-     * git 토큰
-     * **/
-
-    @Override
-    public Optional<GitToken> getGitData(String id) {
-        return gitRedisRepository.findById(id);
-    }
-
-    @Override
-    public void setGitData(GitToken gitToken) { gitRedisRepository.save(gitToken); }
-
-    @Override
-    public void deleteGitData(GitToken gitToken) { gitRedisRepository.delete(gitToken); }
 
 
     /**
