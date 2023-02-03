@@ -15,6 +15,7 @@ public class NormalToken {
     @Id
     private String username;
     private String refreshToken;
+    private String userType;
 
     @TimeToLive(unit = TimeUnit.MILLISECONDS)
     private Long timeToLive;

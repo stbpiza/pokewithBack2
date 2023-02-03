@@ -15,4 +15,5 @@ public interface UserService {
     ResponseEntity<String> normalLogIn(RqLogInDto rqLogInDto, HttpServletResponse response, HttpServletRequest request);
 
     ResponseEntity<String> emailCheck(RqEmailCheckDto rqEmailCheckDto);
+
 }

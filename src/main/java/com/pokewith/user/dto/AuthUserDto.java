@@ -1,5 +1,6 @@
 package com.pokewith.user.dto;
 
+import com.pokewith.auth.NormalToken;
 import com.pokewith.user.User;
 import com.pokewith.user.UserType;
 import lombok.Builder;
@@ -25,22 +26,13 @@ public class AuthUserDto implements UserDetails {
 
     private Long userId;
 
-    private String oauth2Id;
-
-    private String email;
-
     private UserType userType;
-
-    private String nickname1;
 
 
     @Builder
-    public AuthUserDto(User user) {
-        this.userId = user.getUserId();
-        this.oauth2Id = user.getOauth2Id();
-        this.email = user.getEmail();
-        this.userType = user.getUserType();
-        this.nickname1 = user.getNickname1();
+    public AuthUserDto(NormalToken normalToken) {
+        this.userId = Long.parseLong(normalToken.getUsername());
+        this.userType = UserType.valueOf(normalToken.getUserType());
     }
 
     @Override

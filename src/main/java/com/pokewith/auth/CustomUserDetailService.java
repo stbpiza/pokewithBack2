@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final RedisService redisService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User member = userRepository.findById(Long.parseLong(username))
+        NormalToken normalToken = redisService.getNormalData(username)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
         return AuthUserDto.builder()
-                .user(member)
+                .normalToken(normalToken)
                 .build();
     }
 

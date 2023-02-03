@@ -33,7 +33,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "회원가입성공"),
             @ApiResponse(code = 400, message = "잘못된 값으로 요청 유효성검사 실패")
     })
-    public ResponseEntity<String> signup (@Valid @RequestBody RqSignUpDto dto) {
+    public ResponseEntity<String> signup(@Valid @RequestBody RqSignUpDto dto) {
         log.info("/signup");
         return userService.normalSignUp(dto);
     }
@@ -44,7 +44,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "로그인성공"),
             @ApiResponse(code = 400, message = "email password 불일치, 유효성검사, 소셜로그인 유저가 일반로그인 시도")
     })
-    public ResponseEntity<String> login (@Valid @RequestBody RqLogInDto dto, HttpServletResponse response, HttpServletRequest request) {
+    public ResponseEntity<String> login(@Valid @RequestBody RqLogInDto dto, HttpServletResponse response, HttpServletRequest request) {
         log.info("/login");
         return userService.normalLogIn(dto, response, request);
     }
