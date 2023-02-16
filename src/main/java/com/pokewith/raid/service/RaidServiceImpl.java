@@ -107,7 +107,7 @@ public class RaidServiceImpl implements RaidService {
      *  분리한 메소드
      **/
 
-    private User getUserAndCheckUserState(Long userId) {
+    protected User getUserAndCheckUserState(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(DbErrorException::new);
 
         // 이미 참여중인 레이드가 있는지 확인
@@ -118,7 +118,7 @@ public class RaidServiceImpl implements RaidService {
         return user;
     }
 
-    private Raid getRaidAndCheckRaidState(Long raidId) {
+    protected Raid getRaidAndCheckRaidState(Long raidId) {
         Raid raid = raidRepository.findById(raidId).orElseThrow(NotFoundException::new);
 
         // 모집중 상태인 레이드인지 확인
