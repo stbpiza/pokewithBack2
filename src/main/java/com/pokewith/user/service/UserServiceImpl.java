@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService{
      *  분리한 메소드
      **/
 
-    private User normalSignUpSetUser(RqSignUpDto rqSignUpDto) {
+    protected User normalSignUpSetUser(RqSignUpDto rqSignUpDto) {
         return User.NormalSignUpBuilder()
                 .email(rqSignUpDto.getEmail())
                 .password(passwordEncoder.encode(rqSignUpDto.getPassword()))
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService{
                 .build();
     }
 
-    private User checkLoginUser(RqLogInDto rqLogInDto) {
+    protected User checkLoginUser(RqLogInDto rqLogInDto) {
         User user = userRepository.findByEmail(rqLogInDto.getEmail())
                 .orElseThrow(LoginFailedException::new);
         if(!passwordEncoder.matches(rqLogInDto.getPassword(), user.getPassword())) {
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService{
         return user;
     }
 
-    private String createAccessToken(User user, HttpServletResponse response) {
+    protected String createAccessToken(User user, HttpServletResponse response) {
         List<String> roles = new ArrayList<>();
         roles.add(user.getUserType().toString());
 
@@ -116,14 +116,14 @@ public class UserServiceImpl implements UserService{
         return token;
     }
 
-    private void createSession(User user, HttpServletRequest request) {
+    protected void createSession(User user, HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute(USERID, user.getUserId());
         session.setAttribute(NICKNAME1, user.getNickname1());
         session.setMaxInactiveInterval(24*60*60); //24시간
     }
 
-    private Optional<User> findByEmailCheck(RqEmailCheckDto rqEmailCheckDto) {
+    protected Optional<User> findByEmailCheck(RqEmailCheckDto rqEmailCheckDto) {
         return userRepository.findByEmail(rqEmailCheckDto.getEmail());
     }
 

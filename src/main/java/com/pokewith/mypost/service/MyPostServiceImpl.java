@@ -156,7 +156,7 @@ public class MyPostServiceImpl implements MyPostService{
      *  분리한 메소드
      **/
 
-    private Raid getMyPostRaid(User member) {
+    protected Raid getMyPostRaid(User member) {
 
         if (member.getUserState().equals(UserState.POST)) {
             return raidQueryRepository.getLastInviteRaidByUserId(member.getUserId())
@@ -170,7 +170,7 @@ public class MyPostServiceImpl implements MyPostService{
         }
     }
 
-    private boolean checkVote(User member, Raid raid) {
+    protected boolean checkVote(User member, Raid raid) {
         boolean isVote = false;
         if (member.getUserState().equals(UserState.POST)) {
             if (raid.getRaidState().equals(RaidState.VOTE)) {
@@ -188,28 +188,28 @@ public class MyPostServiceImpl implements MyPostService{
         return isVote;
     }
 
-    private void checkWriter(Raid raid, Long userId) {
+    protected void checkWriter(Raid raid, Long userId) {
         // 작성자가 본인인지 확인
         if (!raid.getUser().getUserId().equals(userId)) {
             throw new ForbiddenException();
         }
     }
 
-    private void checkRaidStateInvite(Raid raid) {
+    protected void checkRaidStateInvite(Raid raid) {
         // 초대중인 레이드인지 확인
         if (!raid.getRaidState().equals(RaidState.INVITE)) {
             throw new BadRequestException();
         }
     }
 
-    private void checkRaidStateDone(Raid raid) {
+    protected void checkRaidStateDone(Raid raid) {
         // 이미 종료된 레이드인지 확인
         if (raid.getRaidState().equals(RaidState.DONE)) {
             throw new BadRequestException();
         }
     }
 
-    private void setCommentStateAllJoinedOrRejected(List<RaidComment> raidCommentList, List<Long> raidCommentIdList) {
+    protected void setCommentStateAllJoinedOrRejected(List<RaidComment> raidCommentList, List<Long> raidCommentIdList) {
         for (RaidComment raidComment : raidCommentList) {
             for (Long commentId : raidCommentIdList) {
                 if (commentId.equals(raidComment.getRaidCommentId())) {
@@ -224,7 +224,7 @@ public class MyPostServiceImpl implements MyPostService{
         }
     }
 
-    private void endRaidByRaidState(Raid raid) {
+    protected void endRaidByRaidState(Raid raid) {
         if (raid.getRaidState().equals(RaidState.INVITE)) {
             raid.finalEndRaid();
             raid.getUser().setFreeState();
@@ -233,7 +233,7 @@ public class MyPostServiceImpl implements MyPostService{
         }
     }
 
-    private void setCommentStateAllEndByRaidState(List<RaidComment> raidCommentList, RaidState raidState) {
+    protected void setCommentStateAllEndByRaidState(List<RaidComment> raidCommentList, RaidState raidState) {
         for (RaidComment raidComment : raidCommentList) {
             if (raidState.equals(RaidState.INVITE)) {
                 raidComment.rejectedComment();
@@ -246,13 +246,13 @@ public class MyPostServiceImpl implements MyPostService{
         }
     }
 
-    private void deleteChatRoom(String chat) {
+    protected void deleteChatRoom(String chat) {
         if (chat != null) {
             chatRoomRepository.deleteChatRoom(chat);
         }
     }
 
-    private void checkCommentState(RaidCommentState raidCommentState) {
+    protected void checkCommentState(RaidCommentState raidCommentState) {
         if (raidCommentState.equals(RaidCommentState.VOTE) ||
                 raidCommentState.equals(RaidCommentState.REJECTED) ||
                 raidCommentState.equals(RaidCommentState.END)) {
@@ -260,7 +260,7 @@ public class MyPostServiceImpl implements MyPostService{
         }
     }
 
-    private void endCommentByRaidState(RaidComment raidComment) {
+    protected void endCommentByRaidState(RaidComment raidComment) {
         if (raidComment.getRaid().getRaidState().equals(RaidState.INVITE)) {
             raidComment.rejectedComment();
             raidComment.getUser().setFreeState();
@@ -269,13 +269,13 @@ public class MyPostServiceImpl implements MyPostService{
         }
     }
 
-    private void checkUserState(UserState userstate) {
+    protected void checkUserState(UserState userstate) {
         if (userstate.equals(UserState.FREE)) {
             throw new BadRequestException();
         }
     }
 
-    private void insertLikeAndDislike(List<LikeAndDislikeDto> likeAndDislikeDtoList) {
+    protected void insertLikeAndDislike(List<LikeAndDislikeDto> likeAndDislikeDtoList) {
         for (LikeAndDislikeDto likeAndDislikeDto : likeAndDislikeDtoList) {
             User member = userRepository.findById(likeAndDislikeDto.getUserId())
                     .orElseThrow(ForbiddenException::new);
@@ -287,7 +287,7 @@ public class MyPostServiceImpl implements MyPostService{
         }
     }
 
-    private void endMyRaidOrComment(User member) {
+    protected void endMyRaidOrComment(User member) {
         if (member.getUserState().equals(UserState.POST)) {
             Raid raid = raidQueryRepository.getLastInviteRaidByUserId(member.getUserId())
                     .orElseThrow(NotFoundException::new);
