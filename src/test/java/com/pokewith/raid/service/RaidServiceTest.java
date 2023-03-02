@@ -188,10 +188,10 @@ public class RaidServiceTest {
         dto.setState(RaidState.INVITE);
         dto.setType(RaidType.MEGA);
 
-        //테스트
+        // 테스트
         ResponseEntity<RpRaidListDto> raidList = raidService.getRaidList(dto, pageable);
 
-        //확인
+        // 확인
         assertThat(raidList.getBody().getTotalCount().intValue(), is(equalTo(MEGA_COUNT)));
     }
 
@@ -203,10 +203,10 @@ public class RaidServiceTest {
         dto.setState(RaidState.INVITE);
         dto.setType(RaidType.FIVE);
 
-        //테스트
+        // 테스트
         ResponseEntity<RpRaidListDto> raidList = raidService.getRaidList(dto, pageable);
 
-        //확인
+        // 확인
         assertThat(raidList.getBody().getTotalCount().intValue(), is(equalTo(FIVE_COUNT)));
     }
 
@@ -218,10 +218,10 @@ public class RaidServiceTest {
         dto.setState(RaidState.INVITE);
         dto.setType(RaidType.THREE);
 
-        //테스트
+        // 테스트
         ResponseEntity<RpRaidListDto> raidList = raidService.getRaidList(dto, pageable);
 
-        //확인
+        // 확인
         assertThat(raidList.getBody().getTotalCount().intValue(), is(equalTo(THREE_COUNT)));
     }
 
@@ -233,10 +233,10 @@ public class RaidServiceTest {
         dto.setState(RaidState.INVITE);
         dto.setType(RaidType.ONE);
 
-        //테스트
+        // 테스트
         ResponseEntity<RpRaidListDto> raidList = raidService.getRaidList(dto, pageable);
 
-        //확인
+        // 확인
         assertThat(raidList.getBody().getTotalCount().intValue(), is(equalTo(ONE_COUNT)));
     }
 
