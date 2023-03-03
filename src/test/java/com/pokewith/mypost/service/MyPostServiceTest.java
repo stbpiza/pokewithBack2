@@ -1,5 +1,7 @@
 package com.pokewith.mypost.service;
 
+import com.pokewith.exception.BadRequestException;
+import com.pokewith.exception.ForbiddenException;
 import com.pokewith.exception.NotFoundException;
 import com.pokewith.raid.Raid;
 import com.pokewith.raid.RaidComment;
@@ -20,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -47,14 +47,20 @@ public class MyPostServiceTest {
     @Autowired
     MyPostServiceImpl myPostService;
 
-    private final Long RAID_WRITER_ID = 1L;
-    private final Long RAID_COMMENT_WRITER_ID_1 = 2L;
-    private final Long RAID_COMMENT_WRITER_ID_2 = 3L;
-    private final Long RAID_COMMENT_WRITER_ID_3 = 4L;
-    private final Long RAID_COMMENT_WRITER_ID_4 = 5L;
+    private final Long INVITE_RAID_WRITER_ID = 1L;
+    private final Long INVITE_RAID_COMMENT_WRITER_ID_1 = 2L;
+    private final Long DOING_RAID_WRITER_ID = 3L;
+    private final Long INVITE_RAID_COMMENT_WRITER_ID_3 = 4L;
+    private final Long INVITE_RAID_COMMENT_WRITER_ID_4 = 5L;
+    private final Long INVITE_RAID_COMMENT_WRITER_ID_5 = 6L;
+    private final Long INVITE_RAID_COMMENT_WRITER_ID_6 = 7L;
+    private final Long INVITE_RAID_COMMENT_WRITER_ID_7 = 8L;
+    private final Long INVITE_RAID_COMMENT_WRITER_ID_8 = 9L;
+    private final Long INVITE_RAID_COMMENT_WRITER_ID_9 = 10L;
     private final Long FREE_USER_ID = 6L;
-    private final Long TEST_RAID_ID = 1L;
-    private final Long TEST_RAID_COMMENT_ID = 1L;
+    private final Long INVITE_RAID_ID = 1L;
+    private final Long DOING_RAID_ID = 2L;
+    private final Long INVITE_RAID_COMMENT_ID = 1L;
 
     @BeforeAll
     void before() {
@@ -66,7 +72,7 @@ public class MyPostServiceTest {
         String nickname = "tester";
         String friendCode = "0000-0000-0000-0000";
 
-        for (int i=1; i<=6; i++) {
+        for (int i=1; i<=10; i++) {
             User user = User.NormalSignUpBuilder()
                     .email(email+i)
                     .password(password)
@@ -74,7 +80,7 @@ public class MyPostServiceTest {
                     .friendCode1(friendCode)
                     .build();
 
-            if (i == RAID_WRITER_ID) {
+            if (i == INVITE_RAID_WRITER_ID || i == DOING_RAID_WRITER_ID) {
                 user.setPostState();
             } else if (i == FREE_USER_ID) {
                 user.setFreeState();
@@ -101,31 +107,42 @@ public class MyPostServiceTest {
         rqPostRaidDto.setNormalPass(normalPass);
         rqPostRaidDto.setRemotePass(remotePass);
 
-        Raid raid = Raid.builder()
+        Raid inviteRaid = Raid.builder()
                 .dto(rqPostRaidDto)
-                .user(new User(RAID_WRITER_ID))
+                .user(new User(INVITE_RAID_WRITER_ID))
                 .build();
 
-        raidRepository.save(raid);
+        raidRepository.save(inviteRaid);
+
+        Raid doingRaid = Raid.builder()
+                .dto(rqPostRaidDto)
+                .user(new User(DOING_RAID_WRITER_ID))
+                .build();
+
+        doingRaid.startRaid();
+        raidRepository.save(doingRaid);
+
 
 
         // 댓글 세팅
         RqPostRaidCommentDto rqPostRaidCommentDto = new RqPostRaidCommentDto();
-        rqPostRaidCommentDto.setRaidId(TEST_RAID_ID);
+        rqPostRaidCommentDto.setRaidId(INVITE_RAID_ID);
         rqPostRaidCommentDto.setAccount1(true);
         rqPostRaidCommentDto.setAccount2(false);
         rqPostRaidCommentDto.setAccount3(false);
         rqPostRaidCommentDto.setAccount4(false);
         rqPostRaidCommentDto.setAccount5(false);
 
-        for (int i=2; i<=5; i++) {
-            RaidComment raidComment = RaidComment.builder()
-                    .dto(rqPostRaidCommentDto)
-                    .raid(raid)
-                    .user(new User((long) i))
-                    .build();
+        for (int i=2; i<=10; i++) {
+            if (i == INVITE_RAID_COMMENT_WRITER_ID_1) {
+                RaidComment raidComment = RaidComment.builder()
+                        .dto(rqPostRaidCommentDto)
+                        .raid(inviteRaid)
+                        .user(new User((long) i))
+                        .build();
 
-            raidCommentRepository.save(raidComment);
+                raidCommentRepository.save(raidComment);
+            }
         }
     }
 
@@ -133,28 +150,28 @@ public class MyPostServiceTest {
     void getMyPostRaid_테스트_POST() {
 
         // 준비
-        User member = userRepository.findById(RAID_WRITER_ID)
+        User member = userRepository.findById(INVITE_RAID_WRITER_ID)
                 .orElseThrow(NotFoundException::new);
 
         // 테스트
         Raid raid = myPostService.getMyPostRaid(member);
 
         // 확인
-        assertThat(raid.getRaidId(), is(equalTo(TEST_RAID_ID)));
+        assertThat(raid.getRaidId(), is(equalTo(INVITE_RAID_ID)));
     }
 
     @Test
     void getMyPostRaid_테스트_COMMENT() {
 
         // 준비
-        User member = userRepository.findById(RAID_COMMENT_WRITER_ID_1)
+        User member = userRepository.findById(INVITE_RAID_COMMENT_WRITER_ID_1)
                 .orElseThrow(NotFoundException::new);
 
         // 테스트
         Raid raid = myPostService.getMyPostRaid(member);
 
         // 확인
-        assertThat(raid.getRaidId(), is(equalTo(TEST_RAID_COMMENT_ID)));
+        assertThat(raid.getRaidId(), is(equalTo(INVITE_RAID_COMMENT_ID)));
     }
 
     @Test
@@ -171,5 +188,60 @@ public class MyPostServiceTest {
         assertThat(raid, is(equalTo(null)));
     }
 
+    @Test
+    void checkWriter_테스트_writer() {
+
+        // 준비
+        Raid raid = raidRepository.findById(INVITE_RAID_ID)
+                .orElseThrow(NotFoundException::new);
+
+        // 테스트
+        myPostService.checkWriter(raid, INVITE_RAID_WRITER_ID);
+
+        // 확인
+        // 예외발생 없으면 성공
+    }
+
+    @Test
+    void checkWriter_테스트_notWriter() {
+
+        // 준비
+        Raid raid = raidRepository.findById(INVITE_RAID_ID)
+                .orElseThrow(NotFoundException::new);
+
+        // 테스트 & 확인
+        assertThrows(ForbiddenException.class, () ->
+            myPostService.checkWriter(raid, FREE_USER_ID)
+        );
+
+    }
+
+    @Test
+    void checkRaidStateInvite_테스트_INVITE() {
+
+        // 준비
+        Raid raid = raidRepository.findById(INVITE_RAID_ID)
+                .orElseThrow(NotFoundException::new);
+
+        // 테스트
+        myPostService.checkRaidStateInvite(raid);
+
+        // 확인
+        // 예외발생 없으면 성공
+    }
+
+    @Test
+    void checkRaidStateInvite_테스트_NotINVITE() {
+
+        // 준비
+        Raid raid = raidRepository.findById(DOING_RAID_ID)
+                .orElseThrow(NotFoundException::new);
+
+        // 테스트 & 확인
+        assertThrows(BadRequestException.class, () ->
+            myPostService.checkRaidStateInvite(raid)
+        );
+
+    }
 
 }
