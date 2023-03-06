@@ -50,7 +50,7 @@ public class MyPostServiceTest {
     private final Long INVITE_RAID_WRITER_ID = 1L;
     private final Long INVITE_RAID_COMMENT_WRITER_ID_1 = 2L;
     private final Long DOING_RAID_WRITER_ID = 3L;
-    private final Long INVITE_RAID_COMMENT_WRITER_ID_3 = 4L;
+    private final Long DOING_RAID_COMMENT_WRITER_ID_1 = 4L;
     private final Long INVITE_RAID_COMMENT_WRITER_ID_4 = 5L;
     private final Long INVITE_RAID_COMMENT_WRITER_ID_5 = 6L;
     private final Long INVITE_RAID_COMMENT_WRITER_ID_6 = 7L;
@@ -126,7 +126,6 @@ public class MyPostServiceTest {
 
         // 댓글 세팅
         RqPostRaidCommentDto rqPostRaidCommentDto = new RqPostRaidCommentDto();
-        rqPostRaidCommentDto.setRaidId(INVITE_RAID_ID);
         rqPostRaidCommentDto.setAccount1(true);
         rqPostRaidCommentDto.setAccount2(false);
         rqPostRaidCommentDto.setAccount3(false);
@@ -187,6 +186,285 @@ public class MyPostServiceTest {
         // 확인
         assertThat(raid, is(equalTo(null)));
     }
+
+    @Test
+    void checkVote_테스트_POSTAndVOTE() {
+
+        // 준비
+        String email = "vote1@abc.com";
+        String password = "1111";
+        String nickname = "vote1";
+        String friendCode = "0000-0000-0000-0000";
+
+        User user = User.NormalSignUpBuilder()
+                .email(email)
+                .password(password)
+                .nickname1(nickname)
+                .friendCode1(friendCode)
+                .build();
+
+        user.setPostState();
+
+        em.persist(user);
+
+        String pokemon = "150";
+        RaidType raidType = RaidType.FIVE;
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = LocalDateTime.now();
+        int normalPass = 1;
+        int remotePass = 0;
+
+        RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
+        rqPostRaidDto.setPokemon(pokemon);
+        rqPostRaidDto.setRaidType(raidType);
+        rqPostRaidDto.setStartTime(startTime);
+        rqPostRaidDto.setEndTime(endTime);
+        rqPostRaidDto.setNormalPass(normalPass);
+        rqPostRaidDto.setRemotePass(remotePass);
+
+        Raid raid = Raid.builder()
+                .dto(rqPostRaidDto)
+                .user(user)
+                .build();
+
+        raid.endRaid();
+
+        em.persist(raid);
+
+        em.flush();
+
+
+
+        // 테스트
+        boolean result = myPostService.checkVote(user, raid);
+
+        // 확인
+        assertThat(result, is(equalTo(true)));
+    }
+
+    @Test
+    void checkVote_테스트_POSTAndNotVOTE() {
+
+        // 준비
+        String email = "vote2@abc.com";
+        String password = "1111";
+        String nickname = "vote2";
+        String friendCode = "0000-0000-0000-0000";
+
+        User user = User.NormalSignUpBuilder()
+                .email(email)
+                .password(password)
+                .nickname1(nickname)
+                .friendCode1(friendCode)
+                .build();
+
+        user.setPostState();
+
+        em.persist(user);
+
+        String pokemon = "150";
+        RaidType raidType = RaidType.FIVE;
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = LocalDateTime.now();
+        int normalPass = 1;
+        int remotePass = 0;
+
+        RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
+        rqPostRaidDto.setPokemon(pokemon);
+        rqPostRaidDto.setRaidType(raidType);
+        rqPostRaidDto.setStartTime(startTime);
+        rqPostRaidDto.setEndTime(endTime);
+        rqPostRaidDto.setNormalPass(normalPass);
+        rqPostRaidDto.setRemotePass(remotePass);
+
+        Raid raid = Raid.builder()
+                .dto(rqPostRaidDto)
+                .user(user)
+                .build();
+
+        raid.startRaid();
+
+        em.persist(raid);
+
+        em.flush();
+
+
+
+        // 테스트
+        boolean result = myPostService.checkVote(user, raid);
+
+        // 확인
+        assertThat(result, is(equalTo(false)));
+    }
+
+    @Test
+    void checkVote_테스트_COMMENTAndVOTE() {
+
+        // 준비
+        String email = "vote@abc.com";
+        String password = "1111";
+        String nickname = "vote";
+        String friendCode = "0000-0000-0000-0000";
+
+        User writer = User.NormalSignUpBuilder()
+                .email(email+3)
+                .password(password)
+                .nickname1(nickname+3)
+                .friendCode1(friendCode)
+                .build();
+
+        writer.setPostState();
+
+        User commenter = User.NormalSignUpBuilder()
+                .email(email+4)
+                .password(password)
+                .nickname1(nickname+4)
+                .friendCode1(friendCode)
+                .build();
+
+        commenter.setCommentState();
+
+        em.persist(writer);
+        em.persist(commenter);
+
+        String pokemon = "150";
+        RaidType raidType = RaidType.FIVE;
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = LocalDateTime.now();
+        int normalPass = 1;
+        int remotePass = 0;
+
+        RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
+        rqPostRaidDto.setPokemon(pokemon);
+        rqPostRaidDto.setRaidType(raidType);
+        rqPostRaidDto.setStartTime(startTime);
+        rqPostRaidDto.setEndTime(endTime);
+        rqPostRaidDto.setNormalPass(normalPass);
+        rqPostRaidDto.setRemotePass(remotePass);
+
+        Raid raid = Raid.builder()
+                .dto(rqPostRaidDto)
+                .user(writer)
+                .build();
+
+        raid.endRaid();
+
+        em.persist(raid);
+
+        RqPostRaidCommentDto rqPostRaidCommentDto = new RqPostRaidCommentDto();
+        rqPostRaidCommentDto.setAccount1(true);
+        rqPostRaidCommentDto.setAccount2(false);
+        rqPostRaidCommentDto.setAccount3(false);
+        rqPostRaidCommentDto.setAccount4(false);
+        rqPostRaidCommentDto.setAccount5(false);
+
+        RaidComment raidComment = RaidComment.builder()
+                .dto(rqPostRaidCommentDto)
+                .user(commenter)
+                .raid(raid)
+                .build();
+
+        raidComment.voteComment();
+
+        em.persist(raidComment);
+
+        em.flush();
+        em.clear();
+
+        Raid myRaid = raidRepository.findById(raid.getRaidId())
+                .orElseThrow(NotFoundException::new);
+
+
+        // 테스트
+        boolean result = myPostService.checkVote(commenter, myRaid);
+
+        // 확인
+        assertThat(result, is(equalTo(true)));
+    }
+
+    @Test
+    void checkVote_테스트_COMMENTAndNotVOTE() {
+
+        // 준비
+        String email = "vote@abc.com";
+        String password = "1111";
+        String nickname = "vote";
+        String friendCode = "0000-0000-0000-0000";
+
+        User writer = User.NormalSignUpBuilder()
+                .email(email+5)
+                .password(password)
+                .nickname1(nickname+5)
+                .friendCode1(friendCode)
+                .build();
+
+        writer.setPostState();
+
+        User commenter = User.NormalSignUpBuilder()
+                .email(email+6)
+                .password(password)
+                .nickname1(nickname+6)
+                .friendCode1(friendCode)
+                .build();
+
+        commenter.setCommentState();
+
+        em.persist(writer);
+        em.persist(commenter);
+
+        String pokemon = "150";
+        RaidType raidType = RaidType.FIVE;
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = LocalDateTime.now();
+        int normalPass = 1;
+        int remotePass = 0;
+
+        RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
+        rqPostRaidDto.setPokemon(pokemon);
+        rqPostRaidDto.setRaidType(raidType);
+        rqPostRaidDto.setStartTime(startTime);
+        rqPostRaidDto.setEndTime(endTime);
+        rqPostRaidDto.setNormalPass(normalPass);
+        rqPostRaidDto.setRemotePass(remotePass);
+
+        Raid raid = Raid.builder()
+                .dto(rqPostRaidDto)
+                .user(writer)
+                .build();
+
+        raid.endRaid();
+
+        em.persist(raid);
+
+        RqPostRaidCommentDto rqPostRaidCommentDto = new RqPostRaidCommentDto();
+        rqPostRaidCommentDto.setAccount1(true);
+        rqPostRaidCommentDto.setAccount2(false);
+        rqPostRaidCommentDto.setAccount3(false);
+        rqPostRaidCommentDto.setAccount4(false);
+        rqPostRaidCommentDto.setAccount5(false);
+
+        RaidComment raidComment = RaidComment.builder()
+                .dto(rqPostRaidCommentDto)
+                .user(commenter)
+                .raid(raid)
+                .build();
+
+        em.persist(raidComment);
+
+        em.flush();
+        em.clear();
+
+        Raid myRaid = raidRepository.findById(raid.getRaidId())
+                .orElseThrow(NotFoundException::new);
+
+
+        // 테스트
+        boolean result = myPostService.checkVote(commenter, myRaid);
+
+        // 확인
+        assertThat(result, is(equalTo(false)));
+    }
+
 
     @Test
     void checkWriter_테스트_writer() {
