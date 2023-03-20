@@ -3,15 +3,13 @@ package com.pokewith.mypost.service;
 import com.pokewith.exception.BadRequestException;
 import com.pokewith.exception.ForbiddenException;
 import com.pokewith.exception.NotFoundException;
-import com.pokewith.raid.Raid;
-import com.pokewith.raid.RaidComment;
-import com.pokewith.raid.RaidCommentState;
-import com.pokewith.raid.RaidType;
+import com.pokewith.raid.*;
 import com.pokewith.raid.dto.request.RqPostRaidCommentDto;
 import com.pokewith.raid.dto.request.RqPostRaidDto;
 import com.pokewith.raid.repository.RaidCommentRepository;
 import com.pokewith.raid.repository.RaidRepository;
 import com.pokewith.user.User;
+import com.pokewith.user.UserState;
 import com.pokewith.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -683,4 +681,131 @@ public class MyPostServiceTest {
         assertThat(raidCommentList.get(1).getRaidCommentState(), is(equalTo(RaidCommentState.REJECTED)));
         assertThat(raidCommentList.get(2).getRaidCommentState(), is(equalTo(RaidCommentState.REJECTED)));
     }
+
+
+    @Test
+    void endRaidByRaidState_테스트_INVITE() {
+        // 준비
+        String email = "endraidtest@abc.com";
+        String password = "1111";
+        String nickname = "endraid";
+        String friendCode = "0000-0000-0000-0000";
+
+        User writer = User.NormalSignUpBuilder()
+                .email(email)
+                .password(password)
+                .nickname1(nickname)
+                .friendCode1(friendCode)
+                .build();
+
+        writer.setPostState();
+
+        em.persist(writer);
+
+        String pokemon = "150";
+        RaidType raidType = RaidType.FIVE;
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = LocalDateTime.now();
+        int normalPass = 1;
+        int remotePass = 0;
+
+        RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
+        rqPostRaidDto.setPokemon(pokemon);
+        rqPostRaidDto.setRaidType(raidType);
+        rqPostRaidDto.setStartTime(startTime);
+        rqPostRaidDto.setEndTime(endTime);
+        rqPostRaidDto.setNormalPass(normalPass);
+        rqPostRaidDto.setRemotePass(remotePass);
+
+        Raid raid = Raid.builder()
+                .dto(rqPostRaidDto)
+                .user(writer)
+                .build();
+
+        em.persist(raid);
+
+        em.flush();
+        em.clear();
+
+        Raid testRaid = raidRepository.findById(raid.getRaidId())
+                .orElseThrow(NotFoundException::new);
+
+        // 테스트
+        myPostService.endRaidByRaidState(testRaid);
+
+        // 확인
+        assertThat(testRaid.getRaidState(), is(equalTo(RaidState.DONE)));
+        assertThat(testRaid.getUser().getUserState(), is(equalTo(UserState.FREE)));
+    }
+
+    @Test
+    void endRaidByRaidState_테스트_DOING() {
+        // 준비
+        String email = "endraidtest@abc.com";
+        String password = "1111";
+        String nickname = "endraid";
+        String friendCode = "0000-0000-0000-0000";
+
+        User writer = User.NormalSignUpBuilder()
+                .email(email)
+                .password(password)
+                .nickname1(nickname)
+                .friendCode1(friendCode)
+                .build();
+
+        writer.setPostState();
+
+        em.persist(writer);
+
+        String pokemon = "150";
+        RaidType raidType = RaidType.FIVE;
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = LocalDateTime.now();
+        int normalPass = 1;
+        int remotePass = 0;
+
+        RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
+        rqPostRaidDto.setPokemon(pokemon);
+        rqPostRaidDto.setRaidType(raidType);
+        rqPostRaidDto.setStartTime(startTime);
+        rqPostRaidDto.setEndTime(endTime);
+        rqPostRaidDto.setNormalPass(normalPass);
+        rqPostRaidDto.setRemotePass(remotePass);
+
+        Raid raid = Raid.builder()
+                .dto(rqPostRaidDto)
+                .user(writer)
+                .build();
+
+        raid.startRaid();
+
+        em.persist(raid);
+
+        em.flush();
+        em.clear();
+
+        Raid testRaid = raidRepository.findById(raid.getRaidId())
+                .orElseThrow(NotFoundException::new);
+
+        // 테스트
+        myPostService.endRaidByRaidState(testRaid);
+
+        // 확인
+        assertThat(testRaid.getRaidState(), is(equalTo(RaidState.VOTE)));
+        assertThat(testRaid.getUser().getUserState(), is(equalTo(UserState.POST)));
+    }
+
+    @Test
+    void endRaidByRaidState_테스트_DONE() {
+        // 준비
+        Raid testRaid = raidRepository.findById(DONE_RAID_ID)
+                .orElseThrow(NotFoundException::new);
+
+        // 테스트
+        myPostService.endRaidByRaidState(testRaid);
+
+        // 확인
+        assertThat(testRaid.getRaidState(), is(equalTo(RaidState.DONE)));
+    }
+
 }
