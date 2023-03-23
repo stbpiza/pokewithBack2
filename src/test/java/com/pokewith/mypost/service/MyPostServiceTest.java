@@ -658,6 +658,8 @@ public class MyPostServiceTest {
                 .raid(raid)
                 .build();
 
+        alreadyRejectedRaidComment.rejectedComment();
+
         em.persist(joinedRaidComment);
         em.persist(rejectedRaidComment);
         em.persist(alreadyRejectedRaidComment);
@@ -808,4 +810,214 @@ public class MyPostServiceTest {
         assertThat(testRaid.getRaidState(), is(equalTo(RaidState.DONE)));
     }
 
+    @Test
+    void setCommentStateAllEndByRaidState_테스트_INVITE() {
+
+        // 준비
+        String email = "commentstateend@abc.com";
+        String password = "1111";
+        String nickname = "commentstateend";
+        String friendCode = "0000-0000-0000-0000";
+
+        User writer = User.NormalSignUpBuilder()
+                .email(email+1)
+                .password(password)
+                .nickname1(nickname+1)
+                .friendCode1(friendCode)
+                .build();
+
+        writer.setPostState();
+
+        User joinedCommenter = User.NormalSignUpBuilder()
+                .email(email+2)
+                .password(password)
+                .nickname1(nickname+2)
+                .friendCode1(friendCode)
+                .build();
+
+        joinedCommenter.setCommentState();
+
+        User alreadyRejectedCommenter = User.NormalSignUpBuilder()
+                .email(email+3)
+                .password(password)
+                .nickname1(nickname+3)
+                .friendCode1(friendCode)
+                .build();
+
+        alreadyRejectedCommenter.setFreeState();
+
+        em.persist(writer);
+        em.persist(joinedCommenter);
+        em.persist(alreadyRejectedCommenter);
+
+        String pokemon = "150";
+        RaidType raidType = RaidType.FIVE;
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = LocalDateTime.now();
+        int normalPass = 1;
+        int remotePass = 0;
+
+        RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
+        rqPostRaidDto.setPokemon(pokemon);
+        rqPostRaidDto.setRaidType(raidType);
+        rqPostRaidDto.setStartTime(startTime);
+        rqPostRaidDto.setEndTime(endTime);
+        rqPostRaidDto.setNormalPass(normalPass);
+        rqPostRaidDto.setRemotePass(remotePass);
+
+        Raid raid = Raid.builder()
+                .dto(rqPostRaidDto)
+                .user(writer)
+                .build();
+
+        em.persist(raid);
+
+        RqPostRaidCommentDto rqPostRaidCommentDto = new RqPostRaidCommentDto();
+        rqPostRaidCommentDto.setAccount1(true);
+        rqPostRaidCommentDto.setAccount2(false);
+        rqPostRaidCommentDto.setAccount3(false);
+        rqPostRaidCommentDto.setAccount4(false);
+        rqPostRaidCommentDto.setAccount5(false);
+
+        RaidComment joinedRaidComment = RaidComment.builder()
+                .dto(rqPostRaidCommentDto)
+                .user(joinedCommenter)
+                .raid(raid)
+                .build();
+
+        RaidComment alreadyRejectedRaidComment = RaidComment.builder()
+                .dto(rqPostRaidCommentDto)
+                .user(alreadyRejectedCommenter)
+                .raid(raid)
+                .build();
+
+        alreadyRejectedRaidComment.rejectedComment();
+
+        em.persist(joinedRaidComment);
+        em.persist(alreadyRejectedRaidComment);
+
+        em.flush();
+        em.clear();
+
+        Raid raidAndComment = raidRepository.findById(raid.getRaidId())
+                .orElseThrow(NotFoundException::new);
+
+        List<RaidComment> raidCommentList = raidAndComment.getRaidComments();
+
+        // 테스트
+        myPostService.setCommentStateAllEndByRaidState(raidCommentList, raidAndComment.getRaidState());
+
+        // 확인
+        assertThat(raidCommentList.get(0).getRaidCommentState(), is(equalTo(RaidCommentState.REJECTED)));
+        assertThat(raidCommentList.get(1).getRaidCommentState(), is(equalTo(RaidCommentState.REJECTED)));
+        assertThat(raidCommentList.get(0).getUser().getUserState(), is(equalTo(UserState.FREE)));
+        assertThat(raidCommentList.get(1).getUser().getUserState(), is(equalTo(UserState.FREE)));
+    }
+
+    @Test
+    void setCommentStateAllEndByRaidState_테스트_NotINVITE() {
+        // 준비
+        String email = "commentstate@abc.com";
+        String password = "1111";
+        String nickname = "commentstate";
+        String friendCode = "0000-0000-0000-0000";
+
+        User writer = User.NormalSignUpBuilder()
+                .email(email+4)
+                .password(password)
+                .nickname1(nickname+4)
+                .friendCode1(friendCode)
+                .build();
+
+        writer.setPostState();
+
+        User joinedCommenter = User.NormalSignUpBuilder()
+                .email(email+5)
+                .password(password)
+                .nickname1(nickname+5)
+                .friendCode1(friendCode)
+                .build();
+
+        joinedCommenter.setCommentState();
+
+        User alreadyRejectedCommenter = User.NormalSignUpBuilder()
+                .email(email+6)
+                .password(password)
+                .nickname1(nickname+6)
+                .friendCode1(friendCode)
+                .build();
+
+        alreadyRejectedCommenter.setFreeState();
+
+        em.persist(writer);
+        em.persist(joinedCommenter);
+        em.persist(alreadyRejectedCommenter);
+
+        String pokemon = "150";
+        RaidType raidType = RaidType.FIVE;
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = LocalDateTime.now();
+        int normalPass = 1;
+        int remotePass = 0;
+
+        RqPostRaidDto rqPostRaidDto = new RqPostRaidDto();
+        rqPostRaidDto.setPokemon(pokemon);
+        rqPostRaidDto.setRaidType(raidType);
+        rqPostRaidDto.setStartTime(startTime);
+        rqPostRaidDto.setEndTime(endTime);
+        rqPostRaidDto.setNormalPass(normalPass);
+        rqPostRaidDto.setRemotePass(remotePass);
+
+        Raid raid = Raid.builder()
+                .dto(rqPostRaidDto)
+                .user(writer)
+                .build();
+
+        raid.startRaid();
+
+        em.persist(raid);
+
+        RqPostRaidCommentDto rqPostRaidCommentDto = new RqPostRaidCommentDto();
+        rqPostRaidCommentDto.setAccount1(true);
+        rqPostRaidCommentDto.setAccount2(false);
+        rqPostRaidCommentDto.setAccount3(false);
+        rqPostRaidCommentDto.setAccount4(false);
+        rqPostRaidCommentDto.setAccount5(false);
+
+        RaidComment joinedRaidComment = RaidComment.builder()
+                .dto(rqPostRaidCommentDto)
+                .user(joinedCommenter)
+                .raid(raid)
+                .build();
+
+        joinedRaidComment.joinedComment();
+
+        RaidComment alreadyRejectedRaidComment = RaidComment.builder()
+                .dto(rqPostRaidCommentDto)
+                .user(alreadyRejectedCommenter)
+                .raid(raid)
+                .build();
+
+        alreadyRejectedRaidComment.rejectedComment();
+
+        em.persist(joinedRaidComment);
+        em.persist(alreadyRejectedRaidComment);
+
+        em.flush();
+        em.clear();
+
+        Raid raidAndComment = raidRepository.findById(raid.getRaidId())
+                .orElseThrow(NotFoundException::new);
+
+        List<RaidComment> raidCommentList = raidAndComment.getRaidComments();
+
+        // 테스트
+        myPostService.setCommentStateAllEndByRaidState(raidCommentList, raidAndComment.getRaidState());
+
+        // 확인
+        assertThat(raidCommentList.get(0).getRaidCommentState(), is(equalTo(RaidCommentState.VOTE)));
+        assertThat(raidCommentList.get(1).getRaidCommentState(), is(equalTo(RaidCommentState.REJECTED)));
+        assertThat(raidCommentList.get(0).getUser().getUserState(), is(equalTo(UserState.COMMENT)));
+        assertThat(raidCommentList.get(1).getUser().getUserState(), is(equalTo(UserState.FREE)));
+    }
 }
