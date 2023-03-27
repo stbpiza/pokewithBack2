@@ -52,9 +52,9 @@ public class MyPostServiceTest {
     private final Long INVITE_RAID_COMMENT_WRITER_ID_1 = 2L;
     private final Long DOING_RAID_WRITER_ID = 3L;
     private final Long DONE_RAID_WRITER_ID = 4L;
-    private final Long INVITE_RAID_COMMENT_WRITER_ID_4 = 5L;
+    private final Long INVITE_RAID_COMMENT_WRITER_ID_2 = 5L;
     private final Long FREE_USER_ID = 6L;
-    private final Long INVITE_RAID_COMMENT_WRITER_ID_6 = 7L;
+    private final Long DOING_RAID_COMMENT_WRITER_ID_1 = 7L;
     private final Long INVITE_RAID_COMMENT_WRITER_ID_7 = 8L;
     private final Long INVITE_RAID_COMMENT_WRITER_ID_8 = 9L;
     private final Long INVITE_RAID_COMMENT_WRITER_ID_9 = 10L;
@@ -63,7 +63,9 @@ public class MyPostServiceTest {
     private final Long DOING_RAID_ID = 2L;
     private final Long DONE_RAID_ID = 3L;
 
-    private final Long INVITE_RAID_COMMENT_ID = 1L;
+    private final Long INVITE_RAID_COMMENT_ID_1 = 1L;
+    private final Long INVITE_RAID_COMMENT_ID_2 = 2L;
+    private final Long DOING_RAID_COMMENT_ID_1 = 3L;
 
     @BeforeAll
     void before() {
@@ -143,10 +145,18 @@ public class MyPostServiceTest {
         rqPostRaidCommentDto.setAccount5(false);
 
         for (int i=2; i<=10; i++) {
-            if (i == INVITE_RAID_COMMENT_WRITER_ID_1) {
+            if (i == INVITE_RAID_COMMENT_WRITER_ID_1 || i == INVITE_RAID_COMMENT_WRITER_ID_2) {
                 RaidComment raidComment = RaidComment.builder()
                         .dto(rqPostRaidCommentDto)
                         .raid(inviteRaid)
+                        .user(new User((long) i))
+                        .build();
+
+                raidCommentRepository.save(raidComment);
+            } else if (i == DOING_RAID_COMMENT_WRITER_ID_1) {
+                RaidComment raidComment = RaidComment.builder()
+                        .dto(rqPostRaidCommentDto)
+                        .raid(doingRaid)
                         .user(new User((long) i))
                         .build();
 
@@ -180,7 +190,7 @@ public class MyPostServiceTest {
         Raid raid = myPostService.getMyPostRaid(member);
 
         // 확인
-        assertThat(raid.getRaidId(), is(equalTo(INVITE_RAID_COMMENT_ID)));
+        assertThat(raid.getRaidId(), is(equalTo(INVITE_RAID_COMMENT_ID_1)));
     }
 
     @Test
@@ -499,7 +509,7 @@ public class MyPostServiceTest {
 
         // 테스트 & 확인
         assertThrows(ForbiddenException.class, () ->
-            myPostService.checkWriter(raid, FREE_USER_ID)
+                myPostService.checkWriter(raid, FREE_USER_ID)
         );
 
     }
@@ -527,7 +537,7 @@ public class MyPostServiceTest {
 
         // 테스트 & 확인
         assertThrows(BadRequestException.class, () ->
-            myPostService.checkRaidStateInvite(raid)
+                myPostService.checkRaidStateInvite(raid)
         );
 
     }
@@ -541,7 +551,7 @@ public class MyPostServiceTest {
 
         // 테스트 & 확인
         assertThrows(BadRequestException.class, () ->
-            myPostService.checkRaidStateDone(raid)
+                myPostService.checkRaidStateDone(raid)
         );
 
     }
@@ -1019,5 +1029,103 @@ public class MyPostServiceTest {
         assertThat(raidCommentList.get(1).getRaidCommentState(), is(equalTo(RaidCommentState.REJECTED)));
         assertThat(raidCommentList.get(0).getUser().getUserState(), is(equalTo(UserState.COMMENT)));
         assertThat(raidCommentList.get(1).getUser().getUserState(), is(equalTo(UserState.FREE)));
+    }
+
+
+    @Test
+    void checkCommentState_테스트_VOTE() {
+
+        // 준비
+        RaidCommentState raidCommentState = RaidCommentState.VOTE;
+
+        // 테스트 & 확인
+        assertThrows(BadRequestException.class, () ->
+                myPostService.checkCommentState(raidCommentState)
+        );
+
+    }
+
+    @Test
+    void checkCommentState_테스트_REJECTED() {
+
+        // 준비
+        RaidCommentState raidCommentState = RaidCommentState.REJECTED;
+
+        // 테스트 & 확인
+        assertThrows(BadRequestException.class, () ->
+                myPostService.checkCommentState(raidCommentState)
+        );
+
+    }
+
+    @Test
+    void checkCommentState_테스트_END() {
+
+        // 준비
+        RaidCommentState raidCommentState = RaidCommentState.END;
+
+        // 테스트 & 확인
+        assertThrows(BadRequestException.class, () ->
+                myPostService.checkCommentState(raidCommentState)
+        );
+
+    }
+
+    @Test
+    void checkCommentState_테스트_WAITING() {
+
+        // 준비
+        RaidCommentState raidCommentState = RaidCommentState.WAITING;
+
+        // 테스트
+        myPostService.checkCommentState(raidCommentState);
+
+        // 확인
+        // 예외발생 없으면 성공
+    }
+
+    @Test
+    void checkCommentState_테스트_JOINED() {
+
+        // 준비
+        RaidCommentState raidCommentState = RaidCommentState.JOINED;
+
+        // 테스트
+        myPostService.checkCommentState(raidCommentState);
+
+        // 확인
+        // 예외발생 없으면 성공
+    }
+
+    @Test
+    void endCommentByRaidState_테스트_INVITE() {
+
+        // 준비
+        RaidComment raidComment = raidCommentRepository.findById(INVITE_RAID_COMMENT_ID_1)
+                .orElseThrow(NotFoundException::new);
+
+        // 테스트
+        myPostService.endCommentByRaidState(raidComment);
+
+        // 확인
+        assertThat(raidComment.getRaidCommentState(), is(equalTo(RaidCommentState.REJECTED)));
+        assertThat(raidComment.getUser().getUserState(), is(equalTo(UserState.FREE)));
+
+    }
+
+    @Test
+    void endCommentByRaidState_테스트_DOING() {
+
+        // 준비
+        RaidComment raidComment = raidCommentRepository.findById(DOING_RAID_COMMENT_ID_1)
+                .orElseThrow(NotFoundException::new);
+
+        // 테스트
+        myPostService.endCommentByRaidState(raidComment);
+
+        // 확인
+        assertThat(raidComment.getRaidCommentState(), is(equalTo(RaidCommentState.VOTE)));
+        assertThat(raidComment.getUser().getUserState(), is(equalTo(UserState.COMMENT)));
+
     }
 }
