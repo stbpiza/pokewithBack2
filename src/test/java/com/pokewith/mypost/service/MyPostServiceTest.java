@@ -1128,4 +1128,29 @@ public class MyPostServiceTest {
         assertThat(raidComment.getUser().getUserState(), is(equalTo(UserState.COMMENT)));
 
     }
+
+    @Test
+    void checkUserState_테스트_FREE() {
+
+        // 준비
+        UserState userState = UserState.FREE;
+
+        // 테스트 & 확인
+        assertThrows(BadRequestException.class, () ->
+            myPostService.checkUserState(userState)
+        );
+    }
+
+    @Test
+    void checkUserState_테스트_NotFREE() {
+
+        // 준비
+        UserState userState = UserState.POST;
+
+        // 테스트
+        myPostService.checkUserState(userState);
+
+        // 확인
+        // 예외발생 없으면 성공
+    }
 }
