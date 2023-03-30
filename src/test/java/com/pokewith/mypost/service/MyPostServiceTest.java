@@ -3,11 +3,13 @@ package com.pokewith.mypost.service;
 import com.pokewith.exception.BadRequestException;
 import com.pokewith.exception.ForbiddenException;
 import com.pokewith.exception.NotFoundException;
+import com.pokewith.mypost.dto.LikeAndDislikeDto;
 import com.pokewith.raid.*;
 import com.pokewith.raid.dto.request.RqPostRaidCommentDto;
 import com.pokewith.raid.dto.request.RqPostRaidDto;
 import com.pokewith.raid.repository.RaidCommentRepository;
 import com.pokewith.raid.repository.RaidRepository;
+import com.pokewith.user.LikeOrDislike;
 import com.pokewith.user.User;
 import com.pokewith.user.UserState;
 import com.pokewith.user.repository.UserRepository;
@@ -55,17 +57,20 @@ public class MyPostServiceTest {
     private final Long INVITE_RAID_COMMENT_WRITER_ID_2 = 5L;
     private final Long FREE_USER_ID = 6L;
     private final Long DOING_RAID_COMMENT_WRITER_ID_1 = 7L;
-    private final Long INVITE_RAID_COMMENT_WRITER_ID_7 = 8L;
-    private final Long INVITE_RAID_COMMENT_WRITER_ID_8 = 9L;
-    private final Long INVITE_RAID_COMMENT_WRITER_ID_9 = 10L;
+    private final Long VOTE_RAID_WRITER_ID = 8L;
+    private final Long VOTE_RAID_COMMENT_WRITER_ID_1 = 9L;
+    private final Long VOTE_RAID_COMMENT_WRITER_ID_2 = 10L;
 
     private final Long INVITE_RAID_ID = 1L;
     private final Long DOING_RAID_ID = 2L;
     private final Long DONE_RAID_ID = 3L;
+    private final Long VOTE_RAID_ID = 4L;
 
     private final Long INVITE_RAID_COMMENT_ID_1 = 1L;
     private final Long INVITE_RAID_COMMENT_ID_2 = 2L;
     private final Long DOING_RAID_COMMENT_ID_1 = 3L;
+    private final Long VOTE_RAID_COMMENT_ID_1 = 4L;
+    private final Long VOTE_RAID_COMMENT_ID_2 = 5L;
 
     @BeforeAll
     void before() {
@@ -85,7 +90,8 @@ public class MyPostServiceTest {
                     .friendCode1(friendCode)
                     .build();
 
-            if (i == INVITE_RAID_WRITER_ID || i == DOING_RAID_WRITER_ID) {
+            if (i == INVITE_RAID_WRITER_ID || i == DOING_RAID_WRITER_ID
+             || i == VOTE_RAID_WRITER_ID) {
                 user.setPostState();
             } else if (i == FREE_USER_ID) {
                 user.setFreeState();
@@ -135,6 +141,14 @@ public class MyPostServiceTest {
         doneRaid.finalEndRaid();
         raidRepository.save(doneRaid);
 
+        Raid doingRaid2 = Raid.builder()
+                .dto(rqPostRaidDto)
+                .user(new User(VOTE_RAID_WRITER_ID))
+                .build();
+
+        doingRaid2.endRaid();
+        raidRepository.save(doingRaid2);
+
 
         // 댓글 세팅
         RqPostRaidCommentDto rqPostRaidCommentDto = new RqPostRaidCommentDto();
@@ -160,6 +174,16 @@ public class MyPostServiceTest {
                         .user(new User((long) i))
                         .build();
 
+                raidComment.joinedComment();
+                raidCommentRepository.save(raidComment);
+            } else if (i == VOTE_RAID_COMMENT_WRITER_ID_1 || i == VOTE_RAID_COMMENT_WRITER_ID_2) {
+                RaidComment raidComment = RaidComment.builder()
+                        .dto(rqPostRaidCommentDto)
+                        .raid(doingRaid2)
+                        .user(new User((long) i))
+                        .build();
+
+                raidComment.voteComment();
                 raidCommentRepository.save(raidComment);
             }
         }
@@ -1152,5 +1176,72 @@ public class MyPostServiceTest {
 
         // 확인
         // 예외발생 없으면 성공
+    }
+
+    @Test
+    void insertLikeAndDislike_테스트() {
+
+        // 준비
+        List<LikeAndDislikeDto> list = new ArrayList<>();
+
+        LikeAndDislikeDto likeAndDislikeDto1 = new LikeAndDislikeDto();
+        likeAndDislikeDto1.setUserId(VOTE_RAID_COMMENT_WRITER_ID_1);
+        likeAndDislikeDto1.setLikeOrDislike(LikeOrDislike.LIKE);
+
+        LikeAndDislikeDto likeAndDislikeDto2 = new LikeAndDislikeDto();
+        likeAndDislikeDto2.setUserId(VOTE_RAID_COMMENT_WRITER_ID_2);
+        likeAndDislikeDto2.setLikeOrDislike(LikeOrDislike.DISLIKE);
+
+        list.add(likeAndDislikeDto1);
+        list.add(likeAndDislikeDto2);
+
+        // 테스트
+        myPostService.insertLikeAndDislike(list);
+
+        // 확인
+        User likeUser = userRepository.findById(VOTE_RAID_COMMENT_WRITER_ID_1)
+                .orElseThrow(NotFoundException::new);
+        User dislikeUser = userRepository.findById(VOTE_RAID_COMMENT_WRITER_ID_2)
+                .orElseThrow(NotFoundException::new);
+
+        assertThat(likeUser.getLikeCount(), is(equalTo(1)));
+        assertThat(likeUser.getDislikeCount(), is(equalTo(0)));
+        assertThat(dislikeUser.getLikeCount(), is(equalTo(0)));
+        assertThat(dislikeUser.getDislikeCount(), is(equalTo(1)));
+
+    }
+
+    @Test
+    void endMyRaidOrComment_테스트_POST() {
+
+        // 준비
+        User user = userRepository.findById(VOTE_RAID_WRITER_ID)
+                .orElseThrow(NotFoundException::new);
+
+        // 테스트
+        myPostService.endMyRaidOrComment(user);
+
+        // 확인
+        Raid raid = raidRepository.findById(VOTE_RAID_ID)
+                .orElseThrow(NotFoundException::new);
+
+        assertThat(raid.getRaidState(), is(equalTo(RaidState.DONE)));
+    }
+
+    @Test
+    void endMyRaidOrComment_테스트_COMMENT() {
+
+        // 준비
+        User user = userRepository.findById(VOTE_RAID_COMMENT_WRITER_ID_1)
+                .orElseThrow(NotFoundException::new);
+
+        // 테스트
+        myPostService.endMyRaidOrComment(user);
+
+        // 확인
+        RaidComment raidComment = raidCommentRepository.findById(VOTE_RAID_COMMENT_ID_1)
+                .orElseThrow(NotFoundException::new);
+
+        assertThat(raidComment.getRaidCommentState(), is(equalTo(RaidCommentState.END)));
     }
 }
