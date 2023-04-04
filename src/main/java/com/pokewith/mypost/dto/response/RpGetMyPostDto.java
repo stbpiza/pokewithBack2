@@ -49,7 +49,7 @@ public class RpGetMyPostDto {
 
     @Builder
     public RpGetMyPostDto(Raid raid, boolean isVote) {
-        try {
+        if (raid != null) {
             this.raidId = raid.getRaidId();
             this.pokemon = raid.getPokemon();
             this.raidType = raid.getRaidType();
@@ -67,8 +67,7 @@ public class RpGetMyPostDto {
             this.dislikeCount = raid.getUser().getDislikeCount();
 
             this.isVote = isVote;
-        } catch (NullPointerException e) {
-            // 작성한 글이나 댓글이 없으면 빈 DTO 리턴
         }
+        // 작성한 글이나 댓글이 없으면 빈 DTO 리턴
     }
 }

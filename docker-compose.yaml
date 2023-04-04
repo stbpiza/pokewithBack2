@@ -42,7 +42,9 @@ services:
     working_dir: /app
     entrypoint: ["sh", "-c"]
     command:
-      - ./gradlew bootrun -x test
+      - |
+        ./gradlew clean
+        ./gradlew bootrun -x test
     restart: on-failure
     networks:
       - poke-network
