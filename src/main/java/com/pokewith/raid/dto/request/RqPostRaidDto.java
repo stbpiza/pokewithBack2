@@ -1,19 +1,17 @@
 package com.pokewith.raid.dto.request;
 
-import com.pokewith.raid.RaidState;
 import com.pokewith.raid.RaidType;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@ApiModel("레이드 모집글 작성")
+@Schema(name="레이드 모집글 작성")
 @NoArgsConstructor
 public class RqPostRaidDto {
 

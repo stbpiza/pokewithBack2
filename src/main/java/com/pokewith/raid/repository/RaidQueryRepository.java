@@ -10,11 +10,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import java.util.List;
 import java.util.Optional;
-
 
 import static com.pokewith.raid.QRaid.raid;
 import static com.pokewith.raid.QRaidComment.raidComment;
