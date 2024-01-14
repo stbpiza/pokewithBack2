@@ -2,19 +2,21 @@ package com.pokewith.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
-@EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@Configuration
+public class WebSecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomAccessDeniedHandler accessDeniedHandler;
@@ -33,10 +35,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-                .antMatchers(
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .requestMatchers(
                         "/favicon.ico"
                         ,"/error"
                         ,"/"
@@ -51,29 +53,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 );
     }
 
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.httpBasic().disable()
-                .csrf().disable()
-                .logout()
-                .logoutSuccessUrl("/")
-                .deleteCookies(tokenValue.getAccessToken())
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/allroom").hasRole("ADMIN")
-                .antMatchers("/api/user/**").hasRole("USER")
-                .antMatchers("/**").permitAll()
-                .antMatchers("/v2/api-docs", "/swagger-ui.html", "/webjars/**",
-                        "/swagger/**", "/configuration/**", "/swagger-resources/**").permitAll()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
-                .accessDeniedHandler(accessDeniedHandler)
-                .and()
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.NEVER))
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/user/**").hasRole("USER"))
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/admin/**").hasRole("ADMIN"))
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .exceptionHandling(e -> e.authenticationEntryPoint(authenticationEntryPoint()))
+//                .accessDeniedHandler(accessDeniedHandler)
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 앞에 넣음
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
+        return httpSecurity.build();
 
     }
 

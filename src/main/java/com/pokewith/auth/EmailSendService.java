@@ -1,7 +1,7 @@
 package com.pokewith.auth;
 
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.utility.RandomString;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -24,7 +24,7 @@ public class EmailSendService implements EmailService {
     @Override
     public void signUpEmail(String userId, String email) {
 
-        String random = RandomString.make(30);
+        String random = RandomStringUtils.random(30);
 
         EmailToken emailToken = EmailToken.builder()
                 .id(userId)
@@ -46,7 +46,7 @@ public class EmailSendService implements EmailService {
     @Override
     public void lostPasswordEmail(String userId, String email) {
 
-        String random = RandomString.make(30);
+        String random = RandomStringUtils.random(30);
 
         EmailToken emailToken = EmailToken.builder()
                 .id(userId)
