@@ -21,13 +21,13 @@ import com.pokewith.user.UserState;
 import com.pokewith.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.utility.RandomString;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 
 @Slf4j
@@ -74,7 +74,7 @@ public class MyPostServiceImpl implements MyPostService{
         raid.startRaid();
 
         // 채팅방 이름생성
-        String random = RandomString.make(40);
+        String random = RandomStringUtils.randomAlphabetic(40);
         raid.makeChat(random);
 
         // 댓글 상태 변경

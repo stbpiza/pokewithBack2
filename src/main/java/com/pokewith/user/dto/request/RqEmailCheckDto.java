@@ -1,20 +1,21 @@
 package com.pokewith.user.dto.request;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
+import jakarta.validation.constraints.Email;
+
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @Getter @Setter
-@ApiModel("이메일 중복 확인")
+@Schema(name = "이메일 중복 확인")
 @NoArgsConstructor
 public class RqEmailCheckDto {
 
     @Email
-    @ApiModelProperty(value = "email 형식", required = true, example = "1234@poke.com")
+    @Schema(description = "email 형식", requiredMode = REQUIRED, example = "1234@poke.com")
     private String email;
 
 }

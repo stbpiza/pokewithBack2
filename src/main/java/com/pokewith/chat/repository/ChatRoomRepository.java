@@ -5,7 +5,7 @@ import com.pokewith.chat.ChatRoomForm;
 import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.*;
 
 @EqualsAndHashCode

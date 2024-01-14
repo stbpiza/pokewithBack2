@@ -32,7 +32,7 @@ services:
       - poke-network
   spring-poke:
     container_name: spring-poke
-    image: openjdk:11-jdk
+    image: openjdk:17-jdk
     ports:
       - "8888:8888"
     depends_on:

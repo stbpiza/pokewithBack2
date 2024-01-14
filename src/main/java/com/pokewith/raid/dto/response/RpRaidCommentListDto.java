@@ -2,7 +2,7 @@ package com.pokewith.raid.dto.response;
 
 import com.pokewith.raid.RaidComment;
 import com.pokewith.raid.dto.RaidCommentDto;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
-@ApiModel("레이드 댓글 리스트 조회")
+@Schema(name = "레이드 댓글 리스트 조회")
 public class RpRaidCommentListDto {
 
     private List<RaidCommentDto> raidCommentDtoList = new ArrayList<>();

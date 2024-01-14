@@ -1,15 +1,15 @@
 package com.pokewith.raid.dto.request;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@ApiModel("레이드 모집글에 댓글 작성")
+@Schema(name = "레이드 모집글에 댓글 작성")
 @NoArgsConstructor
 public class RqPostRaidCommentDto {
 

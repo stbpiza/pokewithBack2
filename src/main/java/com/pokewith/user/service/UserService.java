@@ -5,8 +5,8 @@ import com.pokewith.user.dto.request.RqLogInDto;
 import com.pokewith.user.dto.request.RqSignUpDto;
 import org.springframework.http.ResponseEntity;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface UserService {
 

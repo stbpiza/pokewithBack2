@@ -4,17 +4,17 @@ import com.pokewith.auth.UsernameService;
 import com.pokewith.mypage.service.MyPageService;
 import com.pokewith.mypage.dto.response.RpGetMyPageDto;
 import com.pokewith.mypage.dto.request.RqUpdateMyPageDto;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @Slf4j
 @Validated
@@ -27,10 +27,10 @@ public class MyPageController {
     private final UsernameService usernameService;
 
     @GetMapping("/mypage")
-    @ApiOperation(value = "본인 닉네임 + 친구코드 조회 api", notes = "마이페이지에서 본인 닉네임과 친구코드 조회하는 api")
+    @Operation(summary = "본인 닉네임 + 친구코드 조회 api", description = "마이페이지에서 본인 닉네임과 친구코드 조회하는 api")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "닉네임 친구코드 조회 성공"),
-            @ApiResponse(code = 400, message = "유효성검사 실패(없는 userId)")
+            @ApiResponse(responseCode = "200", description = "닉네임 친구코드 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "유효성검사 실패(없는 userId)")
     })
     public ResponseEntity<RpGetMyPageDto> getMyPage(HttpServletRequest request) {
         log.info("/api/mypage");
@@ -39,10 +39,10 @@ public class MyPageController {
     }
 
     @PutMapping("/mypage")
-    @ApiOperation(value = "본인 닉네임 + 친구코드 변경 api", notes = "마이페이지에서 본인 닉네임과 친구코드 변경하는 api")
+    @Operation(summary = "본인 닉네임 + 친구코드 변경 api", description = "마이페이지에서 본인 닉네임과 친구코드 변경하는 api")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "닉네임 친구코드 변경 성공"),
-            @ApiResponse(code = 400, message = "유효성검사 실패")
+            @ApiResponse(responseCode = "200", description = "닉네임 친구코드 변경 성공"),
+            @ApiResponse(responseCode = "400", description = "유효성검사 실패")
     })
     public ResponseEntity<String> updateMyPage(@Valid @RequestBody RqUpdateMyPageDto dto, HttpServletRequest request) {
         log.info("/api/mypage");

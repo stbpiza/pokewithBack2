@@ -1,7 +1,7 @@
 package com.pokewith.raid.dto.response;
 
 import com.pokewith.raid.dto.RaidDto;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ApiModel("레이드 리스트 조회")
+@Schema(name = "레이드 리스트 조회")
 public class RpRaidListDto {
 
     private List<RaidDto> raidDtoList = new ArrayList<>();
