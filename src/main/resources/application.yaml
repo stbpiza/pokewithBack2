@@ -3,7 +3,8 @@ server:
   port: 8888
 
 spring:
-
+  profiles:
+      active: docker
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://mysql-poke:3306/pokewith?serverTimezone=Asia/Seoul
@@ -18,7 +19,6 @@ spring:
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      use-new-id-generator-mappings: false
     show-sql: true
     properties:
       hibernate:
@@ -28,18 +28,33 @@ spring:
   cache:
     type: redis
 
-  redis:
-    host: redis-poke
-    port: 6379
-
   thymeleaf:
-    suffix: .html
+    check-template-location: true
     cache: false
 
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
+  data:
+    redis:
+      host: redis-poke
+      port: 6379
 
 text:
   secretKey: pokewith123456
   myurl: http://localhost
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pokewith?serverTimezone=Asia/Seoul
+    username: root
+    password: root1234
+    hikari:
+      maximum-pool-size: 20
+  data:
+    redis:
+      host: localhost
+      port: 6379
