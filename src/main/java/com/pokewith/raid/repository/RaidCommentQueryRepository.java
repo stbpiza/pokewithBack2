@@ -42,7 +42,7 @@ public class RaidCommentQueryRepository {
                 .from(raidComment)
                 .leftJoin(raidComment.user, user).fetchJoin()
                 .leftJoin(raidComment.raid, raid).fetchJoin()
-                .leftJoin(raid.user, user).fetchJoin()
+//                .leftJoin(raid.user, user).fetchJoin()
                 .where(raidComment.user.userId.eq(userId), raidComment.raidCommentState.eq(RaidCommentState.JOINED)
                         .or(raidComment.raidCommentState.eq(RaidCommentState.WAITING))
                         .or(raidComment.raidCommentState.eq(RaidCommentState.VOTE)))

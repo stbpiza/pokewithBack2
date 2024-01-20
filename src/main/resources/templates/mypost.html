@@ -27,13 +27,13 @@
 
   <!-- Page Wrapper -->
   <div id="wrapper">
-	<aside th:insert="/partials/sidebar :: sidebar" class="stress navbar-nav bg-gradient-info sidebar-dark sidebar accordion" id="accordionSidebar"></aside>
+	<aside th:insert="~{/partials/sidebar :: sidebar}" class="stress navbar-nav bg-gradient-info sidebar-dark sidebar accordion" id="accordionSidebar"></aside>
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
       <!-- Main Content -->
       <div id="content">
-      <header th:insert="/partials/header :: header"></header>
+      <header th:insert="~{/partials/header :: header}"></header>
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
@@ -52,7 +52,7 @@
 
       </div>
       <!-- End of Main Content -->
-	<footer th:insert="/partials/footer :: footer" class="sticky-footer bg-white"></footer>
+	<footer th:insert="~{/partials/footer :: footer}" class="sticky-footer bg-white"></footer>
     </div>
     <!-- End of Content Wrapper -->
 
