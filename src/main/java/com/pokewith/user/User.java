@@ -36,7 +36,7 @@ public class User extends TimeEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false, length = 15, columnDefinition = "varchar(15)")
     private UserType userType;
 
     @Column(length = 25, nullable = false)
@@ -74,7 +74,7 @@ public class User extends TimeEntity {
     private int dislikeCount;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false, length = 10, columnDefinition = "varchar(10)")
     private UserState userState;
 
 

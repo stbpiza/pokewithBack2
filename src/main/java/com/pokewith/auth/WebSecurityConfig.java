@@ -1,5 +1,6 @@
 package com.pokewith.auth;
 
+import com.pokewith.filter.RequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,10 +64,11 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/api/admin/**").hasRole("ADMIN"))
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .exceptionHandling(e -> e.authenticationEntryPoint(authenticationEntryPoint()))
-//                .accessDeniedHandler(accessDeniedHandler)
+                .exceptionHandling(e -> e.accessDeniedHandler(accessDeniedHandler))
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 앞에 넣음
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class);
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new RequestFilter(), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
 
     }

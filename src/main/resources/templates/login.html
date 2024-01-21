@@ -26,7 +26,7 @@
       <!-- Main Content -->
       <div id="content">
        <!--<header include-html="/views/partials/header.html"></header> -->
-       <header th:insert="/partials/header :: header"></header>
+       <header th:insert="~{/partials/header :: header}"></header>
         <div class="container">
           <!-- Outer Row -->
           <div class="row justify-content-center">
@@ -70,7 +70,7 @@
                   </div>
                   <!-- End of Nested Row within Card Body -->
                 </div>
-				<footer th:insert="/partials/footer :: footer" class="sticky-footer bg-white"></footer>
+				<footer th:insert="~{/partials/footer :: footer}" class="sticky-footer bg-white"></footer>
               </div>
             <!-- End of Card body -->
             </div>
