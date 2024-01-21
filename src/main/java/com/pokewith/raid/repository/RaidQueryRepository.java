@@ -2,6 +2,7 @@ package com.pokewith.raid.repository;
 
 import com.pokewith.raid.*;
 import com.pokewith.raid.dto.request.RqRaidListSearchDto;
+import com.pokewith.user.QUser;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -48,13 +49,17 @@ public class RaidQueryRepository {
     }
 
     public Optional<Raid> getLastInviteRaidByUserId(Long userId) {
+
+        QUser user1 = new QUser("user1");
+        QUser user2 = new QUser("user2");
+
         return Optional.ofNullable(
                 query
                 .selectDistinct(raid)
                 .from(raid)
-                .leftJoin(raid.user, user).fetchJoin()
+                .leftJoin(raid.user, user1).fetchJoin()
                 .leftJoin(raid.raidComments, raidComment).fetchJoin()
-                .leftJoin(raidComment.user, user).fetchJoin()
+                .leftJoin(raidComment.user, user2).fetchJoin()
                 .where(raid.user.userId.eq(userId), raid.raidState.ne(RaidState.DONE))
                 .fetchOne());
     }

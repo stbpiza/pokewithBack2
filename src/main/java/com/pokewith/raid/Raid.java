@@ -26,7 +26,7 @@ public class Raid extends TimeEntity {
     private String pokemon;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "varchar(10)")
     private RaidType raidType;
 
     @Column(nullable = false)
@@ -42,7 +42,7 @@ public class Raid extends TimeEntity {
     private int remotePass;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "varchar(10)")
     private RaidState raidState;
 
     private String chat;

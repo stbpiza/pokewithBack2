@@ -26,7 +26,7 @@ public class RaidComment extends TimeEntity {
     private boolean account5;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "varchar(10)")
     private RaidCommentState raidCommentState;
 
 
