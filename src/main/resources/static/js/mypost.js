@@ -180,12 +180,21 @@ function myPostAjax() {
 	let url = '/api/mypost';
 	
 	fetch(url)
-		.then((response) => response.json())
+		.then((response) => {
+			if (!response.ok) {
+				alert(response.status);
+				throw new Error();
+			}
+			return response.json()
+		})
 		.then((data) => {
 		  const result = data;
 		  raidInfo = result;
 		  showMyPost(result);
 		})
+		.catch((error) => {
+			window.location.replace("/");
+		});
 }
 
 let raidInfo = {
