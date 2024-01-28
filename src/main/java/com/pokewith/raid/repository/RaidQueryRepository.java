@@ -32,7 +32,7 @@ public class RaidQueryRepository {
     }
 
     public Page<Raid> raidList(RqRaidListSearchDto dto, Pageable pageable) {
-        QueryResults<Raid> results = query
+        List<Raid> results = query
                 .selectDistinct(raid)
                 .from(raid)
                 .leftJoin(raid.user, user).fetchJoin()
@@ -40,12 +40,15 @@ public class RaidQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(raid.raidId.desc())
-                .fetchResults();
+                .fetch();
 
-        List<Raid> content = results.getResults();
-        long total = results.getTotal();
+        Long total = query
+                .select(raid.count())
+                .from(raid)
+                .where(typeEq(dto.getType()), stateEq(dto.getState()))
+                .fetchOne();
 
-        return new PageImpl<>(content, pageable, total);
+        return new PageImpl<>(results, pageable, total == null ? 0 : total);
     }
 
     public Optional<Raid> getLastInviteRaidByUserId(Long userId) {

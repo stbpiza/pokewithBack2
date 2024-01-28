@@ -1,5 +1,6 @@
 package com.pokewith.auth;
 
+import com.pokewith.exception.UnauthorizedException;
 import com.pokewith.exception.auth.TokenInvalidException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,13 @@ public class UsernameServiceImpl implements UsernameService{
     public Long getUsername (HttpServletRequest request) {
         try {
             HttpSession session = request.getSession();
-            return (Long) session.getAttribute("userId");
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId == null) {
+                throw new UnauthorizedException();
+            }
+            return userId;
         } catch (Exception e) {
-            throw new TokenInvalidException();
+            throw new UnauthorizedException();
         }
     }
 
