@@ -1,5 +1,6 @@
 package com.pokewith.mypost.service;
 
+import com.pokewith.chat.ChatRoomForm;
 import com.pokewith.chat.repository.ChatRoomRepository;
 import com.pokewith.exception.BadRequestException;
 import com.pokewith.exception.ForbiddenException;
@@ -76,6 +77,9 @@ public class MyPostServiceImpl implements MyPostService{
         // 채팅방 이름생성
         String random = RandomStringUtils.randomAlphabetic(40);
         raid.makeChat(random);
+
+        // 채팅방 생성
+        createChatRoom(userId, random);
 
         // 댓글 상태 변경
         List<RaidComment> raidCommentList = raidCommentQueryRepository.getRaidCommentListByRaidId(dto.getRaidId());
@@ -244,6 +248,14 @@ public class MyPostServiceImpl implements MyPostService{
                 raidComment.voteComment();
             }
         }
+    }
+
+    protected void createChatRoom(Long userId, String chatId) {
+        ChatRoomForm form = ChatRoomForm.builder()
+                .name(userId)
+                .chat(chatId)
+                .build();
+        chatRoomRepository.createChatRoom(form);
     }
 
     protected void deleteChatRoom(String chat) {

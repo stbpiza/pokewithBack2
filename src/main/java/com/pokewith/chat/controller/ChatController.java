@@ -35,29 +35,31 @@ public class ChatController {
     }
 
     @GetMapping("/room/{id}")
-    @Operation(summary = "특정 채팅방 페이지로 이동", description = "{id} 채팅방 페이지로 이동(아직 채팅방이 없다면 생성 후 이동)")
+    @Operation(summary = "특정 채팅방 페이지로 이동", description = "{id} 채팅방 페이지로 이동(채팅방이 없다면 생성 후 이동)")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "{id} 채팅방 페이지로 이동(아직 채팅방이 없다면 생성 후 이동)")
+            @ApiResponse(responseCode = "200", description = "{id} 채팅방 페이지로 이동(채팅방이 없다면 생성 후 이동)")
     })
     public String room(@PathVariable String id, Model model, HttpServletRequest request) {
 
-        Long userId = usernameService.getUsername(request);
+        // db에 채팅방 id 없으면 메인으로 이동
+        if(!chatService.checkChatInRaid(id)) {
+            return "index";
+        }
 
         // 채팅방 없으면 생성
+        ChatRoom room;
         if(chatRoomRepository.findRoomById(id) == null) {
-            // db에 채팅방 id 없으면 메인으로 이동
-            if(!chatService.checkChatInRaid(id)) {
-                return "index";
-            }
+            Long userId = usernameService.getUsername(request);
             ChatRoomForm form = ChatRoomForm.builder()
                     .name(userId)
                     .chat(id)
                     .build();
-            chatRoomRepository.createChatRoom(form);
+            room = chatRoomRepository.createChatRoom(form);
+        } else {
+            room = chatRoomRepository.findRoomById(id);
         }
 
         // 채팅방 접속
-        ChatRoom room = chatRoomRepository.findRoomById(id);
         model.addAttribute("room", room);
         return "room";
 
