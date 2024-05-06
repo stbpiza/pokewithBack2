@@ -28,8 +28,6 @@ public class JwtTokenProvider {
     private final UserDetailsService userDetailsService;
     private final AuthService authService;
 
-    private final TokenValue tokenValue = new TokenValue();
-
 
     // 객체 초기화, secretKey를 Base64로 인코딩한다.
     @PostConstruct
@@ -45,7 +43,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장
                 .setIssuedAt(now) // 토큰 발생 시간 정보
-                .setExpiration(new Date(now.getTime() + tokenValue.getTokenValidTime())) // set Expire Time
+                .setExpiration(new Date(now.getTime() + TokenValue.tokenValidTime)) // set Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 사용할 암호화 알고리즘 + signature에 들어갈 secretKey
                 .compact();
     }
@@ -58,7 +56,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장
                 .setIssuedAt(now) // 토큰 발생 시간 정보
-                .setExpiration(new Date(now.getTime() + tokenValue.getRefreshTokenValidTime())) // set Expire Time
+                .setExpiration(new Date(now.getTime() + TokenValue.refreshTokenValidTime)) // set Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 사용할 암호화 알고리즘 + signature에 들어갈 secretKey
                 .compact();
     }
@@ -77,7 +75,7 @@ public class JwtTokenProvider {
 
     // Request의 쿠키에서 token 값을 가져옵니다.
     public String resolveToken(HttpServletRequest request) {
-        Cookie cookie = authService.getCookie(request, tokenValue.getAccessToken());
+        Cookie cookie = authService.getCookie(request, TokenValue.accessToken);
         if (cookie == null || cookie.getValue() == null) {
 //            throw new TokenInvalidException();
             return null;

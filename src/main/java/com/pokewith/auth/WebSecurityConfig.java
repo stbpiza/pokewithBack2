@@ -22,8 +22,6 @@ public class WebSecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomAccessDeniedHandler accessDeniedHandler;
 
-    private final TokenValue tokenValue = new TokenValue();
-
     // 암호화에 필요한 PasswordEncoder
     @Bean
     public PasswordEncoder passwordEncoder() {

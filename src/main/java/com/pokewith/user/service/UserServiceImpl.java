@@ -36,7 +36,6 @@ public class UserServiceImpl implements UserService{
     private final RedisService redisService;
     private final EntityManager em;
 
-    private final TokenValue tokenValue = new TokenValue();
     private final String USERID = "userId";
     private final String NICKNAME1 = "nickname1";
 
@@ -64,7 +63,7 @@ public class UserServiceImpl implements UserService{
                         .username(member.getUserIdToString())
                         .refreshToken(token)
                         .userType(member.getUserType().toString())
-                        .timeToLive(tokenValue.getTokenValidTime())
+                        .timeToLive(TokenValue.tokenValidTime)
                 .build());
 
         createSession(member, request);
@@ -112,7 +111,7 @@ public class UserServiceImpl implements UserService{
         roles.add(user.getUserType().toString());
 
         String token = jwtTokenProvider.createToken(user.getUserIdToString(), roles);
-        response.addCookie(authService.createCookie(tokenValue.getAccessToken(), token));
+        response.addCookie(authService.createCookie(TokenValue.accessToken, token));
         return token;
     }
 

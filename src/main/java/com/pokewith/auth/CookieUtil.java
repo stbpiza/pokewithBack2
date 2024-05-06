@@ -8,13 +8,11 @@ import jakarta.servlet.http.HttpServletRequest;
 @Service
 public class CookieUtil implements AuthService{
 
-    private final TokenValue tokenValue = new TokenValue();
-
     @Override
     public Cookie createCookie(String cookieName, String value) {
         Cookie token = new Cookie(cookieName, value);
         token.setHttpOnly(true);
-        token.setMaxAge(tokenValue.getRefreshTokenValidTime().intValue()/1000);
+        token.setMaxAge(TokenValue.refreshTokenValidTime.intValue()/1000);
         token.setSecure(false);
         token.setPath("/");
         return token;
