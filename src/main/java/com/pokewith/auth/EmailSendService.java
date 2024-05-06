@@ -19,8 +19,6 @@ public class EmailSendService implements EmailService {
     @Value("${text.myurl}")
     private String myurl;
 
-    private TokenValue tokenValue = new TokenValue();
-
     @Override
     public void signUpEmail(String userId, String email) {
 
@@ -29,7 +27,7 @@ public class EmailSendService implements EmailService {
         EmailToken emailToken = EmailToken.builder()
                 .id(userId)
                 .random(random)
-                .timeToLive(tokenValue.getEmailTokenValidTime())
+                .timeToLive(TokenValue.emailTokenValidTime)
                 .build();
 
         redisService.setEmailData(emailToken);
@@ -51,7 +49,7 @@ public class EmailSendService implements EmailService {
         EmailToken emailToken = EmailToken.builder()
                 .id(userId)
                 .random(random)
-                .timeToLive(tokenValue.getEmailTokenValidTime())
+                .timeToLive(TokenValue.emailTokenValidTime)
                 .build();
 
         redisService.setEmailData(emailToken);

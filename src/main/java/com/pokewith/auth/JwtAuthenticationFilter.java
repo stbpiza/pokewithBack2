@@ -20,8 +20,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final TokenValue tokenValue = new TokenValue();
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         // 쿠키에서 JWT를 받아옵니다.
@@ -36,11 +34,11 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else { throw new SignatureException(""); }
         } catch (SignatureException e) {
-            request.setAttribute(tokenValue.getStatusValue(), ErrorCode.INVALID_TOKEN.getStatus().value());
+            request.setAttribute(TokenValue.statusValue, ErrorCode.INVALID_TOKEN.getStatus().value());
         } catch (ExpiredJwtException e) {
-            request.setAttribute(tokenValue.getStatusValue(), ErrorCode.TIME_OUT_TOKEN.getStatus().value());
+            request.setAttribute(TokenValue.statusValue, ErrorCode.TIME_OUT_TOKEN.getStatus().value());
         } catch (Exception e) {
-            request.setAttribute(tokenValue.getStatusValue(), ErrorCode.ETC_TOKEN.getStatus().value());
+            request.setAttribute(TokenValue.statusValue, ErrorCode.ETC_TOKEN.getStatus().value());
         }
 
 
